@@ -27,6 +27,7 @@ export const AuthProvider = ({ children }: Props) => {
 					},
 				}
 			);
+			console.log(response.data);
 			switch (response.status) {
 				case 201:
 					console.log('Account succesfully created! Welcome to Manthano!');

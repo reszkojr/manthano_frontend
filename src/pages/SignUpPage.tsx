@@ -1,7 +1,7 @@
 import React, { ChangeEvent, Component, FormEvent } from 'react';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 
-interface RegistrationFormState {
+interface SignUpPageState {
 	username: string;
 	email: string;
 	password: string;
@@ -12,7 +12,7 @@ interface RegistrationFormState {
 	errors: Record<string, string[]>;
 }
 
-class RegistrationForm extends Component<{}, RegistrationFormState> {
+class SignUpPage extends Component<{}, SignUpPageState> {
 	constructor(props: {}) {
 		super(props);
 		this.state = {
@@ -111,4 +111,4 @@ class RegistrationForm extends Component<{}, RegistrationFormState> {
 	}
 }
 
-export default RegistrationForm;
+export default SignUpPage;
