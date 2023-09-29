@@ -1,6 +1,9 @@
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import AuthContext from '../context/AuthContext';
 
 const Header = () => {
+	const { user } = useContext(AuthContext);
 	return (
 		<div>
 			<Link to='/'>Home</Link>
@@ -14,6 +17,7 @@ const Header = () => {
 			<Link to='/login'>Login</Link>
 			<span> | </span>
 			<Link to='/signup'>Sign up</Link>
+			{user && <p>Hello, {user.username}!</p>}
 		</div>
 	);
 };
