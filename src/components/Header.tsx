@@ -14,9 +14,7 @@ const Header = () => {
 			<span> | </span>
 			<Link to='/contribute'>Contribute</Link>
 			<span> | </span>
-			<Link to='/login'>Login</Link>
-			<span> | </span>
-			<Link to='/signup'>Sign up</Link>
+			{user ? <Link to='/logout'>Logout</Link> : <Link to='/login'>Login</Link>}
 			{user && <p>Hello, {user.username}!</p>}
 		</div>
 	);
