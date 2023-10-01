@@ -5,9 +5,6 @@ import LoginPage from './pages/LoginPage';
 
 import { AuthProvider } from './context/AuthContext';
 
-import Header from './components/LandingPageHeader';
-
-import RequireAuth from './utils/RequireAuth';
 import SignUpPage from './pages/SignUpPage';
 
 const App = () => {
@@ -15,16 +12,8 @@ const App = () => {
 		<>
 			<Router>
 				<AuthProvider>
-					<Header />
 					<Routes>
-						<Route
-							path='/'
-							element={
-								<RequireAuth>
-									<LandingPage />
-								</RequireAuth>
-							}
-						/>
+						<Route path='/' element={<LandingPage />} />
 						<Route path='/login' element={<LoginPage />} />
 						<Route path='/signup' element={<SignUpPage />} />
 					</Routes>

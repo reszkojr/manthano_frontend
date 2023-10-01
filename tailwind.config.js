@@ -7,12 +7,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        'primary': '#303841',
-        'secondary': '#1F2328',
-        'contrast': '#3A4750',
-        'yellow': '#FF8200',
-        'blue': '#3880D9',
-        'white': '#EEEEEE',
+        'lapis': '#05668D',
+        'teal': '#028290',
+        'persian': '#00A869',
+        'thistle': '#D4CBE5',
+        'black': '#040403',
+        'gray': '#7D7D7E'
+      },
+      fontFamily: {
+        sans: '"Familjen Grotesk", sans-serif',
+        serif: '"DM Serif Display", sans-serif',
       }
     },
   },

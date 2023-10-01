@@ -1,8 +1,11 @@
+import Hero from '../../components/Hero';
+import LandingPageHeader from '../../components/LargeHeader';
+
 const LandingPage = () => {
 	return (
 		<div>
-			<p>This is Manthano's landing page.</p>
-			<p>For now, you should only see this if you are authenticated!</p>
+			<LandingPageHeader />
+			<Hero />
 		</div>
 	);
 };
