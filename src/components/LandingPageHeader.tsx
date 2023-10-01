@@ -17,7 +17,7 @@ const Header = () => {
 						<Link to='/faq'>FAQ</Link>
 						<Link to='/contribute'>Contribute</Link>
 					</div>
-					<div className='ml-auto'>{user ? <Link to='/logout'>{user.username}</Link> : <Link to='/login'>Login</Link>}</div>
+					<div className='ml-auto'>{user ? <Link to='/profile'>{user.username}</Link> : <Link to='/login'>Login</Link>}</div>
 				</div>
 			</div>
 		</header>
