@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-import LandingPage from './pages/LandingPage';
+import LandingPage from './pages/LandingPage/LandingPage';
 import LoginPage from './pages/LoginPage';
 
 import { AuthProvider } from './context/AuthContext';
 
-import Header from './components/Header';
+import Header from './components/LandingPageHeader';
 
 import RequireAuth from './utils/RequireAuth';
 import SignUpPage from './pages/SignUpPage';
