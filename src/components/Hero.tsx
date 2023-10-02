@@ -9,8 +9,8 @@ const Hero = () => {
 			{/* <div className='blue-gradient' /> */}
 			{/* <div className='pink-gradient' /> */}
 			<div className='float-left flex w-full flex-col place-items-center space-y-4 px-20 pt-20 text-center'>
-				<h1 className='w-4/5 font-highlight text-6xl font-extrabold leading-[90px]'>Manage your classroom like philosophers managed their thoughts.</h1>
-				<h2 className='w-[850px] pb-12 text-xl text-gray-500'>Manthano is an open-source platform designed to help students and teachers achieve max productivity in a completely intuitive way.</h2>
+				<h1 className='font-highlight text-6xl font-extrabold leading-[90px] lg:w-[1200px]'>Let's make School of Athens look ordinary next to your classroom.</h1>
+				<h2 className='w-[850px] pb-12 text-justify text-xl text-gray-500'>Elevate your academic experience with Manthano, an innovative open-source platform designed to foster maximum productivity among students and educators, characterized by its inherent intuitiveness.</h2>
 				<div className='flex w-1/2 justify-center space-x-16'>
 					<a href='https://github.com/reszkojr/manthano-frontend' target='_blank' className='call-to-btn bg-gray flex w-60 items-center justify-center gap-3 rounded-[16px] bg-gray-800 px-3 py-4 font-sans text-2xl font-bold'>
 						Give us a star! <BsGithub />

@@ -9,40 +9,16 @@
 }
 
 .socrates-gradient {
-	top: 40vh;
-	right: 50%;
-	transform: translateX(50%);
+	top: 50vh;
+	right: 00%;
 	position: absolute;
-	width: 800px;
-	height: 800px;
-	background: radial-gradient(circle at 50% 50%, rgba(98, 70, 36, 0.77) 0%, rgba(238, 130, 238, 0) 90%, rgba(0, 0, 0, 0) 100%);
-	filter: blur(500px);
+	width: 100vw;
+	height: 70vw;
+	background: radial-gradient(circle at 50% 50%, rgba(28, 150, 161, 0.416) 0%, rgba(238, 130, 238, 0) 100%, rgba(0, 0, 0, 0) 100%);
+	rotate: 90deg;
+	filter: blur(20px);
 	overflow: hidden;
 	z-index: -10;
-}
-
-.blue-gradient {
-	top: -30%;
-	left: -400px;
-	position: absolute;
-	width: 800px;
-	height: 800px;
-	background: radial-gradient(circle at 50% 50%, rgba(98, 70, 36, 0.77) 0%, rgba(238, 130, 238, 0) 90%, rgba(0, 0, 0, 0) 100%);
-	filter: blur(500px);
-	z-index: -20;
-	overflow: hidden;
-}
-
-.pink-gradient {
-	top: 30%;
-	right: -400px;
-	position: absolute;
-	width: 800px;
-	height: 800px;
-	background: radial-gradient(circle at 50% 50%, rgba(98, 70, 36, 0.77) 0%, rgba(238, 130, 238, 0) 90%, rgba(0, 0, 0, 0) 100%);
-	filter: blur(500px);
-	z-index: -10;
-	overflow: hidden;
 }
 
 .waves {
