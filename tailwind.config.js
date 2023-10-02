@@ -67,6 +67,7 @@ export default {
       fontFamily: {
         sans: '"Familjen Grotesk", sans-serif',
         serif: '"DM Serif Display", sans-serif',
+        highlight: 'Montserrat, sans-serif',
       }
     },
   },
