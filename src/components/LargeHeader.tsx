@@ -12,7 +12,7 @@ const Header = () => {
 	const redirect = () => navigate('/');
 	return (
 		<header id='header'>
-			<div className='flex items-center justify-around px-60 pt-10 text-xl text-gray'>
+			<div className='text-gray flex items-center justify-around px-60 pt-10 text-xl'>
 				<ReactSVG src='/m_manthano.svg' onClick={() => redirect()} className='w-12 cursor-pointer' />
 				<div className='flex space-x-64'>
 					<div className='flex space-x-12'>
@@ -38,7 +38,9 @@ const Header = () => {
 							</div>
 						</Link>
 					) : (
-						<Link to='/login'>Login</Link>
+						<Link className='call-to-btn w-60 rounded-[10px] bg-gradient-to-bl from-teal-500 to-lapis-500 px-4 py-2 font-sans' to='/login'>
+							Login
+						</Link>
 					)}
 				</div>
 			</div>
