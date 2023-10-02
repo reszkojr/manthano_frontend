@@ -8,14 +8,14 @@
 	box-shadow: 0px 20px rgba(10, 10, 10, 0.3);
 }
 
-.aqua-gradient {
+.socrates-gradient {
 	top: 40vh;
 	right: 50%;
 	transform: translateX(50%);
 	position: absolute;
-	width: 1500px;
-	height: 1500px;
-	background: radial-gradient(circle at 50% 50%, rgb(0, 68, 255) 0%, rgba(238, 130, 238, 0) 90%, rgba(0, 0, 0, 0) 100%);
+	width: 800px;
+	height: 800px;
+	background: radial-gradient(circle at 50% 50%, rgba(98, 70, 36, 0.77) 0%, rgba(238, 130, 238, 0) 90%, rgba(0, 0, 0, 0) 100%);
 	filter: blur(500px);
 	overflow: hidden;
 	z-index: -10;
@@ -27,9 +27,9 @@
 	position: absolute;
 	width: 800px;
 	height: 800px;
-	background: radial-gradient(circle at 50% 50%, rgba(0, 191, 255, 0.4) 0%, rgba(238, 130, 238, 0) 90%, rgba(0, 0, 0, 0) 100%);
+	background: radial-gradient(circle at 50% 50%, rgba(98, 70, 36, 0.77) 0%, rgba(238, 130, 238, 0) 90%, rgba(0, 0, 0, 0) 100%);
 	filter: blur(500px);
-	z-index: -10;
+	z-index: -20;
 	overflow: hidden;
 }
 
@@ -39,7 +39,7 @@
 	position: absolute;
 	width: 800px;
 	height: 800px;
-	background: radial-gradient(circle at 50% 50%, rgba(255, 0, 157, 0.4) 0%, rgba(238, 130, 238, 0) 100%, rgba(0, 0, 0, 0) 100%);
+	background: radial-gradient(circle at 50% 50%, rgba(98, 70, 36, 0.77) 0%, rgba(238, 130, 238, 0) 90%, rgba(0, 0, 0, 0) 100%);
 	filter: blur(500px);
 	z-index: -10;
 	overflow: hidden;
