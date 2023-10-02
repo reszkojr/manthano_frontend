@@ -30,7 +30,7 @@ const Header = () => {
 						</Link>
 					</div>
 				</div>
-				<div className=''>
+				<>
 					{user ? (
 						<Link to='/profile'>
 							<div className='flex space-x-2 transition-colors hover:text-white'>
@@ -38,11 +38,16 @@ const Header = () => {
 							</div>
 						</Link>
 					) : (
-						<Link className='call-to-btn w-60 rounded-[10px] bg-gradient-to-bl from-teal-500 to-lapis-500 px-4 py-2 font-sans' to='/login'>
-							Login
-						</Link>
+						<div className='space-x-4'>
+							<Link className='w-60 rounded-[10px] bg-gradient-to-bl from-gray-700 to-gray-900 px-4 py-2 text-lg hover:bg-white' to='/login'>
+								Login
+							</Link>
+							<Link className='w-60 rounded-[10px] bg-gradient-to-bl from-teal-500 to-lapis-500 px-4 py-2 text-lg hover:bg-white' to='/login'>
+								Sign up
+							</Link>
+						</div>
 					)}
-				</div>
+				</>
 			</div>
 		</header>
 	);
