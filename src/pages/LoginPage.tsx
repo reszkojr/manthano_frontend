@@ -6,6 +6,8 @@ import TextInput from '../components/elements/TextInput';
 import Submit from '../components/elements/Submit';
 import Checkbox from '../components/elements/Checkbox';
 
+import './LoginPage.css';
+
 const LoginPage = () => {
 	const { loginUser } = useContext(AuthContext);
 
