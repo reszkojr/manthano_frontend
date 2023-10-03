@@ -5,7 +5,7 @@ import { HiUserCircle } from 'react-icons/hi2';
 
 import AuthContext from '../context/AuthContext';
 
-const Header = () => {
+const LargeHeader = () => {
 	const { user } = useContext(AuthContext);
 	const navigate = useNavigate();
 
@@ -53,4 +53,4 @@ const Header = () => {
 	);
 };
 
-export default Header;
+export default LargeHeader;
