@@ -6,4 +6,47 @@
 	html {
 		font-family: 'Familjen Grotesk', sans-serif;
 	}
+	/* Password mask size fix */
+	input[type='password'] {
+		font-family: Verdana;
+	}
+
+	/* Autofill color fix */
+	@keyframes autofill {
+		0%,
+		100% {
+			background: transparent;
+		}
+	}
+
+	input:-webkit-autofill {
+		-webkit-animation-delay: 1s; /* Safari support - any positive time runs instantly */
+		-webkit-animation-name: autofill;
+		-webkit-animation-fill-mode: both;
+	}
+
+	.radial-gradient-aqua {
+		top: 50vh;
+		right: 0;
+		position: absolute;
+		width: 100vw;
+		height: 70vw;
+		background: radial-gradient(circle at 50% 50%, rgba(28, 150, 161, 0.416) 0%, rgba(238, 130, 238, 0) 100%, rgba(0, 0, 0, 0) 100%);
+		rotate: 90deg;
+		filter: blur(20px);
+		overflow: hidden;
+		z-index: -10;
+	}
+
+	.radial-gradient-lapis {
+		top: 50vh;
+		right: 0;
+		position: absolute;
+		width: 100vw;
+		height: 100vw;
+		background: radial-gradient(circle at 50% 50%, #1359752d 0%, rgba(238, 130, 238, 0) 90%, rgba(0, 0, 0, 0) 100%);
+		filter: blur(20px);
+		overflow: hidden;
+		z-index: -10;
+	}
 }
