@@ -11,11 +11,6 @@ import './LoginPage.css';
 const LoginPage = () => {
 	const { loginUser } = useContext(AuthContext);
 
-	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		loginUser(e);
-	};
-
 	return (
 		<div className='flex flex-col items-center px-6 py-8'>
 			<div className='mt-0 w-full max-w-md rounded-lg border border-gray-700 bg-gray-800 p-0 shadow'>
@@ -27,7 +22,7 @@ const LoginPage = () => {
 							Still don't have an account? <span className='text-lapis-500'>Sign up</span>
 						</h2>
 					</div>
-					<form className='flex flex-col gap-4' onSubmit={handleSubmit}>
+					<form className='flex flex-col gap-4' method='POST' onSubmit={loginUser}>
 						<TextInput type='text' name='username' placeholder='fabio@reszko.dev' label='Email' />
 						<TextInput type='password' name='password' placeholder='●●●●●●●●●●●●●' label='Password' />
 						<div className='my-2 flex justify-between text-gray-300'>
