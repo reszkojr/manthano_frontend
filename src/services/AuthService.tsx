@@ -20,7 +20,7 @@ class AuthService {
     private static url = `${api.url}/auth/token`;
 
 
-    handleLogin = async (userData: LoginUserData) => {
+    public handleLogin = async (userData: LoginUserData) => {
         const headers = {
             'Content-Type': 'application/json'
         }
@@ -83,4 +83,4 @@ class AuthService {
     }
 }
 
-export default AuthService;
+export default new AuthService();
