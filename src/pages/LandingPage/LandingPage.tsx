@@ -1,5 +1,5 @@
-import Hero from '../../components/Hero';
-import LandingPageHeader from '../../components/LargeHeader';
+import Hero from '../../components/landing-page/Hero';
+import LandingPageHeader from '../../components/landing-page/LargeHeader';
 
 const LandingPage = () => {
 	return (

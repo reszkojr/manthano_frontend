@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ReactSVG } from 'react-svg';
 import { HiUserCircle } from 'react-icons/hi2';
 
-import AuthContext from '../context/AuthContext';
+import AuthContext from '../../context/AuthContext';
 
 const LargeHeader = () => {
 	const { user } = useContext(AuthContext);

@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LandingPage from './pages/LandingPage/LandingPage';
 import LoginPage from './pages/LoginPage';
 
-import LargeHeader from './components/LargeHeader';
+import LargeHeader from './components/landing-page/LargeHeader';
 
 import SignUpPage from './pages/SignUpPage';
 

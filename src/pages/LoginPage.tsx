@@ -18,7 +18,6 @@ const LoginPage = () => {
 
 	return (
 		<div className='flex flex-col items-center px-6 py-8'>
-			<div className='radial-gradient-lapis' />
 			<div className='mt-0 w-full max-w-md rounded-lg border border-gray-700 bg-gray-800 p-0 shadow'>
 				<div className='space-y-4 p-6'>
 					<div className=''>
