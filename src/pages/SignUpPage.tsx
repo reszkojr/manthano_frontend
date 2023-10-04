@@ -1,5 +1,5 @@
-import React, { ChangeEvent, Component, FormEvent } from 'react';
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import { ChangeEvent, Component, FormEvent } from 'react';
+import axios, { AxiosResponse } from 'axios';
 
 interface SignUpPageState {
 	username: string;

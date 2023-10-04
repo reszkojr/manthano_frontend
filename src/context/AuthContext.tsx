@@ -1,9 +1,11 @@
-import { createContext, useState, useEffect, FormEvent, useMemo, useContext } from 'react';
-import Props from '../utils/Props';
-import axios, { AxiosPromise, AxiosResponse } from 'axios';
+import { createContext, useState, useEffect, FormEvent } from 'react';
+import axios, {  AxiosResponse } from 'axios';
 import jwt_decode from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
-import { authenticateUser } from '../utils/AuthenticationUtils';
+
+import Props from '../utils/Props';
+
+import { config } from "../config";
 
 type User = {
 	exp: number;
@@ -16,7 +18,7 @@ type User = {
 
 const AuthContext = createContext({
 	user: {} as User | null,
-	loginUser: async (e: FormEvent<HTMLFormElement>) => {},
+	loginUser: async (e) => Promise<void>, // Função sem parâmetros
 });
 
 export const AuthProvider = ({ children }: Props) => {
@@ -42,14 +44,17 @@ export const AuthProvider = ({ children }: Props) => {
 
 	const loginUser = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		console.log('submit');
 		try {
 			const userData = {
 				username: e.currentTarget.username.value,
 				password: e.currentTarget.password.value,
 			};
 
-			const response = await authenticateUser(userData);
-			console.log(response);
+			let headers = { 'Content-Type': 'application/json' };
+			let url = `${config.url}/auth/token/`
+			const response = await axios.post(url, userData, { headers: headers });
+	
 			handleAuthenticationResponse(response);
 		} catch (error: unknown) {
 			handleAuthenticationError(error);
