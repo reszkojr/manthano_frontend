@@ -17,7 +17,7 @@ type RegistrationUserData = {
 }
 
 class AuthService {
-    private static url = `${api.url}/auth/token`;
+    private static url = `${api.url}/auth/token/`;
 
 
     public handleLogin = async (userData: LoginUserData) => {
@@ -32,14 +32,18 @@ class AuthService {
             }
             return response;
         } catch (error: unknown) {
+            // TODO: better error handling
             if (!axios.isAxiosError(error)) {
                 console.error('Error:', error);
                 return;
             }
 
             switch (error.response?.status) {
+                case 401:
+                    console.error('Error:', error.response.data);
+                    break;
                 case 500:
-                    // TODO: error handling
+                    console.error('Error:', error);
             }
         }
     }

@@ -1,6 +1,6 @@
-import { useContext } from 'react';
+import { FormEvent } from 'react';
 
-import AuthContext from '../context/AuthContext';
+import AuthService from '../services/AuthService';
 
 import TextInput from '../components/elements/TextInput';
 import Submit from '../components/elements/Submit';
@@ -9,7 +9,14 @@ import Checkbox from '../components/elements/Checkbox';
 import './LoginPage.css';
 
 const LoginPage = () => {
-	const { loginUser } = useContext(AuthContext);
+	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		const userData = {
+			username: e.currentTarget.username.value,
+			password: e.currentTarget.password.value
+		}
+		const loginResponse = AuthService.handleLogin(userData);
+	}
 
 	return (
 		<div className='flex flex-col items-center px-6 py-8'>
@@ -22,7 +29,7 @@ const LoginPage = () => {
 							Still don't have an account? <span className='text-lapis-500'>Sign up</span>
 						</h2>
 					</div>
-					<form className='flex flex-col gap-4' method='POST' onSubmit={loginUser}>
+					<form className='flex flex-col gap-4' method='POST' onSubmit={handleSubmit}>
 						<TextInput type='text' name='username' placeholder='fabio@reszko.dev' label='Email' />
 						<TextInput type='password' name='password' placeholder='●●●●●●●●●●●●●' label='Password' />
 						<div className='my-2 flex justify-between text-gray-300'>
