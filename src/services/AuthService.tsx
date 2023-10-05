@@ -1,90 +1,53 @@
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 
-import { api } from '../config'
+import { api } from '../config';
 
 type LoginUserData = {
-    username: string,
-    password: string,
-}
+	username: string;
+	password: string;
+};
 
 type RegistrationUserData = {
-    username: string,
-    email: string,
-    password: string,
-    password2: string,
-    first_name: string,
-    last_name: string,
-}
+	username: string;
+	email: string;
+	password: string;
+	password2: string;
+	first_name: string;
+	last_name: string;
+};
 
 class AuthService {
-    private static url = `${api.url}/auth/token/`;
+	private static url = `${api.url}`;
+	private static jsonHeaders = {
+		'Content-Type': 'application/json',
+	};
 
+	public handleLogin = async (userData: LoginUserData) => {
+		const response = await axios.post(`${AuthService.url}/auth/token/`, userData, { headers: AuthService.jsonHeaders });
+		return response;
+	};
 
-    public handleLogin = async (userData: LoginUserData) => {
-        const headers = {
-            'Content-Type': 'application/json'
+	public handleRegister = async (userData: RegistrationUserData) => {
+		const response = await axios.post(`${AuthService.url}/auth/register/`, userData, { headers: AuthService.jsonHeaders });
+		return response;
+	};
+
+	public checkAuthStatus = async (token: string) => {
+		const authHeader = {
+			Authorization: `Bearer ${token}`,
+		};
+        var userData = null
+		try {
+			const response = await axios.post(`${AuthService.url}/auth/token/check`, token, { headers: authHeader });
+
+			if (response.status === 200) {
+				userData = response.data;
+			}
+			return userData;
+		} catch (error: unknown) {
+            return null;
         }
-
-        try {
-            const response = await axios.post(AuthService.url, userData, { headers: headers });
-            if (response.status == 200) {
-                this.createToken(response);
-            }
-            return response;
-        } catch (error: unknown) {
-            // TODO: better error handling
-            if (!axios.isAxiosError(error)) {
-                console.error('Error:', error);
-                return;
-            }
-
-            switch (error.response?.status) {
-                case 401:
-                    console.error('Error:', error.response.data);
-                    break;
-                case 500:
-                    console.error('Error:', error);
-            }
-        }
-    }
-
-    handleRegister = async(userData: RegistrationUserData) => {
-        const headers = {
-            'Content-Type': 'application/json'
-        }
-
-        try {
-            const response = await axios.post(AuthService.url, userData, { headers: headers });
-            if (response.status == 200) {
-                // Login user after registration
-                const { username, password } = userData;
-                this.handleLogin({ username, password });
-            }
-            return response;
-        } catch (error: unknown) {
-            if (!axios.isAxiosError(error)) {
-                console.error('Error:', error);
-                return;
-            }
-
-            switch (error.response?.status) {
-                case 500:
-                    // TODO: error handling
-            }
-        }
-    }
-
-    handleLogout = () => {
-        this.removeToken();
-    }
-
-    createToken = (response: AxiosResponse<any, any>) => {
-        localStorage.setItem('token', response.data.access);
-    }
-
-    removeToken = () => {
-        localStorage.removeItem('token');
-    }
+	};
 }
 
 export default new AuthService();

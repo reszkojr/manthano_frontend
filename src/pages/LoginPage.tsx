@@ -1,6 +1,6 @@
 import { FormEvent } from 'react';
 
-import AuthService from '../services/AuthService';
+import { useAuth } from '../context/AuthContext';
 
 import TextInput from '../components/elements/TextInput';
 import Submit from '../components/elements/Submit';
@@ -9,14 +9,20 @@ import Checkbox from '../components/elements/Checkbox';
 import './LoginPage.css';
 
 const LoginPage = () => {
-	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+	const { login } = useAuth();
+
+	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const userData = {
 			username: e.currentTarget.username.value,
-			password: e.currentTarget.password.value
+			password: e.currentTarget.password.value,
+		};
+		try {
+			await login(userData);
+		} catch (error) {
+			console.error('There was an error while attempting to login:', error);
 		}
-		const loginResponse = AuthService.handleLogin(userData);
-	}
+	};
 
 	return (
 		<div className='flex flex-col items-center px-6 py-8'>
