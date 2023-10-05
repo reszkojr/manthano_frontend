@@ -31,7 +31,10 @@ const LoginPage = () => {
 					<h1 className='mb-3 text-2xl font-bold'>Welcome back!</h1>
 					<h2 className='text-gray-300'>Let's start your classroom in just a few clicks.</h2>
 					<h2 className='text-gray-300'>
-						Still don't have an account? <span className='text-lapis-500'>Sign up</span>
+						Still don't have an account?{' '}
+						<a href='/signup' className='text-lapis-500'>
+							Sign up
+						</a>
 					</h2>
 				</div>
 				<form className='flex flex-col gap-4' method='POST' onSubmit={handleSubmit}>
@@ -39,7 +42,7 @@ const LoginPage = () => {
 					<TextInput type='password' name='password' placeholder='●●●●●●●●●●●●●' label='Password' />
 					<div className='my-2 flex justify-between text-gray-300'>
 						<Checkbox text='Remember me' id='remember' />
-						<a href='/auth/passwordreset' className='text-lapis-500'>
+						<a href='/auth/password md:w-[400px] rreset' className='text-lapis-500'>
 							Forgot your password?
 						</a>
 					</div>
