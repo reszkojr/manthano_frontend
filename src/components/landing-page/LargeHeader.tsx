@@ -1,6 +1,5 @@
 import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ReactSVG } from 'react-svg';
 import { HiUserCircle } from 'react-icons/hi2';
 
 import AuthContext from '../../context/AuthContext';
@@ -13,7 +12,7 @@ const LargeHeader = () => {
 	return (
 		<header id='header'>
 			<div className='text-gray flex items-center justify-around px-60 pt-10 text-xl'>
-				<ReactSVG src='/m_manthano.svg' onClick={() => redirect()} className='w-12 cursor-pointer' />
+				<img src='/m_manthano.png' onClick={() => redirect()} className='w-12 cursor-pointer' />
 				<div className='flex space-x-64'>
 					<div className='flex space-x-12'>
 						<Link className='transition-colors hover:text-white' to='/'>
