@@ -13,9 +13,9 @@ const styles = {
 
 const TextInput = (props: TextInputProps) => {
 	return (
-		<div className={styles.container}>
+		<div className={`${styles.container}${props.className ? ' ' + props.className : ''}`}>
 			<label htmlFor={props.name}>{props.label}</label>
-			<input className={`${styles.input} ${props.className}`} type={props.type} name={props.name} placeholder={props.placeholder} />
+			<input className={`${styles.input}`} type={props.type} name={props.name} placeholder={props.placeholder} />
 		</div>
 	);
 };
