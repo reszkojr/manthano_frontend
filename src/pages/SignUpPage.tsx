@@ -1,114 +1,77 @@
-import { ChangeEvent, Component, FormEvent } from 'react';
-import axios, { AxiosResponse } from 'axios';
+import { FormEvent } from 'react';
 
-interface SignUpPageState {
-	username: string;
-	email: string;
-	password: string;
-	password2: string;
-	first_name: string;
-	last_name: string;
-	message: string;
-	errors: Record<string, string[]>;
-}
+import { useAuth } from '../context/AuthContext';
 
-class SignUpPage extends Component<{}, SignUpPageState> {
-	constructor(props: {}) {
-		super(props);
-		this.state = {
-			username: '',
-			email: '',
-			password: '',
-			password2: '',
-			first_name: '',
-			last_name: '',
-			message: '',
-			errors: {},
+import TextInput from '../components/elements/TextInput';
+import Submit from '../components/elements/Submit';
+import Checkbox from '../components/elements/Checkbox';
+
+import './form.css';
+import { useNavigate } from 'react-router';
+
+const SignUpPage = () => {
+	const { register } = useAuth();
+	const navigate = useNavigate();
+
+	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		const userData = {
+			username: e.currentTarget.username.value,
+			email: e.currentTarget.email.value,
+			password: e.currentTarget.password.value,
+			password2: e.currentTarget.password2.value,
+			first_name: e.currentTarget.first_name.value,
+			last_name: e.currentTarget.last_name.value,
 		};
-	}
-
-	handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = event.target;
-		this.setState((prevState) => ({
-			...prevState,
-			[name]: value,
-		}));
-	};
-
-	handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
-
-		if (this.state.password !== this.state.password2) {
-			alert('The passwords do not match!');
-			return;
-		}
-
-		const { username, email, password, password2, first_name, last_name } = this.state;
-
-		const formData = { username, email, password, password2, first_name, last_name };
-
 		try {
-			const response: AxiosResponse<any> = await axios.post('http://127.0.0.1:8000/auth/register/', formData);
-
-			switch (response.status) {
-				case 201:
-					this.setState({ message: 'Account succesfully created! Welcome to Manthano!' });
-					break;
+			const response = await register(userData);
+			if (response?.status == 201) {
+				navigate('/classroom');
 			}
-		} catch (error: unknown) {
-			if (axios.isAxiosError(error)) {
-				switch (error.response?.status) {
-					case 400:
-						console.log(error.response?.data);
-						this.setState({ errors: error.response?.data });
-						break;
-					case 500:
-						break;
-				}
-				return;
-			}
-			console.error('Error:', error);
+		} catch (error) {
+			console.error('There was an error while attempting to login:', error);
 		}
 	};
 
-	render() {
-		const errorNotifications = Object.keys(this.state.errors).map((field) => (
-			<div key={field}>
-				{this.state.errors[field].map((error, index) => (
-					<div key={index} className='error-notification'>
-						{error}
+	return (
+		<div className='my-4 w-96 md:w-[600px] rounded-lg border border-gray-700 bg-gray-800 shadow mx-auto md:absolute md:bottom-1/2 md:right-1/2 md:translate-x-1/2 md:translate-y-1/2'>
+			<div className='space-y-4 p-6'>
+				<div className=''>
+					<h1 className='mb-3 text-2xl font-bold'>Let's get you started!</h1>
+					<h2 className='text-gray-300'>Creating your classroom is gonna be as easy as Plato finding a cave.</h2>
+					<h2 className='text-gray-300'>
+						Already have an account?{' '}
+						<a href='/login' className='text-lapis-500'>
+							Then Login here
+						</a>
+					</h2>
+				</div>
+				<form className='flex flex-col gap-4' method='POST' onSubmit={handleSubmit}>
+					<div className='flex flex-col gap-4'>
+						<div className='flex flex-col md:flex-row gap-4'>
+							<TextInput type='text' className='flex-1' name='first_name' placeholder='Diogenes' label='First name' />
+							<TextInput type='text' className='flex-1' name='last_name' placeholder='the Cynic' label='Last name' />
+						</div>
+						<div className='flex flex-col md:flex-row gap-4'>
+							<TextInput type='text' className='flex-1' name='username' placeholder='diogenesdacynic' label='Username' />
+							<TextInput type='text' className='flex-1' name='email' placeholder='diogenes@philosopher.com' label='Email' />
+						</div>
+						<div className='flex flex-col md:flex-row gap-4'>
+							<TextInput type='password' className='flex-1' name='password' placeholder='●●●●●●●●●●●●●' label='Password' />
+							<TextInput type='password' className='flex-1' name='password2' placeholder='●●●●●●●●●●●●●' label='Confirm your password' />
+						</div>
 					</div>
-				))}
-			</div>
-		));
-		return (
-			<div id='signup-form'>
-				<p>{this.state.message}</p>
-				{errorNotifications}
-				<form onSubmit={this.handleSubmit}>
-					<div className='username'>
-						<input type='text' id='username' name='username' placeholder='cronaldo7' value={this.state.username} onChange={this.handleChange} />
+					<div className='my-2 flex justify-between text-gray-300'>
+						<Checkbox text='Remember me' id='remember' />
+						<a href='/auth/passwordreset' className='text-lapis-500'>
+							Forgot your password?
+						</a>
 					</div>
-					<div className='email'>
-						<input type='text' id='email' name='email' placeholder='cristiano@ronaldo.com' value={this.state.email} onChange={this.handleChange} />
-					</div>
-					<div className='password'>
-						<input type='password' id='password' name='password' placeholder='**********' value={this.state.password} onChange={this.handleChange} />
-					</div>
-					<div className='password2'>
-						<input type='password' id='password2' name='password2' placeholder='**********' value={this.state.password2} onChange={this.handleChange} />
-					</div>
-					<div className='first-name'>
-						<input type='text' id='first_name' name='first_name' placeholder='First name' value={this.state.first_name} onChange={this.handleChange} />
-					</div>
-					<div className='last-name'>
-						<input type='text' id='last_name' name='last_name' placeholder='Last name' value={this.state.last_name} onChange={this.handleChange} />
-					</div>
-					<input type='submit' value='Sign up' />
+					<Submit label='Sign up' />
 				</form>
 			</div>
-		);
-	}
-}
+		</div>
+	);
+};
 
 export default SignUpPage;
