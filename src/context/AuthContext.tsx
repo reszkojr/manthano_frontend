@@ -5,7 +5,7 @@ import axios, { AxiosResponse } from 'axios';
 import Props from '../utils/Props';
 import AuthService from '../services/AuthService';
 
-type User = {
+interface Token {
 	exp: number;
 	iat: number;
 	jti: string;
@@ -29,7 +29,7 @@ type RegistrationUserData = {
 };
 
 interface AuthContextData {
-	user: User | null;
+	username: string;
 	login(userData: LoginUserData): Promise<AxiosResponse<any, any> | undefined>;
 	logout(): void;
 	register(userData: RegistrationUserData): Promise<AxiosResponse<any, any> | undefined>;
@@ -40,7 +40,7 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: Props) => {
-	const [user, setUser] = useState(null);
+	const [username, setUsername] = useState('');
 	const [token, setToken] = useState('');
 
 	useEffect(() => {
@@ -52,12 +52,13 @@ export const AuthProvider = ({ children }: Props) => {
 			const response = await AuthService.handleLogin(userData);
 			if (response?.status == 200) {
 				const token = response.data.access;
-				const user = response.data.user;
+				const decoded_token: Token = jwt_decode(response.data.access);
+				const username: string = decoded_token.username;
 
-				createStorageItem('token', jwt_decode(token));
+				createStorageItem('token', token);
 
 				setToken(token);
-				setUser(user);
+				setUsername(username);
 			}
 			return response;
 		} catch (error: unknown) {
@@ -101,7 +102,6 @@ export const AuthProvider = ({ children }: Props) => {
 
 	const logout = () => {
 		removeLocalStorageItem('token');
-		removeLocalStorageItem('user');
 	};
 
 	const createStorageItem = (item: string, value: string) => {
@@ -116,15 +116,15 @@ export const AuthProvider = ({ children }: Props) => {
 		try {
 			const userData = await AuthService.checkAuthStatus(token);
 			if (userData) {
-				setUser(user);
+				return true;
 			}
 		} catch (error) {
-			setUser(null);
+			return false;
 		}
 	};
 
 	const contextData = {
-		user,
+		username,
 		login,
 		logout,
 		register,
