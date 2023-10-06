@@ -5,7 +5,7 @@ This is the repository for the frontend of the Manthano project, a resource-shar
 
 The frontend was built using the ReactJS framework in version 18.2.
 
-![manthano landing2](https://github.com/reszkojr/manthano_frontend/assets/67809084/2f2a9ebb-b852-403a-854c-c455ce76a2dd)
+![manthano landing2](https://github.com/reszkojr/manthano-frontend/assets/67809084/8e58c149-fdbe-4678-a9cb-a8e6c24871f8)
 
 ## Overview
 
