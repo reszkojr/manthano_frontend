@@ -1,9 +1,9 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import jwt_decode from 'jwt-decode';
+import axios, { AxiosResponse } from 'axios';
 
 import Props from '../utils/Props';
 import AuthService from '../services/AuthService';
-import axios from 'axios';
 
 type User = {
 	exp: number;
@@ -30,9 +30,9 @@ type RegistrationUserData = {
 
 interface AuthContextData {
 	user: User | null;
-	login(userData: LoginUserData): void;
+	login(userData: LoginUserData): Promise<AxiosResponse<any, any> | undefined>;
 	logout(): void;
-	register(userData: RegistrationUserData): void;
+	register(userData: RegistrationUserData): Promise<AxiosResponse<any, any> | undefined>;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -54,8 +54,7 @@ export const AuthProvider = ({ children }: Props) => {
 				const token = response.data.access;
 				const user = response.data.user;
 
-				createStorageItem('user', jwt_decode(user));
-				createStorageItem('token', token);
+				createStorageItem('token', jwt_decode(token));
 
 				setToken(token);
 				setUser(user);
@@ -81,7 +80,7 @@ export const AuthProvider = ({ children }: Props) => {
 	const register = async (userData: RegistrationUserData) => {
 		try {
 			const response = await AuthService.handleRegister(userData);
-			if (response.status == 200) {
+			if (response.status == 201) {
 				// Login user after registration
 				const { username, password } = userData;
 				login({ username, password });
@@ -120,7 +119,7 @@ export const AuthProvider = ({ children }: Props) => {
 				setUser(user);
 			}
 		} catch (error) {
-			throw error;
+			setUser(null);
 		}
 	};
 
