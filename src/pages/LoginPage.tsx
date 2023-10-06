@@ -1,24 +1,28 @@
 import { FormEvent } from 'react';
-
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 import TextInput from '../components/elements/TextInput';
 import Submit from '../components/elements/Submit';
 import Checkbox from '../components/elements/Checkbox';
 
-import './LoginPage.css';
+import './form.css';
 
 const LoginPage = () => {
 	const { login } = useAuth();
+	const navigate = useNavigate();
 
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const userData = {
-			username: e.currentTarget.username.value,
+			username: e.currentTarget.email.value,
 			password: e.currentTarget.password.value,
 		};
 		try {
-			await login(userData);
+			const response = await login(userData);
+			if (response?.status === 200 || response?.status === 201) {
+				navigate('/classroom')
+			}
 		} catch (error) {
 			console.error('There was an error while attempting to login:', error);
 		}
@@ -38,7 +42,7 @@ const LoginPage = () => {
 					</h2>
 				</div>
 				<form className='flex flex-col gap-4' method='POST' onSubmit={handleSubmit}>
-					<TextInput type='text' name='username' placeholder='fabio@reszko.dev' label='Email' />
+					<TextInput type='text' name='email' placeholder='fabio@reszko.dev' label='Email' />
 					<TextInput type='password' name='password' placeholder='●●●●●●●●●●●●●' label='Password' />
 					<div className='my-2 flex justify-between text-gray-300'>
 						<Checkbox text='Remember me' id='remember' />
