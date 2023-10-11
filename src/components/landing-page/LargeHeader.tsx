@@ -1,11 +1,10 @@
-import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { HiUserCircle } from 'react-icons/hi2';
 
-import AuthContext from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 
 const LargeHeader = () => {
-	const { user } = useContext(AuthContext);
+	const { userData } = useAuth();
 	const navigate = useNavigate();
 
 	const redirect = () => navigate('/');
@@ -30,10 +29,10 @@ const LargeHeader = () => {
 					</nav>
 				</div>
 				<>
-					{user ? (
+					{userData.username ? (
 						<Link to='/profile'>
 							<div className='flex space-x-2 transition-colors hover:text-white'>
-								<HiUserCircle className='mt-1 h-auto w-6' /> <span>{user.username}</span>
+								<HiUserCircle className='mt-1 h-auto w-6' /> <span>{userData.username}</span>
 							</div>
 						</Link>
 					) : (

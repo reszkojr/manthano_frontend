@@ -32,21 +32,25 @@ class AuthService {
 		return response;
 	};
 
-	public checkAuthStatus = async (token: string) => {
+	public refreshAuth = async (token: string, refreshToken: string) => {
 		const authHeader = {
 			Authorization: `Bearer ${token}`,
 		};
-        var userData = null
 		try {
-			const response = await axios.post(`${AuthService.url}/auth/token/check`, token, { headers: authHeader });
-
+			var response = await axios.post(`${AuthService.url}/auth/token/check`, { token: token }, { headers: authHeader });
 			if (response.status === 200) {
-				userData = response.data;
+				return response;
 			}
-			return userData;
 		} catch (error: unknown) {
-            return null;
-        }
+			if (axios.isAxiosError(error)) {
+				if (error.response?.status === 401) {
+					const response = await axios.post(`${AuthService.url}/auth/token/refresh`, { refresh: refreshToken }, { headers: authHeader });
+					if (response.status === 200) {
+						return response;
+					}
+				}
+			}
+		}
 	};
 }
 
