@@ -37,7 +37,7 @@ class AuthService {
 			Authorization: `Bearer ${token}`,
 		};
 		try {
-			var response = await axios.post(`${AuthService.url}/auth/token/check`, { token: token }, { headers: authHeader });
+			const response = await axios.post(`${AuthService.url}/auth/token/check`, { token: token }, { headers: authHeader });
 			if (response.status === 200) {
 				return response;
 			}

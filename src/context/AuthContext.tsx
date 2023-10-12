@@ -1,6 +1,6 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import jwt_decode from 'jwt-decode';
-import axios, { Axios, AxiosResponse } from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 import Props from '../utils/Props';
 import AuthService from '../services/AuthService';
@@ -36,14 +36,12 @@ interface UserData {
 
 interface AuthContextData {
 	userData: UserData;
-	login(userData: LoginUserData): Promise<AxiosResponse<any, any> | undefined>;
+	login(userData: LoginUserData): Promise<AxiosResponse<unknown, unknown> | undefined>;
 	logout(): void;
-	register(userData: RegistrationUserData): Promise<AxiosResponse<any, any> | undefined>;
+	register(userData: RegistrationUserData): Promise<AxiosResponse<unknown, unknown> | undefined>;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
-
-export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: Props) => {
 	const [userData, setUserData] = useState({} as UserData);

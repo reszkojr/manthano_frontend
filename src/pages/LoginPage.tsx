@@ -1,5 +1,5 @@
 import { FormEvent } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../components/hooks/UseAuth';
 import { useNavigate } from 'react-router-dom';
 
 import TextInput from '../components/elements/TextInput';

@@ -1,6 +1,6 @@
 import { FormEvent } from 'react';
 
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../components/hooks/UseAuth';
 
 import TextInput from '../components/elements/TextInput';
 import Submit from '../components/elements/Submit';
