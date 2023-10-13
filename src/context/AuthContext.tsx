@@ -14,6 +14,11 @@ interface Token {
 	username: string;
 }
 
+interface RefreshAuthResponse {
+	token: string;
+	refreshToken: string;
+}
+
 type LoginUserData = {
 	username: string;
 	password: string;
@@ -28,14 +33,8 @@ type RegistrationUserData = {
 	last_name: string;
 };
 
-interface UserData {
-	username: string;
-	token: string;
-	refreshToken: string;
-}
-
 interface AuthContextData {
-	userData: UserData;
+	username: string | null | undefined;
 	login(userData: LoginUserData): Promise<AxiosResponse<unknown, unknown> | undefined>;
 	logout(): void;
 	register(userData: RegistrationUserData): Promise<AxiosResponse<unknown, unknown> | undefined>;
@@ -44,21 +43,43 @@ interface AuthContextData {
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export const AuthProvider = ({ children }: Props) => {
-	const [userData, setUserData] = useState({} as UserData);
+	const [username, setUsername] = useState<string | null>();
 
 	useEffect(() => {
-		refreshAuth(localStorage.getItem('token'), localStorage.getItem('refreshToken'));
+		const currentToken = localStorage.getItem('token') || '';
+		const currentRefreshToken = localStorage.getItem('refreshToken') || '';
+
+		const updateToken = async () => {
+			try {
+				const authResponse: RefreshAuthResponse | undefined = await AuthService.refreshAuth(currentToken, currentRefreshToken);
+
+				if (authResponse) {
+					const decodedToken: Token = jwt_decode(authResponse.token);
+					const usernameFromToken = decodedToken.username;
+
+					setUsername(usernameFromToken);
+					storeTokens(authResponse.token, authResponse.refreshToken);
+				}
+			} catch (error: unknown) {
+				if (axios.isAxiosError(error)) {
+					setUsername(null);
+					// Lida com outros erros
+					console.error('Unknown error: sss', error);
+				}
+			}
+		};
+
+		updateToken();
 	}, []);
 
 	const login = async (userData: LoginUserData) => {
 		try {
 			const response = await AuthService.handleLogin(userData);
 			if (response?.status == 200) {
-				const username: string = jwt_decode(response?.data.access);
 				const token = response?.data.access;
 				const refreshToken = response?.data.refresh;
 
-				storeAuthData(username, token, refreshToken);
+				storeTokens(token, refreshToken);
 			}
 			return response;
 		} catch (error: unknown) {
@@ -104,46 +125,15 @@ export const AuthProvider = ({ children }: Props) => {
 		localStorage.removeItem('token');
 	};
 
-	const storeAuthData = (username: string, token: string, refreshToken: string) => {
-		setUserData({ username, token, refreshToken });
-
+	const storeTokens = (token: string, refreshToken: string) => {
 		localStorage.setItem('token', token);
 		localStorage.setItem('refreshToken', refreshToken);
 	};
 
-	const refreshAuth = async (token: string | null, refreshToken: string | null) => {
-		try {
-			if (!token || !refreshToken) {
-				return;
-			}
-			const response = await AuthService.refreshAuth(token, refreshToken);
-
-			if (response?.status === 200) {
-				const decodedToken: Token = jwt_decode(response?.data.access);
-				const username: string = decodedToken.username;
-
-				storeAuthData(username, token, refreshToken);
-			}
-		} catch (error: unknown) {
-			if (axios.isAxiosError(error)) {
-				if (error.response?.status === 401) {
-					const data = error.response?.data;
-
-					const newToken = data.access;
-					const newRefreshToken = data.refresh;
-					setUserData((prev) => {
-						prev.token = newToken;
-						prev.refreshToken = newRefreshToken;
-						return prev;
-					});
-				}
-			}
-		}
-	};
 	return (
 		<AuthContext.Provider
 			value={{
-				userData,
+				username,
 				login,
 				logout,
 				register,

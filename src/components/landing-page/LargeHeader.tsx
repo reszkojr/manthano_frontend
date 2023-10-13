@@ -4,7 +4,7 @@ import { HiUserCircle } from 'react-icons/hi2';
 import { useAuth } from '../hooks/UseAuth';
 
 const LargeHeader = () => {
-	const { userData } = useAuth();
+	const { username } = useAuth();
 	const navigate = useNavigate();
 
 	const redirect = () => navigate('/');
@@ -29,10 +29,10 @@ const LargeHeader = () => {
 					</nav>
 				</div>
 				<>
-					{userData.username ? (
+					{username ? (
 						<Link to='/profile'>
 							<div className='flex space-x-2 transition-colors hover:text-white'>
-								<HiUserCircle className='mt-1 h-auto w-6' /> <span>{userData.username}</span>
+								<HiUserCircle className='mt-1 h-auto w-6' /> <span>{username}</span>
 							</div>
 						</Link>
 					) : (
