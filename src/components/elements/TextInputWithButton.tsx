@@ -8,9 +8,9 @@ type TextInputWithButtonProps = {
 };
 
 const styles = {
-	container: 'table space-y-2',
-	input: 'py-3 px-3 text-gray bg-gray-900 border border-gray-700 rounded-md border-r-none rounded-r-none',
-	button: 'py-3 px-4 h-full bg-persian-400 hover:bg-lapis-500 transition-colors duration-100 focus:ring-2 focus:outline-none focus:ring-teal-600 border-r-gray-700 rounded-r',
+	container: 'flex',
+	input: 'py-3 px-3 flex-[3] h-12 text-gray bg-gray-900 border border-gray-700 rounded-md rounded-r-none',
+	button: 'py-3 px-6 h-12 bg-persian-400 hover:bg-lapis-500 transition-colors duration-100 focus:ring-2 focus:outline-none focus:ring-teal-600 border-r-persian-300 border-l-none rounded-r',
 };
 
 const TextInputWithButton = (props: TextInputWithButtonProps) => {
