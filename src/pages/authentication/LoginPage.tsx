@@ -1,10 +1,10 @@
 import { FormEvent } from 'react';
-import { useAuth } from '../components/hooks/UseAuth';
+import { useAuth } from '../../components/hooks/UseAuth';
 import { useNavigate } from 'react-router-dom';
 
-import TextInput from '../components/elements/TextInput';
-import Submit from '../components/elements/Submit';
-import Checkbox from '../components/elements/Checkbox';
+import TextInput from '../../components/elements/TextInput';
+import Submit from '../../components/elements/Submit';
+import Checkbox from '../../components/elements/Checkbox';
 
 import './form.css';
 
@@ -21,7 +21,7 @@ const LoginPage = () => {
 		try {
 			const response = await login(userData);
 			if (response?.status === 200 || response?.status === 201) {
-				navigate('/classroom')
+				navigate('/classroom');
 			}
 		} catch (error) {
 			console.error('There was an error while attempting to login:', error);

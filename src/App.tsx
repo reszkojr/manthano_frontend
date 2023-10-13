@@ -2,9 +2,9 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import { AuthProvider } from './context/AuthContext';
 
-import LandingPage from './pages/LandingPage/LandingPage';
-import LoginPage from './pages/LoginPage';
-import SignUpPage from './pages/SignUpPage';
+import LandingPage from './pages/landingpage/LandingPage';
+import LoginPage from './pages/authentication/LoginPage';
+import SignUpPage from './pages/authentication/SignUpPage';
 
 const App = () => {
 	return (

@@ -1,10 +1,10 @@
 import { FormEvent } from 'react';
 
-import { useAuth } from '../components/hooks/UseAuth';
+import { useAuth } from '../../components/hooks/UseAuth';
 
-import TextInput from '../components/elements/TextInput';
-import Submit from '../components/elements/Submit';
-import Checkbox from '../components/elements/Checkbox';
+import TextInput from '../../components/elements/TextInput';
+import Submit from '../../components/elements/Submit';
+import Checkbox from '../../components/elements/Checkbox';
 
 import './form.css';
 import { useNavigate } from 'react-router';
