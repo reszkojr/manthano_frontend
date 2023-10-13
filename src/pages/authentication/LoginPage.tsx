@@ -21,7 +21,7 @@ const LoginPage = () => {
 		try {
 			const response = await login(userData);
 			if (response?.status === 200 || response?.status === 201) {
-				navigate('/classroom');
+				navigate('/joinclassroom');
 			}
 		} catch (error) {
 			console.error('There was an error while attempting to login:', error);

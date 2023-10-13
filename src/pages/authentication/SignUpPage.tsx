@@ -26,7 +26,7 @@ const SignUpPage = () => {
 		try {
 			const response = await register(userData);
 			if (response?.status == 201) {
-				navigate('/classroom');
+				navigate('/joinclassroom');
 			}
 		} catch (error) {
 			console.error('There was an error while attempting to login:', error);

@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import { AuthProvider } from './context/AuthContext';
 
+import ClassroomJoinPage from './pages/classroom/ClassroomJoinPage';
 import LandingPage from './pages/landingpage/LandingPage';
 import LoginPage from './pages/authentication/LoginPage';
 import SignUpPage from './pages/authentication/SignUpPage';
@@ -12,6 +13,7 @@ const App = () => {
 			<Router>
 				<Routes>
 					<Route path='/' element={<LandingPage />} />
+					<Route path='/joinclassroom' element={<ClassroomJoinPage />} />
 					<Route path='/login' element={<LoginPage />} />
 					<Route path='/signup' element={<SignUpPage />} />
 				</Routes>
