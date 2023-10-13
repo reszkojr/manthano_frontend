@@ -1,8 +1,8 @@
 type TextInputProps = {
 	type: string;
 	name: string;
-	placeholder: string;
-	label: string;
+	label?: string;
+	placeholder?: string;
 	className?: string;
 };
 
