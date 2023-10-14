@@ -35,6 +35,7 @@ type RegistrationUserData = {
 
 interface AuthContextData {
 	username: string | null | undefined;
+	token: string | null | undefined;
 	login(userData: LoginUserData): Promise<AxiosResponse<unknown, unknown> | undefined>;
 	logout(): void;
 	register(userData: RegistrationUserData): Promise<AxiosResponse<unknown, unknown> | undefined>;
@@ -44,6 +45,7 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export const AuthProvider = ({ children }: Props) => {
 	const [username, setUsername] = useState<string | null>();
+	const [token, setToken] = useState<string | null>();
 
 	useEffect(() => {
 		const currentToken = localStorage.getItem('token') || '';
@@ -52,7 +54,6 @@ export const AuthProvider = ({ children }: Props) => {
 		const updateToken = async () => {
 			try {
 				const authResponse: RefreshAuthResponse | undefined = await AuthService.refreshAuth(currentToken, currentRefreshToken);
-
 				if (authResponse) {
 					const decodedToken: Token = jwt_decode(authResponse.token);
 					const usernameFromToken = decodedToken.username;
@@ -63,8 +64,7 @@ export const AuthProvider = ({ children }: Props) => {
 			} catch (error: unknown) {
 				if (axios.isAxiosError(error)) {
 					setUsername(null);
-					// Lida com outros erros
-					console.error('Unknown error: sss', error);
+					removeTokens();
 				}
 			}
 		};
@@ -126,14 +126,21 @@ export const AuthProvider = ({ children }: Props) => {
 	};
 
 	const storeTokens = (token: string, refreshToken: string) => {
+		setToken(token);
 		localStorage.setItem('token', token);
 		localStorage.setItem('refreshToken', refreshToken);
+	};
+
+	const removeTokens = () => {
+		localStorage.removeItem('token');
+		localStorage.removeItem('refreshToken');
 	};
 
 	return (
 		<AuthContext.Provider
 			value={{
 				username,
+				token,
 				login,
 				logout,
 				register,
