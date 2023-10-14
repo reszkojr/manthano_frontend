@@ -46,6 +46,7 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 export const AuthProvider = ({ children }: Props) => {
 	const [username, setUsername] = useState<string | null>();
 	const [token, setToken] = useState<string | null>();
+	const [loading, setLoading] = useState<boolean>(true);
 
 	useEffect(() => {
 		const currentToken = localStorage.getItem('token') || '';
@@ -67,6 +68,7 @@ export const AuthProvider = ({ children }: Props) => {
 					removeTokens();
 				}
 			}
+			setLoading(false);
 		};
 
 		updateToken();
@@ -135,6 +137,10 @@ export const AuthProvider = ({ children }: Props) => {
 		localStorage.removeItem('token');
 		localStorage.removeItem('refreshToken');
 	};
+
+	if (loading) {
+		return;
+	}
 
 	return (
 		<AuthContext.Provider
