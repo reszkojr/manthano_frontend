@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from 'react';
 import jwt_decode from 'jwt-decode';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 
 import Props from '../utils/Props';
 import AuthService from '../services/AuthService';
@@ -36,9 +36,9 @@ type RegistrationUserData = {
 interface AuthContextData {
 	username: string | null | undefined;
 	token: string | null | undefined;
-	login(userData: LoginUserData): Promise<AxiosResponse<unknown, unknown> | undefined>;
+	login(userData: LoginUserData): Promise<boolean>;
 	logout(): void;
-	register(userData: RegistrationUserData): Promise<AxiosResponse<unknown, unknown> | undefined>;
+	register(userData: RegistrationUserData): Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -82,13 +82,14 @@ export const AuthProvider = ({ children }: Props) => {
 				const refreshToken = response?.data.refresh;
 
 				storeTokens(token, refreshToken);
+				return true;
 			}
-			return response;
+			return false;
 		} catch (error: unknown) {
 			// TODO: better error handling
 			if (!axios.isAxiosError(error)) {
 				console.error('Error:', error);
-				return;
+				return false;
 			}
 
 			switch (error.response?.status) {
@@ -98,6 +99,7 @@ export const AuthProvider = ({ children }: Props) => {
 				case 500:
 					console.error('Error:', error);
 			}
+			return false;
 		}
 	};
 
@@ -108,23 +110,26 @@ export const AuthProvider = ({ children }: Props) => {
 				// Login user after registration
 				const { username, password } = userData;
 				login({ username, password });
+				return true;
 			}
-			return response;
+			return false;
 		} catch (error: unknown) {
 			if (!axios.isAxiosError(error)) {
 				console.error('Error:', error);
-				return;
+				return false;
 			}
 
 			switch (error.response?.status) {
 				case 500:
 				// TODO: error handling
 			}
+			return false;
 		}
 	};
 
 	const logout = () => {
 		localStorage.removeItem('token');
+		return true;
 	};
 
 	const storeTokens = (token: string, refreshToken: string) => {

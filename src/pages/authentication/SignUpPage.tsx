@@ -25,7 +25,7 @@ const SignUpPage = () => {
 		};
 		try {
 			const response = await register(userData);
-			if (response?.status == 201) {
+			if (response) {
 				navigate('/joinclassroom');
 			}
 		} catch (error) {

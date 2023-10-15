@@ -20,7 +20,7 @@ const LoginPage = () => {
 		};
 		try {
 			const response = await login(userData);
-			if (response?.status === 200 || response?.status === 201) {
+			if (response) {
 				navigate('/joinclassroom');
 			}
 		} catch (error) {
