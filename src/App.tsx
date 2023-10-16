@@ -7,6 +7,7 @@ import LandingPage from './pages/landingpage/LandingPage';
 import LoginPage from './pages/authentication/LoginPage';
 import SignUpPage from './pages/authentication/SignUpPage';
 import RequireAuth from './utils/RequireAuth';
+import ClassroomPage from './pages/classroom/ClassroomPage';
 
 const App = () => {
 	return (
@@ -19,6 +20,14 @@ const App = () => {
 						element={
 							<RequireAuth>
 								<ClassroomJoinPage />
+							</RequireAuth>
+						}
+					/>
+					<Route
+						path='/classroom'
+						element={
+							<RequireAuth>
+								<ClassroomPage />
 							</RequireAuth>
 						}
 					/>
