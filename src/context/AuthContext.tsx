@@ -1,11 +1,12 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useState } from 'react';
 import jwt_decode from 'jwt-decode';
 import axios from 'axios';
 
 import Props from '../utils/Props';
 import AuthService from '../services/AuthService';
 
-import { LoginUserData, RegistrationUserData, RefreshAuthResponse, Token } from '../types/Types';
+import { LoginUserData, RegistrationUserData, Token } from '../types/Types';
+import api from '../api';
 
 interface AuthContextData {
 	username: string | null | undefined;
@@ -20,33 +21,30 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 export const AuthProvider = ({ children }: Props) => {
 	const [username, setUsername] = useState<string | null>();
 	const [token, setToken] = useState<string | null>();
-	const [loading, setLoading] = useState<boolean>(true);
+	// const [loading, setLoading] = useState<boolean>(true);
 
-	useEffect(() => {
-		const currentToken = localStorage.getItem('token') || '';
-		const currentRefreshToken = localStorage.getItem('refreshToken') || '';
+	// useEffect(() => {
+	// 	const currentToken = localStorage.getItem('token') || '';
+	// 	const currentRefreshToken = localStorage.getItem('refreshToken') || '';
 
-		const updateToken = async () => {
-			try {
-				const authResponse: RefreshAuthResponse | undefined = await AuthService.refreshAuth(currentToken, currentRefreshToken);
-				if (authResponse) {
-					const decodedToken: Token = jwt_decode(authResponse.token);
-					const usernameFromToken = decodedToken.username;
+	// 	const updateToken = async () => {
+	// 		try {
+	// 			const tokenCheckResponse = await api.post('/auth/token/check', {token: currentToken})
+	// 			const refreshTokenCheckResponse = await api.post('/auth/token/check', {token: currentRefreshToken})
 
-					setUsername(usernameFromToken);
-					storeTokens(authResponse.token, authResponse.refreshToken);
-				}
-			} catch (error: unknown) {
-				if (axios.isAxiosError(error)) {
-					setUsername(null);
-					removeTokens();
-				}
-			}
-			setLoading(false);
-		};
+	// 			if (tokenCheckResponse.status !== 200)
 
-		updateToken();
-	}, []);
+	// 		} catch (error: unknown) {
+	// 			if (axios.isAxiosError(error)) {
+	// 				setUsername(null);
+	// 				removeTokens();
+	// 			}
+	// 		}
+	// 		setLoading(false);
+	// 	};
+
+	// 	updateToken();
+	// }, []);
 
 	const login = async (userData: LoginUserData) => {
 		try {
@@ -54,8 +52,11 @@ export const AuthProvider = ({ children }: Props) => {
 			if (response?.status == 200) {
 				const token = response?.data.access;
 				const refreshToken = response?.data.refresh;
-
 				storeTokens(token, refreshToken);
+
+				const decodedToken: Token = jwt_decode(token);
+				const usernameFromToken = decodedToken.username;
+				setUsername(usernameFromToken);
 				return true;
 			}
 			return false;
@@ -112,14 +113,9 @@ export const AuthProvider = ({ children }: Props) => {
 		localStorage.setItem('refreshToken', refreshToken);
 	};
 
-	const removeTokens = () => {
-		localStorage.removeItem('token');
-		localStorage.removeItem('refreshToken');
-	};
-
-	if (loading) {
-		return;
-	}
+	// if (loading) {
+	// 	return;
+	// }
 
 	return (
 		<AuthContext.Provider

@@ -2,10 +2,9 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
 import Props from './Props';
-import { useAuth } from '../components/hooks/UseAuth';
 
 const RequireAuth = ({ children }: Props) => {
-	const { token } = useAuth();
+	const token = localStorage.getItem('token');
 	const navigate = useNavigate();
 
 	useEffect(() => {
