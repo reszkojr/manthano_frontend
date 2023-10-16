@@ -1,13 +1,24 @@
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 import { FaUsersSlash, FaUsers } from 'react-icons/fa';
 
 import TextInputWithButton from '../../components/elements/TextInputWithButton';
 import Card from '../../components/elements/Card';
+import api from '../../api';
+import axios from 'axios';
 
 const ClassroomJoinPage = () => {
+	const [classroomCode, setClassroomCode] = useState('');
+
 	const handleJoinClassroomSubmit = async (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		alert('joining classroom...');
+		try {
+			const response = await api.post('/classroom/join/', { classroom_code: classroomCode });
+			response;
+		} catch (error: unknown) {
+			if (axios.isAxiosError(error)) {
+				// console.log(error.response?.data);
+			}
+		}
 	};
 
 	return (
@@ -32,7 +43,7 @@ const ClassroomJoinPage = () => {
 								<h1 className='text-gray-300'>Already have an invitation?</h1>
 								<h2 className='text-gray-300 mb-2'>Insert the code below and let's get you to socialize.</h2>
 								<div className='flex gap-2'>
-									<TextInputWithButton className='w-full' type='number' name='classroom_code' placeholder='Classroom code' buttonLabel='Join' buttonType='submit' onChange={undefined} onClick={undefined} />
+									<TextInputWithButton className='w-full' type='text' name='classroom_code' placeholder='Classroom code' buttonLabel='Join' buttonType='submit' value={classroomCode} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setClassroomCode(event.target.value)} />
 								</div>
 							</div>
 						</form>
