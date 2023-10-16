@@ -1,9 +1,9 @@
 # Manthano - Frontend
 ![manthano-newlogo-light](https://github.com/reszkojr/manthano_frontend/assets/67809084/abb85b68-c6b5-4988-a946-92ee6a440170)
 
-This is the repository for the frontend of the Manthano project, a resource-sharing platform for students. Manthano is a virtual learning environment aimed at making the educational process more effective and interactive.
+This is Manthano's frontend repository. Manthano is a virtual learning environment aimed at making the academic communication process more effective and interactive.
 
-The frontend was built using the ReactJS framework in version 18.2.
+This project was built using mainly ReactJS and TailwindCSS.
 
 ![manthano landing2](https://github.com/reszkojr/manthano-frontend/assets/67809084/8e58c149-fdbe-4678-a9cb-a8e6c24871f8)
 
