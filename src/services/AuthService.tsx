@@ -2,24 +2,7 @@ import axios from 'axios';
 
 import { api } from '../config';
 
-type LoginUserData = {
-	email: string;
-	password: string;
-};
-
-type RegistrationUserData = {
-	username: string;
-	email: string;
-	password: string;
-	password2: string;
-	first_name: string;
-	last_name: string;
-};
-
-interface RefreshAuthResponse {
-	token: string;
-	refreshToken: string;
-}
+import { LoginUserData, RegistrationUserData, RefreshAuthResponse } from "../types/Types";
 
 class AuthService {
 	private static url = `${api.url}`;

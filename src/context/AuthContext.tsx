@@ -5,33 +5,7 @@ import axios from 'axios';
 import Props from '../utils/Props';
 import AuthService from '../services/AuthService';
 
-interface Token {
-	exp: number;
-	iat: number;
-	jti: string;
-	token_type: string;
-	user_id: number;
-	username: string;
-}
-
-interface RefreshAuthResponse {
-	token: string;
-	refreshToken: string;
-}
-
-type LoginUserData = {
-	email: string;
-	password: string;
-};
-
-type RegistrationUserData = {
-	username: string;
-	email: string;
-	password: string;
-	password2: string;
-	first_name: string;
-	last_name: string;
-};
+import { LoginUserData, RegistrationUserData, RefreshAuthResponse, Token } from '../types/Types';
 
 interface AuthContextData {
 	username: string | null | undefined;
