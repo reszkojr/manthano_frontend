@@ -1,6 +1,7 @@
 interface CardProps {
-	icon?: React.ReactNode;
 	title: string;
+	icon?: React.ReactNode;
+	href: string;
 	subtitle?: string;
 	className?: string;
 }
@@ -10,13 +11,13 @@ const Card = (props: CardProps) => {
 
 	return (
 		<div className={styles.card}>
-			<div className='flex'>
+			<a href={props.href} className='flex'>
 				{props.icon && <div className='ml-2 mr-6 my-auto'>{props.icon}</div>}
 				<div className='space-y-1'>
 					<h2 className='text-md font-semibold'>{props.title}</h2>
 					{props.subtitle && <p className='text-md text-gray-300'>{props.subtitle}</p>}
 				</div>
-			</div>
+			</a>
 		</div>
 	);
 };
