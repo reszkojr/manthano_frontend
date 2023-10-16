@@ -1,12 +1,13 @@
 type TextInputWithButtonProps = {
 	type: string;
 	name: string;
+	value?: string;
 	buttonLabel: string;
 	buttonType: 'button' | 'reset' | 'submit' | undefined;
 	placeholder?: string;
 	className?: string;
-	onClick: React.MouseEventHandler<HTMLButtonElement> | undefined;
-	onChange: React.ChangeEventHandler<HTMLInputElement> | undefined;
+	onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
+	onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined;
 };
 
 const styles = {
@@ -18,7 +19,7 @@ const styles = {
 const TextInputWithButton = (props: TextInputWithButtonProps) => {
 	return (
 		<div className={`${styles.container}${props.className ? ' ' + props.className : ''}`}>
-			<input className={`${styles.input}`} type={props.type} onChange={props.onChange} name={props.name} placeholder={props.placeholder} />
+			<input className={`${styles.input}`} value={props.value || ''} type={props.type} onChange={props.onChange} name={props.name} placeholder={props.placeholder} />
 			<button className={styles.button} type={props.buttonType} onClick={props.onClick}>
 				{props.buttonLabel}
 			</button>
