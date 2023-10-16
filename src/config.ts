@@ -1,3 +1,3 @@
 export const api = {
-    "url": "https://reszko.pythonanywhere.com"
+    "url": "http://localhost:8000"
 }

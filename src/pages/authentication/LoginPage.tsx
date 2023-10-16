@@ -15,7 +15,7 @@ const LoginPage = () => {
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const userData = {
-			username: e.currentTarget.email.value,
+			email: e.currentTarget.email.value,
 			password: e.currentTarget.password.value,
 		};
 		try {

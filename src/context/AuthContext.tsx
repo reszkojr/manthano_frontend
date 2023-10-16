@@ -20,7 +20,7 @@ interface RefreshAuthResponse {
 }
 
 type LoginUserData = {
-	username: string;
+	email: string;
 	password: string;
 };
 
@@ -108,8 +108,8 @@ export const AuthProvider = ({ children }: Props) => {
 			const response = await AuthService.handleRegister(userData);
 			if (response.status == 201) {
 				// Login user after registration
-				const { username, password } = userData;
-				login({ username, password });
+				const { email, password } = userData;
+				login({ email, password });
 				return true;
 			}
 			return false;

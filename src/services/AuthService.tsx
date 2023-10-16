@@ -3,7 +3,7 @@ import axios from 'axios';
 import { api } from '../config';
 
 type LoginUserData = {
-	username: string;
+	email: string;
 	password: string;
 };
 
