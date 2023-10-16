@@ -32,7 +32,7 @@ const ClassroomJoinPage = () => {
 								<h1 className='text-gray-300'>Already have an invitation?</h1>
 								<h2 className='text-gray-300 mb-2'>Insert the code below and let's get you to socialize.</h2>
 								<div className='flex gap-2'>
-									<TextInputWithButton className='w-full' type='number' name='classroom_code' placeholder='Classroom code' buttonLabel='Join' buttonType='submit' />
+									<TextInputWithButton className='w-full' type='number' name='classroom_code' placeholder='Classroom code' buttonLabel='Join' buttonType='submit' onClick={undefined} />
 								</div>
 							</div>
 						</form>
