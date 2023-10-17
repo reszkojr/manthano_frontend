@@ -32,4 +32,9 @@
 		-webkit-animation-name: autofill;
 		-webkit-animation-fill-mode: both;
 	}
+
+	:root {
+		--toastify-color-info: #359ba6 !important;
+		--toastify-color-success: #33b987 !important;
+	}
 }
