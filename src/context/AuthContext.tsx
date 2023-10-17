@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import jwt_decode from 'jwt-decode';
 import axios from 'axios';
 
@@ -18,32 +18,17 @@ interface AuthContextData {
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export const AuthProvider = ({ children }: Props) => {
-	const [username, setUsername] = useState<string | null>();
-	const [token, setToken] = useState<string | null>();
-	// const [loading, setLoading] = useState<boolean>(true);
+	const [username, setUsername] = useState<string>();
+	const [token, setToken] = useState<string>();
 
-	// useEffect(() => {
-	// 	const currentToken = localStorage.getItem('token') || '';
-	// 	const currentRefreshToken = localStorage.getItem('refreshToken') || '';
-
-	// 	const updateToken = async () => {
-	// 		try {
-	// 			const tokenCheckResponse = await api.post('/auth/token/check', {token: currentToken})
-	// 			const refreshTokenCheckResponse = await api.post('/auth/token/check', {token: currentRefreshToken})
-
-	// 			if (tokenCheckResponse.status !== 200)
-
-	// 		} catch (error: unknown) {
-	// 			if (axios.isAxiosError(error)) {
-	// 				setUsername(null);
-	// 				removeTokens();
-	// 			}
-	// 		}
-	// 		setLoading(false);
-	// 	};
-
-	// 	updateToken();
-	// }, []);
+	useEffect(() => {
+		// Force Axios API to send a request after each component mount.
+		const storageToken = localStorage.getItem('token');
+		if (storageToken) {
+			setToken(storageToken);
+		}
+		AuthService.loginCheck(token);
+	}, [token]);
 
 	const login = async (userData: LoginUserData) => {
 		try {

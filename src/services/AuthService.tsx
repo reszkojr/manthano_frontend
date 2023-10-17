@@ -8,15 +8,22 @@ class AuthService {
 	};
 
 	public handleLogin = async (userData: LoginUserData) => {
-		const response = await api.post(`/auth/token/`, userData, { headers: AuthService.jsonHeaders });
+		const response = await api.post('/auth/token/', userData, { headers: AuthService.jsonHeaders });
 		const { access } = response.data;
 		api.defaults.headers.common['Authorization'] = 'Bearer ' + access;
 		return response;
 	};
 
 	public handleRegister = async (userData: RegistrationUserData) => {
-		const response = await api.post(`/auth/register/`, userData, { headers: AuthService.jsonHeaders });
+		const response = await api.post('/auth/register/', userData, { headers: AuthService.jsonHeaders });
 		return response;
+	};
+
+	public loginCheck = async (token: string | undefined) => {
+		if (!token) return false;
+
+		const response = await api.post('/auth/token/check', { token: token });
+		return response.status === 200;
 	};
 }
 
