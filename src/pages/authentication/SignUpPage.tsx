@@ -8,6 +8,8 @@ import Checkbox from '../../components/elements/Checkbox';
 
 import './form.css';
 import { useNavigate } from 'react-router';
+import { ResponseData } from '../../types/Types';
+import { toast } from 'react-toastify';
 
 const SignUpPage = () => {
 	const { register } = useAuth();
@@ -23,14 +25,19 @@ const SignUpPage = () => {
 			first_name: e.currentTarget.first_name.value,
 			last_name: e.currentTarget.last_name.value,
 		};
-		try {
-			const response = await register(userData);
-			if (response) {
-				navigate('/joinclassroom');
-			}
-		} catch (error) {
-			console.error('There was an error while attempting to login:', error);
+		const response: ResponseData = await register(userData);
+
+		if (response.status === 200) {
+			toast.success(response.message);
+			return navigate('/joinclassroom');
 		}
+		
+		if (response.error) {
+			Object.keys(response.message).forEach((field) => {
+				toast.error(`${response.message[field as keyof typeof response.message]}`);
+			});
+		}
+
 	};
 
 	return (

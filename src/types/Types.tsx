@@ -25,3 +25,9 @@ export type RegistrationUserData = {
 	first_name: string;
 	last_name: string;
 };
+
+export interface ResponseData {
+	message: string;
+	error: boolean;
+	status: number;
+}

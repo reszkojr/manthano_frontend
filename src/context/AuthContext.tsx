@@ -5,15 +5,14 @@ import axios from 'axios';
 import Props from '../utils/Props';
 import AuthService from '../services/AuthService';
 
-import { LoginUserData, RegistrationUserData, Token } from '../types/Types';
-import api from '../api';
+import { LoginUserData, RegistrationUserData, Token, ResponseData } from '../types/Types';
 
 interface AuthContextData {
 	username: string | null | undefined;
 	token: string | null | undefined;
-	login(userData: LoginUserData): Promise<boolean>;
+	login(userData: LoginUserData): Promise<ResponseData>;
 	logout(): void;
-	register(userData: RegistrationUserData): Promise<boolean>;
+	register(userData: RegistrationUserData): Promise<ResponseData>;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -49,57 +48,62 @@ export const AuthProvider = ({ children }: Props) => {
 	const login = async (userData: LoginUserData) => {
 		try {
 			const response = await AuthService.handleLogin(userData);
-			if (response?.status == 200) {
-				const token = response?.data.access;
-				const refreshToken = response?.data.refresh;
-				storeTokens(token, refreshToken);
 
-				const decodedToken: Token = jwt_decode(token);
-				const usernameFromToken = decodedToken.username;
-				setUsername(usernameFromToken);
-				return true;
-			}
-			return false;
+			const token = response?.data.access;
+			const refreshToken = response?.data.refresh;
+			storeTokens(token, refreshToken);
+
+			const decodedToken: Token = jwt_decode(token);
+			const usernameFromToken = decodedToken.username;
+			setUsername(usernameFromToken);
+			return {
+				message: 'Successfully logged in.',
+				error: false,
+				status: 200,
+			};
 		} catch (error: unknown) {
-			// TODO: better error handling
-			if (!axios.isAxiosError(error)) {
-				console.error('Error:', error);
-				return false;
+			if (axios.isAxiosError(error)) {
+				return {
+					message: error.response?.data,
+					error: true,
+					status: 400,
+				};
 			}
-
-			switch (error.response?.status) {
-				case 401:
-					console.error('Error:', error.response.data);
-					break;
-				case 500:
-					console.error('Error:', error);
-			}
-			return false;
 		}
+		return {} as ResponseData;
 	};
 
 	const register = async (userData: RegistrationUserData) => {
 		try {
 			const response = await AuthService.handleRegister(userData);
-			if (response.status == 201) {
-				// Login user after registration
-				const { email, password } = userData;
-				login({ email, password });
-				return true;
-			}
-			return false;
-		} catch (error: unknown) {
-			if (!axios.isAxiosError(error)) {
-				console.error('Error:', error);
-				return false;
+
+			if (response.status !== 201) {
+				return {
+					message: 'Something wrong happened.',
+					error: true,
+					status: 400,
+				};
 			}
 
-			switch (error.response?.status) {
-				case 500:
-				// TODO: error handling
+			// Login user after registration
+			const { email, password } = userData;
+			login({ email, password });
+
+			return {
+				message: 'Your account was successfully created!',
+				error: false,
+				status: 200,
+			};
+		} catch (error: unknown) {
+			if (axios.isAxiosError(error)) {
+				return {
+					message: error.response?.data,
+					error: true,
+					status: 400,
+				};
 			}
-			return false;
 		}
+		return {} as ResponseData;
 	};
 
 	const logout = () => {

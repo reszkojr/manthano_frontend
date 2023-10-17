@@ -7,6 +7,8 @@ import Submit from '../../components/elements/Submit';
 import Checkbox from '../../components/elements/Checkbox';
 
 import './form.css';
+import { toast } from 'react-toastify';
+import { ResponseData } from '../../types/Types';
 
 const LoginPage = () => {
 	const { login } = useAuth();
@@ -18,13 +20,17 @@ const LoginPage = () => {
 			email: e.currentTarget.email.value,
 			password: e.currentTarget.password.value,
 		};
-		try {
-			const response = await login(userData);
-			if (response) {
-				navigate('/joinclassroom');
-			}
-		} catch (error) {
-			console.error('There was an error while attempting to login:', error);
+		const response: ResponseData = await login(userData);
+
+		if (response.status === 200) {
+			toast.success(response.message);
+			return navigate('/joinclassroom');
+		} 
+
+		if(response.error) {
+			Object.keys(response.message).forEach((field) => {
+				toast.error(`${response.message[field as keyof typeof response.message]}`);
+			});
 		}
 	};
 

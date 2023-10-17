@@ -1,5 +1,6 @@
 import { FormEvent, useState } from 'react';
 import { FaUsersSlash, FaUsers } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 import TextInputWithButton from '../../components/elements/TextInputWithButton';
 import Card from '../../components/elements/Card';
@@ -13,9 +14,12 @@ const ClassroomJoinPage = () => {
 		event.preventDefault();
 		try {
 			const response = await api.post('/classroom/join/', { classroom_code: classroomCode });
-			response;
+			if (response.status === 200) {
+				toast.success(response.data);
+			}
 		} catch (error: unknown) {
 			if (axios.isAxiosError(error)) {
+				toast.error(error.response?.data, {});
 				// console.log(error.response?.data);
 			}
 		}
