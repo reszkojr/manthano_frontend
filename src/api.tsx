@@ -8,7 +8,9 @@ api.interceptors.request.use(
 	(config) => {
 		const token = localStorage.getItem('token');
 		if (token) {
-			config.headers.Authorization = `Bearer ${token}`;
+			config.headers['Authorization'] = `Bearer ${token}`;
+			config.headers['Accept'] = 'application/json';
+			config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
 		}
 		return config;
 	},
@@ -18,6 +20,9 @@ api.interceptors.request.use(
 api.interceptors.response.use(
 	(response) => response,
 	async (error) => {
+		if (error.response.config.url.includes('/auth/login') || error.response.config.url.includes('/auth/register')) {
+			return Promise.reject(error);
+		}
 		const originalRequest = error.config;
 
 		// If the error status is 401 and there is no originalRequest._retry flag,
@@ -26,22 +31,15 @@ api.interceptors.response.use(
 			originalRequest._retry = true;
 		}
 
-		try {
-			const refreshToken = localStorage.getItem('refreshToken');
-			if (!refreshToken) return;
-			const response = await api.post('/auth/token/refresh', { refresh: refreshToken });
-			const token = response.data.access;
+		const refreshToken = localStorage.getItem('refreshToken');
+		if (!refreshToken) return;
 
-			localStorage.setItem('token', token);
+		const response = await api.post('/auth/token/refresh', { refresh: refreshToken });
+		const token = response.data.access;
 
-			originalRequest.headers.Authorization = `Bearer ${token}`;
-			return axios(originalRequest);
-		} catch (error: unknown) {
-			if (axios.isAxiosError(error) && error.response?.status === 401) {
-				localStorage.removeItem('refreshToken');
-				localStorage.removeItem('token');
-			}
-		}
+		localStorage.setItem('token', token);
+
+		return axios(originalRequest);
 	}
 );
 

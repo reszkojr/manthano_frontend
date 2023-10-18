@@ -9,8 +9,6 @@ class AuthService {
 
 	public handleLogin = async (userData: LoginUserData) => {
 		const response = await api.post('/auth/token/', userData, { headers: AuthService.jsonHeaders });
-		const { access } = response.data;
-		api.defaults.headers.common['Authorization'] = 'Bearer ' + access;
 		return response;
 	};
 

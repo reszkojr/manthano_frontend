@@ -60,19 +60,7 @@ export const AuthProvider = ({ children }: Props) => {
 
 	const register = async (userData: RegistrationUserData) => {
 		try {
-			const response = await AuthService.handleRegister(userData);
-
-			if (response.status !== 201) {
-				return {
-					message: 'Something wrong happened.',
-					error: true,
-					status: 400,
-				};
-			}
-
-			// Login user after registration
-			const { email, password } = userData;
-			login({ email, password });
+			await AuthService.handleRegister(userData);
 
 			return {
 				message: 'Your account was successfully created!',
@@ -87,8 +75,12 @@ export const AuthProvider = ({ children }: Props) => {
 					status: 400,
 				};
 			}
+			return {
+				message: ['An error ocurred. We are sorry for the inconvenience.'],
+				error: true,
+				status: 400,
+			};
 		}
-		return {} as ResponseData;
 	};
 
 	const logout = () => {
