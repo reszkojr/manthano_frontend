@@ -6,7 +6,6 @@ import TextInput from '../../components/elements/TextInput';
 import Submit from '../../components/elements/Submit';
 import Checkbox from '../../components/elements/Checkbox';
 
-import './form.css';
 import { useNavigate } from 'react-router';
 import { ResponseData } from '../../types/Types';
 import { toast } from 'react-toastify';
@@ -37,7 +36,6 @@ const SignUpPage = () => {
 				toast.error(`${response.message[field as keyof typeof response.message]}`);
 			});
 		}
-
 	};
 
 	return (

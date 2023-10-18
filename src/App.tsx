@@ -15,7 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const App = () => {
 	return (
 		<>
-			<ToastContainer position='top-right' transition={Slide} autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover theme='dark' />
+			<ToastContainer position='top-center' transition={Slide} autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover theme='dark' />
 			<AuthProvider>
 				<Router>
 					<Routes>

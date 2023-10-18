@@ -3,6 +3,13 @@
 @tailwind utilities;
 
 @layer base {
+	:root {
+		color: white;
+		background-color: #0b0e10;
+		--toastify-color-info: #359ba6 !important;
+		--toastify-color-success: #33b987 !important;
+	}
+
 	html {
 		font-family: 'Familjen Grotesk', sans-serif;
 	}
@@ -31,10 +38,5 @@
 		-webkit-animation-delay: 1s; /* Safari support - any positive time runs instantly */
 		-webkit-animation-name: autofill;
 		-webkit-animation-fill-mode: both;
-	}
-
-	:root {
-		--toastify-color-info: #359ba6 !important;
-		--toastify-color-success: #33b987 !important;
 	}
 }
