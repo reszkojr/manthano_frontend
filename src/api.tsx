@@ -28,6 +28,7 @@ api.interceptors.response.use(
 
 		try {
 			const refreshToken = localStorage.getItem('refreshToken');
+			if (!refreshToken) return;
 			const response = await api.post('/auth/token/refresh', { refresh: refreshToken });
 			const token = response.data.access;
 

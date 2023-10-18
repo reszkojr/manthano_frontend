@@ -1,18 +1,33 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
+import useWebSocket from 'react-use-websocket';
+
 import TextInputWithButton from '../../components/elements/TextInputWithButton';
+import { useAuth } from '../../components/hooks/UseAuth';
 
 const ClassroomPage = () => {
 	const [message, setMessage] = useState('');
 	const [messages, setMessages] = useState<string[]>([]);
+	const { token } = useAuth();
 
-	useEffect(() => {
-		new WebSocket('ws://localhost:8000/ws/');
-	}, []);
+	const { sendJsonMessage } = useWebSocket(`ws://localhost:8000/ws/info4/?token=${token}`, {
+		onMessage: (event: MessageEvent) => {
+			const data = JSON.parse(event.data)
+			const message = `${data['user']}: ${data['message']}`
+			setMessages([...messages, message]);
+		},
+	});
+
+	// useEffect(() => {
+	// 	new WebSocket();
+	// }, []);
 
 	const handleMessageSubmit = (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
+		const message = event.currentTarget.message.value;
+		sendJsonMessage({ message: message });
+
 		setMessage('');
-		setMessages([...messages, event.currentTarget.message.value]);
+		// setMessages([...messages, message]);
 	};
 
 	return (
