@@ -9,21 +9,21 @@ const LargeHeader = () => {
 
 	const redirect = () => navigate('/');
 	return (
-		<header id='header'>
-			<div className='text-gray flex items-center justify-around px-60 pt-10 text-xl'>
-				<img src='/m_manthano.png' onClick={() => redirect()} className='w-12 cursor-pointer' />
-				<div className='flex space-x-64'>
-					<nav className='flex space-x-12'>
-						<Link className='transition-colors hover:text-white' to='/'>
+		<nav className='border-b border-b-gray-600'>
+			<div className='text-gray flex items-center justify-between p-4 px-12'>
+				<div className='flex space-x-12 items-center'>
+					<img src='/m_manthano.png' onClick={() => redirect()} className='w-8 cursor-pointer' />
+					<nav className='flex space-x-4 text-gray-200'>
+						<Link className='hover:rounded-md hover:bg-gray-700 px-3 py-2 hover:text-white' to='/'>
 							Home
 						</Link>
-						<Link className='transition-colors hover:text-white' to='/classroom'>
+						<Link className='hover:rounded-md hover:bg-gray-700 px-3 py-2 hover:text-white' to='/classroom'>
 							Classroom
 						</Link>
-						<Link className='transition-colors hover:text-white' to='/faq'>
+						<Link className='hover:rounded-md hover:bg-gray-700 px-3 py-2 hover:text-white' to='/faq'>
 							FAQ
 						</Link>
-						<Link className='transition-colors hover:text-white' to='/contribute'>
+						<Link className='hover:rounded-md hover:bg-gray-700 px-3 py-2 hover:text-white' to='/contribute'>
 							Contribute
 						</Link>
 					</nav>
@@ -31,23 +31,23 @@ const LargeHeader = () => {
 				<>
 					{username ? (
 						<Link to='/profile'>
-							<div className='flex space-x-2 transition-colors hover:text-white'>
-								<HiUserCircle className='mt-1 h-auto w-6' /> <span>{username}</span>
+							<div className='flex space-x-2 items-center hover:rounded-md text-gray-200 hover:bg-gray-700 px-3 py-2 hover:text-white'>
+								<HiUserCircle className='mt-1 h-auto w-5' /> <span>{username}</span>
 							</div>
 						</Link>
 					) : (
-						<div className='space-x-4'>
-							<Link className='w-60 rounded-[10px] bg-gradient-to-bl from-gray-700 to-gray-900 px-4 py-2 text-lg hover:bg-white' to='/login'>
+						<div className='space-x-8 text-gray-50'>
+							<Link className='' to='/login'>
 								Login
 							</Link>
-							<Link className='w-60 rounded-[10px] bg-gradient-to-bl from-teal-500 to-lapis-500 px-4 py-2 text-lg hover:bg-white' to='/login'>
-								Sign up
+							<Link className='w-60 rounded-[4px] bg-gradient-to-bl from-teal-500 to-lapis-500 px-4 py-2 hover:bg-white' to='/login'>
+								Sign up for free
 							</Link>
 						</div>
 					)}
 				</>
 			</div>
-		</header>
+		</nav>
 	);
 };
 
