@@ -21,7 +21,7 @@ api.interceptors.response.use(
 	(response) => response,
 	async (error) => {
 		if (error.response.config.url.includes('/auth/login') || error.response.config.url.includes('/auth/register')) {
-			return Promise.reject(error);
+			return error;
 		}
 		const originalRequest = error.config;
 
