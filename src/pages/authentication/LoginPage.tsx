@@ -51,7 +51,7 @@ const LoginPage = () => {
 					<TextInput type='password' name='password' placeholder='●●●●●●●●●●●●●' label='Password' />
 					<div className='my-2 flex justify-between text-gray-300'>
 						<Checkbox text='Remember me' id='remember' />
-						<a href='/auth/password md:w-[400px] rreset' className='text-lapis-500'>
+						<a href='/auth/password md:w-[400px]' className='text-lapis-500'>
 							Forgot your password?
 						</a>
 					</div>
