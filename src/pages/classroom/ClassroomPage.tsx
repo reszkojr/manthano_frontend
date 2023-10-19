@@ -4,6 +4,7 @@ import useWebSocket from 'react-use-websocket';
 import { useAuth } from '../../components/hooks/UseAuth';
 import Sidebar from '../../components/classroom/Sidebar';
 import NavigationPanel from '../../components/classroom/NavigationPanel';
+import Channel from '../../components/classroom/Channel';
 
 const ClassroomPage = () => {
 	const [message, setMessage] = useState('');
@@ -29,9 +30,14 @@ const ClassroomPage = () => {
 	};
 
 	return (
-		<div className='flex'>
-			<Sidebar />
-			<NavigationPanel />
+		<div className='flex w-full'>
+			<div className='flex w-min'>
+				<Sidebar />
+				<NavigationPanel />
+			</div>
+			<div className='w-full'>
+				<Channel />
+			</div>
 		</div>
 		// 		<div className='w-96 h-96 bg-gray-800 rounded-lg m-auto'>
 		// 	<div className='w-full h-full mb-4 p-4'>
