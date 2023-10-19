@@ -28,9 +28,9 @@ const SignUpPage = () => {
 
 		if (response.status === 200) {
 			toast.success(response.message);
-			return navigate('/joinclassroom');
+			return navigate('/login');
 		}
-		
+
 		if (response.error) {
 			Object.keys(response.message).forEach((field) => {
 				toast.error(`${response.message[field as keyof typeof response.message]}`);

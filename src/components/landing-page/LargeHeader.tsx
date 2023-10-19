@@ -40,7 +40,7 @@ const LargeHeader = () => {
 							<Link className='' to='/login'>
 								Login
 							</Link>
-							<Link className='w-60 rounded-[4px] bg-gradient-to-bl from-teal-500 to-lapis-500 px-4 py-2 hover:bg-white' to='/login'>
+							<Link className='w-60 rounded-[4px] bg-gradient-to-bl from-teal-500 to-lapis-500 px-4 py-2 hover:bg-white' to='/signup'>
 								Sign up for free
 							</Link>
 						</div>
