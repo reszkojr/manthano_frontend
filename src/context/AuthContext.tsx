@@ -26,6 +26,9 @@ export const AuthProvider = ({ children }: Props) => {
 		const storageToken = localStorage.getItem('token');
 		if (storageToken) {
 			setToken(storageToken);
+			const decodedToken: Token = jwt_decode(storageToken);
+			const usernameFromToken = decodedToken.username;
+			setUsername(usernameFromToken);
 		}
 		AuthService.loginCheck(token);
 	}, [token]);
@@ -36,11 +39,8 @@ export const AuthProvider = ({ children }: Props) => {
 
 			const token = response?.data.access;
 			const refreshToken = response?.data.refresh;
+			setToken(token);
 			storeTokens(token, refreshToken);
-
-			const decodedToken: Token = jwt_decode(token);
-			const usernameFromToken = decodedToken.username;
-			setUsername(usernameFromToken);
 			return {
 				message: 'Successfully logged in.',
 				error: false,
