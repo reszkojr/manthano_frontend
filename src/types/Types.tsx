@@ -29,5 +29,4 @@ export type RegistrationUserData = {
 export interface ResponseData {
 	message: string;
 	error: boolean;
-	status: number;
 }

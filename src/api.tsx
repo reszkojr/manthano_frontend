@@ -20,9 +20,6 @@ api.interceptors.request.use(
 api.interceptors.response.use(
 	(response) => response,
 	async (error) => {
-		if (error.response.config.url.includes('/auth/login') || error.response.config.url.includes('/auth/register')) {
-			return error;
-		}
 		const originalRequest = error.config;
 
 		// If the error status is 401 and there is no originalRequest._retry flag,
@@ -31,15 +28,24 @@ api.interceptors.response.use(
 			originalRequest._retry = true;
 		}
 
-		const refreshToken = localStorage.getItem('refreshToken');
-		if (!refreshToken) return;
+		try {
+			const refreshToken = localStorage.getItem('refreshToken');
+			const response = await api.post('/auth/token/refresh', { refresh: refreshToken });
 
-		const response = await api.post('/auth/token/refresh', { refresh: refreshToken });
-		const token = response.data.access;
+			const token = response.data.access;
 
-		localStorage.setItem('token', token);
-
-		return axios(originalRequest);
+			localStorage.setItem('token', token);
+			originalRequest.headers.Authorization = `Bearer ${token}`;
+			return axios(originalRequest);
+		} catch (refreshError) {
+			if (axios.isAxiosError(refreshError)) {
+				if (refreshError.status === 401) {
+					localStorage.removeItem('token');
+					localStorage.removeItem('refreshToken');
+				}
+			}
+			return axios(originalRequest);
+		}
 	}
 );
 

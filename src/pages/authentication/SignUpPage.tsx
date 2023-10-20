@@ -26,20 +26,19 @@ const SignUpPage = () => {
 		};
 		const response: ResponseData = await register(userData);
 
-		if (response.status === 200) {
-			toast.success(response.message);
-			return navigate('/login');
-		}
-
 		if (response.error) {
 			Object.keys(response.message).forEach((field) => {
 				toast.error(`${response.message[field as keyof typeof response.message]}`);
 			});
+			return;
 		}
+
+		toast.success(response.message);
+		return navigate('/auth/login');
 	};
 
 	return (
-		<div className='my-4 w-96 md:w-[600px] rounded-lg border border-gray-700 bg-gray-800 shadow mx-auto md:absolute md:bottom-1/2 md:right-1/2 md:translate-x-1/2 md:translate-y-1/2'>
+		<div className='mx-auto my-4 w-96 rounded-lg border border-gray-700 bg-gray-800 shadow md:absolute md:bottom-1/2 md:right-1/2 md:w-[600px] md:translate-x-1/2 md:translate-y-1/2'>
 			<div className='space-y-4 p-6'>
 				<div className=''>
 					<h1 className='mb-3 text-2xl font-bold'>Let's get you started!</h1>
@@ -53,15 +52,15 @@ const SignUpPage = () => {
 				</div>
 				<form className='flex flex-col gap-4' method='POST' onSubmit={handleSubmit}>
 					<div className='flex flex-col gap-4'>
-						<div className='flex flex-col md:flex-row gap-4'>
+						<div className='flex flex-col gap-4 md:flex-row'>
 							<TextInput type='text' className='flex-1' name='first_name' placeholder='Diogenes' label='First name' />
 							<TextInput type='text' className='flex-1' name='last_name' placeholder='the Cynic' label='Last name' />
 						</div>
-						<div className='flex flex-col md:flex-row gap-4'>
+						<div className='flex flex-col gap-4 md:flex-row'>
 							<TextInput type='text' className='flex-1' name='username' placeholder='diogenesdacynic' label='Username' />
 							<TextInput type='text' className='flex-1' name='email' placeholder='diogenes@philosopher.com' label='Email' />
 						</div>
-						<div className='flex flex-col md:flex-row gap-4'>
+						<div className='flex flex-col gap-4 md:flex-row'>
 							<TextInput type='password' className='flex-1' name='password' placeholder='●●●●●●●●●●●●●' label='Password' />
 							<TextInput type='password' className='flex-1' name='password2' placeholder='●●●●●●●●●●●●●' label='Confirm your password' />
 						</div>

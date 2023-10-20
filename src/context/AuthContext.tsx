@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
-import jwt_decode from 'jwt-decode';
+import jwt_decode, { InvalidTokenError } from 'jwt-decode';
 import axios from 'axios';
 
 import Props from '../utils/Props';
@@ -19,68 +19,67 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export const AuthProvider = ({ children }: Props) => {
 	const [username, setUsername] = useState<string>();
-	const [token, setToken] = useState<string>();
+	const [token, setToken] = useState<string | null>();
 
 	useEffect(() => {
 		// Force Axios API to send a request after each component mount.
 		const storageToken = localStorage.getItem('token');
-		if (storageToken) {
-			setToken(storageToken);
-			const decodedToken: Token = jwt_decode(storageToken);
-			const usernameFromToken = decodedToken.username;
-			setUsername(usernameFromToken);
+		if (storageToken === undefined || storageToken === null) {
+			setToken(null);
+			return;
 		}
-		AuthService.loginCheck(token);
-	}, [token]);
-
-	const login = async (userData: LoginUserData) => {
 		try {
-			const response = await AuthService.handleLogin(userData);
-
-			const token = response?.data.access;
-			const refreshToken = response?.data.refresh;
-			setToken(token);
-			storeTokens(token, refreshToken);
-			return {
-				message: 'Successfully logged in.',
-				error: false,
-				status: 200,
-			};
-		} catch (error: unknown) {
-			if (axios.isAxiosError(error)) {
-				return {
-					message: error.response?.data,
-					error: true,
-					status: 400,
-				};
+			jwt_decode(storageToken);
+		} catch (error) {
+			if (error instanceof InvalidTokenError) {
+				setToken(null);
+				removeTokens();
 			}
 		}
-		return {} as ResponseData;
+		setToken(storageToken);
+		setUsername(usernameFromToken(storageToken));
+	}, [token]);
+
+	const login = async (userData: LoginUserData): Promise<ResponseData> => {
+		return await AuthService.handleLogin(userData)
+			.then((response) => {
+				const token = response?.data.access;
+				const refreshToken = response?.data.refresh;
+				setToken(token);
+				storeTokens(token, refreshToken);
+				return {
+					message: 'Successfully logged in.',
+					error: false,
+				};
+			})
+			.catch((error) => {
+				return {
+					message: error.response.data,
+					error: true,
+				};
+			});
 	};
 
 	const register = async (userData: RegistrationUserData) => {
-		try {
-			await AuthService.handleRegister(userData);
-
-			return {
-				message: 'Your account was successfully created!',
-				error: false,
-				status: 200,
-			};
-		} catch (error: unknown) {
-			if (axios.isAxiosError(error)) {
+		return await AuthService.handleRegister(userData)
+			.then(() => {
 				return {
-					message: error.response?.data,
-					error: true,
-					status: 400,
+					message: 'Your account was successfully created!',
+					error: false,
 				};
-			}
-			return {
-				message: ['An error ocurred. We are sorry for the inconvenience.'],
-				error: true,
-				status: 400,
-			};
-		}
+			})
+			.catch((error) => {
+				if (axios.isAxiosError(error)) {
+					return {
+						message: error.response?.data,
+						error: true,
+					};
+				}
+				return {
+					message: ['Something bad happened.'],
+					error: true,
+				};
+			});
 	};
 
 	const logout = () => {
@@ -89,14 +88,19 @@ export const AuthProvider = ({ children }: Props) => {
 	};
 
 	const storeTokens = (token: string, refreshToken: string) => {
-		setToken(token);
 		localStorage.setItem('token', token);
 		localStorage.setItem('refreshToken', refreshToken);
 	};
 
-	// if (loading) {
-	// 	return;
-	// }
+	const removeTokens = () => {
+		localStorage.removeItem('token');
+		localStorage.removeItem('refreshToken');
+	};
+
+	const usernameFromToken = (token: string) => {
+		const decodedToken: Token = jwt_decode(token);
+		return decodedToken.username;
+	};
 
 	return (
 		<AuthContext.Provider

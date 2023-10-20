@@ -1,6 +1,6 @@
 import { FormEvent } from 'react';
 import { useAuth } from '../../components/hooks/UseAuth';
-import { useNavigate } from 'react-router-dom';
+import { Form, useNavigate } from 'react-router-dom';
 
 import TextInput from '../../components/elements/TextInput';
 import Submit from '../../components/elements/Submit';
@@ -21,20 +21,19 @@ const LoginPage = () => {
 		};
 		const response: ResponseData = await login(userData);
 
-		if (response.status === 200) {
-			toast.success(response.message);
-			return navigate('/joinclassroom');
-		} 
-
-		if(response.error) {
+		if (response.error) {
 			Object.keys(response.message).forEach((field) => {
 				toast.error(`${response.message[field as keyof typeof response.message]}`);
 			});
+			return;
 		}
+		
+		toast.success(response.message);
+		return navigate('/classroom/join');
 	};
 
 	return (
-		<div className='mt-0 w-96 rounded-lg border border-gray-700 bg-gray-800 p-0 shadow absolute bottom-1/2 right-1/2 translate-x-1/2 translate-y-1/2'>
+		<div className='absolute bottom-1/2 right-1/2 mt-0 w-96 translate-x-1/2 translate-y-1/2 rounded-lg border border-gray-700 bg-gray-800 p-0 shadow'>
 			<div className='space-y-4 p-6'>
 				<div className=''>
 					<h1 className='mb-3 text-2xl font-bold'>Welcome back!</h1>
@@ -46,16 +45,18 @@ const LoginPage = () => {
 						</a>
 					</h2>
 				</div>
-				<form className='flex flex-col gap-4' method='POST' onSubmit={handleSubmit}>
-					<TextInput type='text' name='email' placeholder='fabio@reszko.dev' label='Email' />
-					<TextInput type='password' name='password' placeholder='●●●●●●●●●●●●●' label='Password' />
-					<div className='my-2 flex justify-between text-gray-300'>
-						<Checkbox text='Remember me' id='remember' />
-						<a href='/auth/password md:w-[400px]' className='text-lapis-500'>
-							Forgot your password?
-						</a>
+				<form method='POST' onSubmit={handleSubmit}>
+					<div className='flex flex-col gap-4'>
+						<TextInput type='text' name='email' placeholder='fabio@reszko.dev' label='Email' />
+						<TextInput type='password' name='password' placeholder='●●●●●●●●●●●●●' label='Password' />
+						<div className='my-2 flex justify-between text-gray-300'>
+							<Checkbox text='Remember me' id='remember' />
+							<a href='/auth/password md:w-[400px]' className='text-lapis-500'>
+								Forgot your password?
+							</a>
+						</div>
+						<Submit label='Sign in' />
 					</div>
-					<Submit label='Sign in' />
 				</form>
 			</div>
 		</div>
