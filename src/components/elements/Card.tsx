@@ -7,13 +7,13 @@ interface CardProps {
 }
 
 const Card = (props: CardProps) => {
-	const styles = { card: `bg-gray-600 border border-gray-500 rounded-md p-3 hover:bg-gray-500 cursor-pointer ${props.className}` };
+	const styles = { card: `bg-gray-700 shadow-md rounded-md p-3 hover:filter hover:brightness-125 cursor-pointer transition-all duration-75 ${props.className}` };
 
 	return (
 		<div className={styles.card}>
 			<a href={props.href} className='flex'>
-				{props.icon && <div className='ml-2 mr-6 my-auto'>{props.icon}</div>}
-				<div className='space-y-1'>
+				{props.icon && <div className='my-auto ml-2 mr-6'>{props.icon}</div>}
+				<div className='pr-2'>
 					<h2 className='text-md font-semibold'>{props.title}</h2>
 					{props.subtitle && <p className='text-md text-gray-300'>{props.subtitle}</p>}
 				</div>
