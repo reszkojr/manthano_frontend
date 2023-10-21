@@ -39,4 +39,42 @@
 		-webkit-animation-name: autofill;
 		-webkit-animation-fill-mode: both;
 	}
+
+	/* Estilo para as barras de rolagem no Chrome e Safari */
+::-webkit-scrollbar {
+	width: 12px;
+  }
+  
+  ::-webkit-scrollbar-track {
+	background: rgba(0,0,0,0.2);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+	background: rgba(0,0,0,0.5);
+	border-radius: 6px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+	background: #555;
+  }
+  
+  /* Estilo para as barras de rolagem no Firefox */
+  /* Note que as propriedades podem variar entre os navegadores, verifique a compatibilidade */
+  /* no navegador que você está usando */
+  
+  /* Track */
+  * {
+	scrollbar-width: thin;
+	scrollbar-color: #f1f1f1 #888;
+  }
+  
+  *::-webkit-scrollbar-thumb {
+	background-color: rgba(0,0,0,0.3);;
+	border-radius: 6px;
+  }
+  
+  *::-webkit-scrollbar-thumb:hover {
+	background-color: #555;
+  }
+  
 }
