@@ -28,8 +28,12 @@ api.interceptors.response.use(
 			originalRequest._retry = true;
 		}
 
+		const refreshToken = localStorage.getItem('refreshToken');
+		if (!refreshToken) {
+			return axios(originalRequest);
+		}
+
 		try {
-			const refreshToken = localStorage.getItem('refreshToken');
 			const response = await api.post('/auth/token/refresh', { refresh: refreshToken });
 
 			const token = response.data.access;
@@ -38,12 +42,8 @@ api.interceptors.response.use(
 			originalRequest.headers.Authorization = `Bearer ${token}`;
 			return axios(originalRequest);
 		} catch (refreshError) {
-			if (axios.isAxiosError(refreshError)) {
-				if (refreshError.status === 401) {
-					localStorage.removeItem('token');
-					localStorage.removeItem('refreshToken');
-				}
-			}
+			localStorage.removeItem('token');
+			localStorage.removeItem('refreshToken');
 			return axios(originalRequest);
 		}
 	}
