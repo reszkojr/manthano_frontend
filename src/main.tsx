@@ -16,6 +16,7 @@ import { Slide, ToastContainer } from 'react-toastify';
 import ClassroomJoinPage from './pages/classroom/ClassroomJoinPage.tsx';
 import ClassroomPage from './pages/classroom/ClassroomPage.tsx';
 import ErrorPage from './pages/ErrorPage.tsx';
+import RequireAuth from './utils/RequireAuth.tsx';
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
@@ -27,7 +28,7 @@ const router = createBrowserRouter(
 				<Route path='signup' element={<SignUpPage />} />
 			</Route>
 			{/* Classroom routes */}
-			<Route path='classroom'>
+			<Route path='classroom' element={<RequireAuth />}>
 				<Route path='join' element={<ClassroomJoinPage />} />
 				<Route path=':classroom_code'>
 					<Route index element={<ClassroomPage />} />
