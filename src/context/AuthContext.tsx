@@ -20,12 +20,13 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 export const AuthProvider = ({ children }: Props) => {
 	const [username, setUsername] = useState<string>();
 	const [token, setToken] = useState<string | null>();
+	const [loading, setLoading] = useState<boolean>(true);
 
 	useEffect(() => {
-		// Force Axios API to send a request after each component mount.
 		const storageToken = localStorage.getItem('token');
 		if (storageToken === undefined || storageToken === null) {
 			setToken(null);
+			setLoading(false);
 			return;
 		}
 		try {
@@ -38,6 +39,7 @@ export const AuthProvider = ({ children }: Props) => {
 		}
 		setToken(storageToken);
 		setUsername(usernameFromToken(storageToken));
+		setLoading(false);
 	}, [token]);
 
 	const login = async (userData: LoginUserData): Promise<ResponseData> => {
@@ -101,6 +103,10 @@ export const AuthProvider = ({ children }: Props) => {
 		const decodedToken: Token = jwt_decode(token);
 		return decodedToken.username;
 	};
+
+	if (loading) {
+		return <div>Loading...</div>;
+	}
 
 	return (
 		<AuthContext.Provider
