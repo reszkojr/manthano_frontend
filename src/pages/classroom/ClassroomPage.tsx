@@ -1,11 +1,12 @@
 import { FormEvent, useEffect, useState } from 'react';
 import useWebSocket from 'react-use-websocket';
+import { useParams } from 'react-router-dom';
 
 import { useAuth } from '../../components/hooks/UseAuth';
+import { NavigationPanelCollapseProvider } from '../../context/NavigationPanelCollapseContext';
 import Sidebar from '../../components/classroom/Sidebar';
 import NavigationPanel from '../../components/classroom/NavigationPanel';
 import ClassroomChannel from '../../components/classroom/ClassroomChannel';
-import { useParams } from 'react-router-dom';
 
 const ClassroomPage = () => {
 	const { classroom_code } = useParams();
@@ -37,13 +38,15 @@ const ClassroomPage = () => {
 
 	return (
 		<div className='flex w-full'>
-			<div className='flex w-min'>
-				<Sidebar />
-				<NavigationPanel />
-			</div>
-			<div className='w-full'>
-				<ClassroomChannel />
-			</div>
+			<NavigationPanelCollapseProvider>
+				<div className='flex w-min'>
+					<Sidebar />
+					<NavigationPanel />
+				</div>
+				<div className='w-full'>
+					<ClassroomChannel />
+				</div>
+			</NavigationPanelCollapseProvider>
 		</div>
 	);
 };
