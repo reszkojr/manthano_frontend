@@ -4,7 +4,7 @@ import useWebSocket from 'react-use-websocket';
 import { useAuth } from '../../components/hooks/UseAuth';
 import Sidebar from '../../components/classroom/Sidebar';
 import NavigationPanel from '../../components/classroom/NavigationPanel';
-import Channel from '../../components/classroom/Channel';
+import ClassroomChannel from '../../components/classroom/ClassroomChannel';
 import { useParams } from 'react-router-dom';
 
 const ClassroomPage = () => {
@@ -42,7 +42,7 @@ const ClassroomPage = () => {
 				<NavigationPanel />
 			</div>
 			<div className='w-full'>
-				<Channel />
+				<ClassroomChannel />
 			</div>
 		</div>
 	);

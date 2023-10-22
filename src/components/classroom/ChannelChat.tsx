@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Chat = () => {
+const ChannelChat = () => {
 	const messages = [
 		{
 			user: 'User1',
@@ -79,4 +79,4 @@ const Chat = () => {
 	);
 };
 
-export default Chat;
+export default ChannelChat;
