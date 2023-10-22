@@ -5,27 +5,33 @@ import axios from 'axios';
 import Props from '../utils/Props';
 import AuthService from '../services/AuthService';
 
-import { LoginUserData, RegistrationUserData, Token, ResponseData } from '../types/Types';
+import { LoginUserData, RegistrationUserData, ResponseData, Token } from '../types/Types';
 
-interface AuthContextData {
+type User = {
 	username: string | null | undefined;
 	token: string | null | undefined;
+	user_id: number | null | undefined;
+	avatar: string | null | undefined;
+};
+
+interface AuthContextData {
+	user: User | null; // Alterado o nome para 'user'
 	login(userData: LoginUserData): Promise<ResponseData>;
 	logout(): void;
 	register(userData: RegistrationUserData): Promise<ResponseData>;
+	tokenCheck(token: string): void;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export const AuthProvider = ({ children }: Props) => {
-	const [username, setUsername] = useState<string>();
-	const [token, setToken] = useState<string | null>();
+	const [user, setUser] = useState<User | null>(null);
 	const [loading, setLoading] = useState<boolean>(true);
 
 	useEffect(() => {
 		const storageToken = localStorage.getItem('token');
 		if (storageToken === undefined || storageToken === null) {
-			setToken(null);
+			setUser(null);
 			setLoading(false);
 			return;
 		}
@@ -33,21 +39,40 @@ export const AuthProvider = ({ children }: Props) => {
 			jwt_decode(storageToken);
 		} catch (error) {
 			if (error instanceof InvalidTokenError) {
-				setToken(null);
+				setUser(null);
 				removeTokens();
 			}
 		}
-		setToken(storageToken);
-		setUsername(usernameFromToken(storageToken));
+
+		const username = usernameFromToken(storageToken);
+		const user_id = userIdFromToken(storageToken);
+
+		setUser({
+			username,
+			token: storageToken,
+			user_id,
+			avatar: '', // TODO
+		});
+		(async () => {
+			await tokenCheck(storageToken);
+		})();
 		setLoading(false);
-	}, [token]);
+	}, []);
 
 	const login = async (userData: LoginUserData): Promise<ResponseData> => {
 		return await AuthService.handleLogin(userData)
 			.then((response) => {
 				const token = response?.data.access;
 				const refreshToken = response?.data.refresh;
-				setToken(token);
+
+				const username = usernameFromToken(token);
+				const user_id = userIdFromToken(token);
+				setUser({
+					username,
+					token,
+					user_id,
+					avatar: '', // TODO
+				});
 				storeTokens(token, refreshToken);
 				return {
 					message: 'Successfully logged in.',
@@ -89,6 +114,10 @@ export const AuthProvider = ({ children }: Props) => {
 		return true;
 	};
 
+	const tokenCheck = async (token: string) => {
+		await AuthService.loginCheck(token);
+	};
+
 	const storeTokens = (token: string, refreshToken: string) => {
 		localStorage.setItem('token', token);
 		localStorage.setItem('refreshToken', refreshToken);
@@ -104,6 +133,11 @@ export const AuthProvider = ({ children }: Props) => {
 		return decodedToken.username;
 	};
 
+	const userIdFromToken = (token: string) => {
+		const decodedToken: Token = jwt_decode(token);
+		return decodedToken.user_id; // Certifique-se de que a chave seja a correta no seu token
+	};
+
 	if (loading) {
 		return <div>Loading...</div>;
 	}
@@ -111,11 +145,11 @@ export const AuthProvider = ({ children }: Props) => {
 	return (
 		<AuthContext.Provider
 			value={{
-				username,
-				token,
+				user, // Alterado para 'user'
 				login,
 				logout,
 				register,
+				tokenCheck,
 			}}
 		>
 			{children}

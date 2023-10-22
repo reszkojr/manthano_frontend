@@ -30,3 +30,10 @@ export interface ResponseData {
 	message: string;
 	error: boolean;
 }
+
+export interface User {
+	username: string;
+	token: string;
+	user_id: number;
+	avatar: string;
+};
