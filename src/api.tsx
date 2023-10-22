@@ -35,7 +35,6 @@ api.interceptors.response.use(
 
 		try {
 			const response = await api.post('/auth/token/refresh', { refresh: refreshToken });
-
 			const token = response.data.access;
 
 			localStorage.setItem('token', token);
@@ -44,6 +43,7 @@ api.interceptors.response.use(
 		} catch (refreshError) {
 			localStorage.removeItem('token');
 			localStorage.removeItem('refreshToken');
+			window.location.reload();
 			return axios(originalRequest);
 		}
 	}
