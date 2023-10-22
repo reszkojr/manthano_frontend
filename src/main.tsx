@@ -17,6 +17,7 @@ import ClassroomJoinPage from './pages/classroom/ClassroomJoinPage.tsx';
 import ClassroomPage from './pages/classroom/ClassroomPage.tsx';
 import ErrorPage from './pages/ErrorPage.tsx';
 import RequireAuth from './utils/RequireAuth.tsx';
+import { ClassroomProvider } from './context/ClassroomContext.tsx';
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
@@ -28,7 +29,7 @@ const router = createBrowserRouter(
 				<Route path='signup' element={<SignUpPage />} />
 			</Route>
 			{/* Classroom routes */}
-			<Route path='classroom' element={<RequireAuth />}>
+			<Route path='classroom' element={<><ClassroomProvider><RequireAuth /></ClassroomProvider></>}>
 				<Route path='join' element={<ClassroomJoinPage />} />
 				<Route path=':classroom_code'>
 					<Route index element={<ClassroomPage />} />

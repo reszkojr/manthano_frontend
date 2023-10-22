@@ -2,51 +2,32 @@ import { FormEvent, useEffect, useState } from 'react';
 import useWebSocket from 'react-use-websocket';
 import { useParams } from 'react-router-dom';
 
-import { useAuth } from '../../components/hooks/UseAuth';
-import { NavigationPanelCollapseProvider } from '../../context/NavigationPanelCollapseContext';
+import { useClassroomContext } from '../../components/hooks/UseClassroomContext';
 import Sidebar from '../../components/classroom/Sidebar';
 import NavigationPanel from '../../components/classroom/NavigationPanel';
 import ClassroomChannel from '../../components/classroom/ClassroomChannel';
+import { useAuth } from '../../components/hooks/UseAuth';
 
 const ClassroomPage = () => {
 	const { classroom_code } = useParams();
-	const [message, setMessage] = useState('');
-	const [messages, setMessages] = useState<string[]>([]);
-	const { token, tokenCheck } = useAuth();
 
-	const { sendJsonMessage } = useWebSocket(`ws://localhost:8000/ws/${classroom_code}/?token=${token}`, {
-		onError: () => {
-			tokenCheck(token || '');
-		},
-		onMessage: (event: MessageEvent) => {
-			const data = JSON.parse(event.data);
-			const message = `${data['user']}: ${data['message']}`;
-			setMessages([...messages, message]);
-		},
-		shouldReconnect: () => true,
-		reconnectAttempts: 2,
-	});
+	// const { token, tokenCheck } = useAuth();
+	// const { classroomCode, setClassroomCode, setMessages } = useClassroomContext();
 
-	const handleMessageSubmit = (event: FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
-		const message = event.currentTarget.message.value;
-		sendJsonMessage({ message: message });
-
-		setMessage('');
-		// setMessages([...messages, message]);
-	};
+	useEffect(() => {
+		// setClassroomCode(classroom_code || '');
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [classroom_code]);
 
 	return (
 		<div className='flex w-full'>
-			<NavigationPanelCollapseProvider>
-				<div className='flex w-min'>
-					<Sidebar />
-					<NavigationPanel />
-				</div>
-				<div className='w-full'>
-					<ClassroomChannel />
-				</div>
-			</NavigationPanelCollapseProvider>
+			<div className='flex w-min'>
+				<Sidebar />
+				<NavigationPanel />
+			</div>
+			<div className='w-full'>
+				<ClassroomChannel />
+			</div>
 		</div>
 	);
 };

@@ -5,14 +5,7 @@ import axios from 'axios';
 import Props from '../utils/Props';
 import AuthService from '../services/AuthService';
 
-import { LoginUserData, RegistrationUserData, ResponseData, Token } from '../types/Types';
-
-type User = {
-	username: string | null | undefined;
-	token: string | null | undefined;
-	user_id: number | null | undefined;
-	avatar: string | null | undefined;
-};
+import { LoginUserData, RegistrationUserData, ResponseData, Token, User } from '../types/Types';
 
 interface AuthContextData {
 	user: User | null; // Alterado o nome para 'user'

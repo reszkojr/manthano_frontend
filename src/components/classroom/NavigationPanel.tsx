@@ -3,12 +3,12 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { MdExpandMore } from 'react-icons/md';
 import classNames from 'classnames';
 
-import { useNavigationPanelCollapse } from '../hooks/UseNavigationPanelCollapse';
+import { useClassroomContext } from '../hooks/UseClassroomContext';
 
 import './NavigationPanel.css';
 
 const NavigationPanel = () => {
-	const { isPanelCollapsed } = useNavigationPanelCollapse();
+	const { isPanelCollapsed } = useClassroomContext();
 
 	return (
 		<div className={classNames('flex h-screen w-56 flex-col gap-3 border-r border-r-gray-600 bg-gray-800 transition-[width] duration-200', { collapsed: isPanelCollapsed })}>
