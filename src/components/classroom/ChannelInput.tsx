@@ -3,16 +3,19 @@ import { HiOutlineEmojiHappy } from 'react-icons/hi';
 import { FiAtSign } from 'react-icons/fi';
 import { AiOutlineGif } from 'react-icons/ai';
 
-import './ChannelInput.css';
-import { useState } from 'react';
+import { KeyboardEvent, useRef, useState } from 'react';
 import { useClassroomContext } from '../hooks/UseClassroomContext';
 import { useAuth } from '../hooks/UseAuth';
 
+import './ChannelInput.css';
+
 const ChannelInput = () => {
 	const [inputContent, setInputContent] = useState('');
-	const { sendMessage } = useClassroomContext();
 
 	const { user } = useAuth();
+	const { sendMessage } = useClassroomContext();
+
+	const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
 	const handleMessageSend = () => {
 		if (inputContent.trim() == '') return;
@@ -23,13 +26,20 @@ const ChannelInput = () => {
 			avatar: '',
 		};
 		sendMessage(message);
-		setInputContent('');
+	};
+
+	const handleTextAreaEnter = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+		if (event.key === 'Enter' && !event.shiftKey) {
+			event.preventDefault();
+			handleMessageSend();
+			setInputContent('');
+		}
 	};
 
 	return (
 		<div className='m-4 overflow-auto rounded-md border border-gray-600 px-2 pt-2 shadow-2xl'>
 			<div className='mb-2 flex gap-4'>
-				<input contentEditable={true} value={inputContent} onChange={(event) => setInputContent(event.target.value)} spellCheck={false} id='message_input' className='min-h-8 max-h-28 w-full resize-none border-none bg-transparent p-0 text-gray-50 outline-none' />
+				<textarea ref={textAreaRef} value={inputContent} onKeyDown={handleTextAreaEnter} onChange={(event) => setInputContent(event.target.value)} spellCheck={false} id='message_input' className='min-h-8 max-h-28 w-full resize-none border-none bg-transparent p-0 text-gray-50 outline-none' />
 				<BiSolidSend onClick={handleMessageSend} className='mb-auto h-auto w-6 hover:cursor-pointer hover:brightness-150 hover:filter' />
 			</div>
 			<div className='h-8'>

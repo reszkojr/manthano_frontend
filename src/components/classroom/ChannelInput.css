@@ -1,4 +1,4 @@
-div[contenteditable] {
+textarea {
     border: none !important;
     overflow: auto !important;
     outline: none !important;
