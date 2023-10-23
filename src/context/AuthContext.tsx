@@ -6,11 +6,13 @@ import Props from '../utils/Props';
 import AuthService from '../services/AuthService';
 
 import { LoginUserData, RegistrationUserData, ResponseData, Token, User } from '../types/Types';
+import api from '../api';
 
 interface AuthContextData {
 	user: User | null; // Alterado o nome para 'user'
 	login(userData: LoginUserData): Promise<ResponseData>;
 	logout(): void;
+	getClassroom(): Promise<string | null>;
 	register(userData: RegistrationUserData): Promise<ResponseData>;
 	tokenCheck(token: string): void;
 }
@@ -107,6 +109,13 @@ export const AuthProvider = ({ children }: Props) => {
 		return true;
 	};
 
+	const getClassroom = async () => {
+		return await api
+			.get('/classroom/user')
+			.then((response) => response.data.classroom_code)
+			.catch(() => null);
+	};
+
 	const tokenCheck = async (token: string) => {
 		await AuthService.loginCheck(token);
 	};
@@ -141,6 +150,7 @@ export const AuthProvider = ({ children }: Props) => {
 				user, // Alterado para 'user'
 				login,
 				logout,
+				getClassroom,
 				register,
 				tokenCheck,
 			}}

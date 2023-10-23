@@ -1,29 +1,51 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { FaUsersSlash, FaUsers } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+
+import axios from 'axios';
+import { useAuth } from '../../components/hooks/UseAuth';
+import { useNavigate } from 'react-router-dom';
 
 import TextInputWithButton from '../../components/elements/TextInputWithButton';
 import Card from '../../components/elements/Card';
 import api from '../../api';
-import axios from 'axios';
 
 const ClassroomJoinPage = () => {
 	const [classroomCode, setClassroomCode] = useState('');
+	const [loading, setLoading] = useState(true);
+
+	const { getClassroom } = useAuth();
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		const checkUserClassroom = async () => {
+			return await getClassroom().then((response) => {
+				if (response !== null) navigate(`/classroom/${response}`);
+				setLoading(false);
+			});
+		};
+		checkUserClassroom();
+	});
 
 	const handleJoinClassroomSubmit = async (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		try {
-			const response = await api.post('/classroom/join/', { classroom_code: classroomCode });
-			if (response.status === 200) {
-				toast.success(response.data);
-			}
-		} catch (error: unknown) {
-			if (axios.isAxiosError(error)) {
-				toast.error(error.response?.data, {});
-				// console.log(error.response?.data);
-			}
-		}
+		api.post('/classroom/join/', { classroom_code: classroomCode })
+			.then(async (response) => {
+				if (response.status === 200) {
+					toast.success(response.data);
+					return navigate(`/classroom/${classroomCode}`);
+				}
+			})
+			.catch((error) => {
+				if (axios.isAxiosError(error)) {
+					toast.error(error.response?.data, {});
+				}
+			});
 	};
+
+	if (loading) {
+		return <div></div>;
+	}
 
 	return (
 		<>

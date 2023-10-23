@@ -1,6 +1,6 @@
 import { FormEvent } from 'react';
 import { useAuth } from '../../components/hooks/UseAuth';
-import { Form, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import TextInput from '../../components/elements/TextInput';
 import Submit from '../../components/elements/Submit';
@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import { ResponseData } from '../../types/Types';
 
 const LoginPage = () => {
-	const { login } = useAuth();
+	const { login, getClassroom } = useAuth();
 	const navigate = useNavigate();
 
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -27,7 +27,7 @@ const LoginPage = () => {
 			});
 			return;
 		}
-		
+
 		toast.success(response.message);
 		return navigate('/classroom/join');
 	};
@@ -40,7 +40,7 @@ const LoginPage = () => {
 					<h2 className='text-gray-300'>Let's start your classroom in just a few clicks.</h2>
 					<h2 className='text-gray-300'>
 						Still don't have an account?{' '}
-						<a href='/signup' className='text-lapis-500'>
+						<a href='/auth/signup' className='text-lapis-500'>
 							Sign up
 						</a>
 					</h2>
