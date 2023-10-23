@@ -14,6 +14,8 @@
 
 	html {
 		font-family: 'Familjen Grotesk', sans-serif;
+		width: 100vw;
+		overflow-x: hidden;
 	}
 
 	/* Password mask size fix */
