@@ -38,7 +38,7 @@ interface Message {
 
 export const ClassroomContext = createContext<ClassroomContextType>({} as ClassroomContextType);
 
-export const ClassroomProvider = ({ children }: Props) => {
+export const ClassroomProvider = () => {
 	const [classroomName, setClassroomName] = useState('');
 	const [classroomCode, setClassroomCode] = useState('');
 	const [classroomChannels, setClassroomChannels] = useState([] as string[]);
@@ -60,8 +60,8 @@ export const ClassroomProvider = ({ children }: Props) => {
 		},
 		onMessage: (event: MessageEvent) => {
 			const data = JSON.parse(event.data);
-			const {user, user_id, avatar, message} = data;
-			const newMessage: Message = {user, user_id, avatar, message};
+			const { user, user_id, avatar, message } = data;
+			const newMessage: Message = { user, user_id, avatar, message };
 			setMessages((prevMessages) => [...prevMessages, newMessage]);
 		},
 		shouldReconnect: () => true,
@@ -96,7 +96,7 @@ export const ClassroomProvider = ({ children }: Props) => {
 				setPanelCollapsed,
 			}}
 		>
-			{children}
+			<Outlet />
 		</ClassroomContext.Provider>
 	);
 };

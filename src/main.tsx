@@ -29,9 +29,9 @@ const router = createBrowserRouter(
 				<Route path='signup' element={<SignUpPage />} />
 			</Route>
 			{/* Classroom routes */}
-			<Route path='classroom' element={<><ClassroomProvider><RequireAuth /></ClassroomProvider></>}>
+			<Route path='classroom' element={<RequireAuth />}>
 				<Route path='join' element={<ClassroomJoinPage />} />
-				<Route path=':classroom_code'>
+				<Route path=':classroom_code' element={<ClassroomProvider />}>
 					<Route index element={<ClassroomPage />} />
 					{/* <Route path=':channel_code' element={<ClassroomChannel />} />   */}
 				</Route>
