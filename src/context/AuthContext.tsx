@@ -9,7 +9,7 @@ import { LoginUserData, RegistrationUserData, ResponseData, Token, User } from '
 import api from '../api';
 
 interface AuthContextData {
-	user: User | null; // Alterado o nome para 'user'
+	user: User | null;
 	login(userData: LoginUserData): Promise<ResponseData>;
 	logout(): void;
 	getClassroom(): Promise<string | null>;
@@ -137,7 +137,7 @@ export const AuthProvider = ({ children }: Props) => {
 
 	const userIdFromToken = (token: string) => {
 		const decodedToken: Token = jwt_decode(token);
-		return decodedToken.user_id; // Certifique-se de que a chave seja a correta no seu token
+		return decodedToken.user_id;
 	};
 
 	if (loading) {
@@ -147,7 +147,7 @@ export const AuthProvider = ({ children }: Props) => {
 	return (
 		<AuthContext.Provider
 			value={{
-				user, // Alterado para 'user'
+				user,
 				login,
 				logout,
 				getClassroom,
