@@ -11,6 +11,8 @@ api.interceptors.request.use(
 			config.headers['Authorization'] = `Bearer ${token}`;
 			config.headers['Accept'] = 'application/json';
 			config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+		} else {
+			delete config.headers['Authorization'];
 		}
 		return config;
 	},
@@ -22,15 +24,15 @@ api.interceptors.response.use(
 	async (error) => {
 		const originalRequest = error.config;
 
+		const refreshToken = localStorage.getItem('refreshToken');
+		const token = localStorage.getItem('token');
+
+		if (!token || !refreshToken) return axios(originalRequest);
+
 		// If the error status is 401 and there is no originalRequest._retry flag,
 		// it means the token has expired and we need to refresh it
 		if (error.response.status === 401 && !originalRequest._retry) {
 			originalRequest._retry = true;
-		}
-
-		const refreshToken = localStorage.getItem('refreshToken');
-		if (!refreshToken) {
-			return axios(originalRequest);
 		}
 
 		try {
