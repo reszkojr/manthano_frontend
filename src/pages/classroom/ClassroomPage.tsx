@@ -1,23 +1,20 @@
-import { FormEvent, useEffect, useState } from 'react';
-import useWebSocket from 'react-use-websocket';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { useClassroomContext } from '../../components/hooks/UseClassroomContext';
-import Sidebar from '../../components/classroom/Sidebar';
-import NavigationPanel from '../../components/classroom/NavigationPanel';
 import ClassroomChannel from '../../components/classroom/ClassroomChannel';
-import { useAuth } from '../../components/hooks/UseAuth';
+import NavigationPanel from '../../components/classroom/NavigationPanel';
+import Sidebar from '../../components/classroom/Sidebar';
+import { useClassroomContext } from '../../components/hooks/UseClassroomContext';
 
 const ClassroomPage = () => {
 	const { classroom_code } = useParams();
 
 	// const { token, tokenCheck } = useAuth();
-	// const { classroomCode, setClassroomCode, setMessages } = useClassroomContext();
+	const { setClassroom } = useClassroomContext();
 
 	useEffect(() => {
-		// setClassroomCode(classroom_code || '');
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [classroom_code]);
+		setClassroom((prev) => ({...prev, code: classroom_code || ''}));
+	}, []);
 
 	return (
 		<div className='flex w-full'>

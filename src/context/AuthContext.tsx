@@ -14,7 +14,7 @@ interface AuthContextData {
 	logout(): void;
 	getClassroom(): Promise<string | null>;
 	register(userData: RegistrationUserData): Promise<ResponseData>;
-	tokenCheck(token: string): void;
+	tokenCheck(): void;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }: Props) => {
 			avatar: '', // TODO
 		});
 		(async () => {
-			await tokenCheck(storageToken);
+			await tokenCheck();
 		})();
 		setLoading(false);
 	}, []);
@@ -116,8 +116,9 @@ export const AuthProvider = ({ children }: Props) => {
 			.catch(() => null);
 	};
 
-	const tokenCheck = async (token: string) => {
-		await AuthService.loginCheck(token);
+	const tokenCheck = async () => {
+		if (!user) return
+		await AuthService.loginCheck(user.token);
 	};
 
 	const storeTokens = (token: string, refreshToken: string) => {

@@ -1,21 +1,10 @@
 import { createContext, Dispatch, SetStateAction, useEffect, useState } from 'react';
-import useWebSocket from 'react-use-websocket';
+import { Outlet } from 'react-router-dom';
 import { useAuth } from '../components/hooks/UseAuth';
-import { Outlet, useParams } from 'react-router-dom';
-import Props from '../utils/Props';
 
 interface ClassroomContextType {
-	classroomName: string;
-	setClassroomName: Dispatch<SetStateAction<string>>;
-
-	classroomCode: string;
-	setClassroomCode: Dispatch<SetStateAction<string>>;
-
-	classroomChannels: string[];
-	setClassroomChannels: Dispatch<SetStateAction<string[]>>;
-
-	classroomActiveChannelCode: string;
-	setClassroomActiveChannelCode: Dispatch<SetStateAction<string>>;
+	classroom: Classroom;
+	setClassroom: Dispatch<SetStateAction<Classroom>>;
 
 	message: Message;
 	setMessage: Dispatch<SetStateAction<Message>>;
@@ -29,6 +18,13 @@ interface ClassroomContextType {
 	setPanelCollapsed: Dispatch<SetStateAction<boolean>>;
 }
 
+interface Classroom {
+	name: string;
+	code: string;
+	channels: string[];
+	activeChannelCode: string;
+}
+
 interface Message {
 	user: string;
 	user_id: number;
@@ -39,54 +35,69 @@ interface Message {
 export const ClassroomContext = createContext<ClassroomContextType>({} as ClassroomContextType);
 
 export const ClassroomProvider = () => {
-	const [classroomName, setClassroomName] = useState('');
-	const [classroomCode, setClassroomCode] = useState('');
-	const [classroomChannels, setClassroomChannels] = useState([] as string[]);
-	const [classroomActiveChannelCode, setClassroomActiveChannelCode] = useState('');
+	const [classroom, setClassroom] = useState<Classroom>({
+		name: '',
+		code: '',
+		channels: [],
+		activeChannelCode: '',
+	});
 	const [message, setMessage] = useState<Message>({} as Message);
 	const [messages, setMessages] = useState<Message[]>([] as Message[]);
 	const [isPanelCollapsed, setPanelCollapsed] = useState(false);
+	const [websocket, setWebsocket] = useState<WebSocket | null>(null);
 
 	const { user, tokenCheck } = useAuth();
 
-	const { classroom_code } = useParams();
+	useEffect(() => {
+		if (!classroom.code) return;
 
-	const { sendJsonMessage } = useWebSocket(`ws://localhost:8000/ws/${classroom_code}/?token=${user!.token}`, {
-		onError: () => {
-			tokenCheck(user!.token || '');
-		},
-		onOpen: () => {
-			console.log('connection opened');
-		},
-		onMessage: (event: MessageEvent) => {
+		const webSocketURL = 
+			`ws://localhost:8000/ws/${classroom.code}/?token=${user!.token}`;
+
+		const ws = new WebSocket(webSocketURL);
+		setWebsocket(ws);
+
+		ws.onopen = () => {
+			console.log('WebSocket connection opened');
+		};
+
+		ws.onclose = () => {
+			console.log('WebSocket connection closed');
+		}
+
+		ws.onerror = () => {
+			console.log('Error trying to connect to socket. Trying to reconnect in one second..')
+			setTimeout(() => {
+				const ws = new WebSocket(webSocketURL);
+				setWebsocket(ws);
+			})
+			tokenCheck()
+		}
+
+		ws.onmessage = (event) => {
 			const data = JSON.parse(event.data);
 			const { user, user_id, avatar, message } = data;
-			const newMessage: Message = { user, user_id, avatar, message };
+			const newMessage = { user, user_id, avatar, message };
 			setMessages((prevMessages) => [...prevMessages, newMessage]);
-		},
-		shouldReconnect: () => true,
-		reconnectAttempts: 2,
-	});
+		};
 
-	useEffect(() => {
-		setClassroomCode(classroom_code || '');
-	}, [classroomCode, classroom_code]);
+		return () => {
+			ws.close();
+		};
+	}, [classroom, user]);
 
 	const sendMessage = (message: Message) => {
-		sendJsonMessage(message);
+		if (websocket) {
+			const messageString = JSON.stringify(message);
+			websocket.send(messageString);
+		}
 	};
 
 	return (
 		<ClassroomContext.Provider
 			value={{
-				classroomName,
-				setClassroomName,
-				classroomCode,
-				setClassroomCode,
-				classroomChannels,
-				setClassroomChannels,
-				classroomActiveChannelCode,
-				setClassroomActiveChannelCode,
+				classroom,
+				setClassroom,
 				message,
 				setMessage,
 				messages,
