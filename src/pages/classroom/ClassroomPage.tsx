@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router-dom';
 
-import ClassroomChannel from '../../components/classroom/ClassroomChannel';
 import NavigationPanel from '../../components/classroom/NavigationPanel';
 import Sidebar from '../../components/classroom/Sidebar';
 import { useClassroomContext } from '../../components/hooks/UseClassroomContext';
@@ -9,11 +8,10 @@ import { useClassroomContext } from '../../components/hooks/UseClassroomContext'
 const ClassroomPage = () => {
 	const { classroom_code } = useParams();
 
-	// const { token, tokenCheck } = useAuth();
 	const { setClassroom } = useClassroomContext();
 
 	useEffect(() => {
-		setClassroom((prev) => ({...prev, code: classroom_code || ''}));
+		setClassroom((prev) => ({ ...prev, code: classroom_code || '' }));
 	}, []);
 
 	return (
@@ -23,7 +21,7 @@ const ClassroomPage = () => {
 				<NavigationPanel />
 			</div>
 			<div className='w-full'>
-				<ClassroomChannel />
+				<Outlet />
 			</div>
 		</div>
 	);

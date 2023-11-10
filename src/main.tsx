@@ -16,27 +16,27 @@ import { Slide, ToastContainer } from 'react-toastify';
 import ClassroomJoinPage from './pages/classroom/ClassroomJoinPage.tsx';
 import ClassroomPage from './pages/classroom/ClassroomPage.tsx';
 import ErrorPage from './pages/ErrorPage.tsx';
-import RequireAuth from './utils/RequireAuth.tsx';
+import ClassroomChannel from './components/classroom/ClassroomChannel.tsx';
 import { ClassroomProvider } from './context/ClassroomContext.tsx';
+import RequireAuth from './utils/RequireAuth.tsx';
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
-		<Route path='/' element={<Root />}>
-			<Route index element={<LandingPage />} />
-			{/* Authentication routes */}
+		<Route path='/' Component={Root}>
+			<Route index Component={LandingPage} />
 			<Route path='auth'>
-				<Route path='login' element={<LoginPage />} />
-				<Route path='signup' element={<SignUpPage />} />
+				<Route path='login' Component={LoginPage} />
+				<Route path='signup' Component={SignUpPage} />
 			</Route>
-			{/* Classroom routes */}
-			<Route path='classroom' element={<RequireAuth />}>
-				<Route path='join' element={<ClassroomJoinPage />} />
-				<Route path=':classroom_code' element={<ClassroomProvider />}>
-					<Route index element={<ClassroomPage />} />
-					{/* <Route path=':channel_code' element={<ClassroomChannel />} />   */}
+			<Route Component={RequireAuth}>
+				<Route path='classroom' Component={ClassroomProvider}>
+					<Route path='join' Component={ClassroomJoinPage} />
+					<Route path=':classroom_code' Component={ClassroomPage}>
+						<Route path=':channel_code' Component={ClassroomChannel} />
+					</Route>
 				</Route>
 			</Route>
-			<Route path='*' element={<ErrorPage />} />
+			<Route path='*' Component={ErrorPage} />
 		</Route>
 	)
 );

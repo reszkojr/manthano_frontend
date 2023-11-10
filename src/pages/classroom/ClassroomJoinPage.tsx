@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 import TextInputWithButton from '../../components/elements/TextInputWithButton';
 import Card from '../../components/elements/Card';
-import api from '../../api';
+import api from '../../hooks/useApi';
 
 const ClassroomJoinPage = () => {
 	const [classroomCode, setClassroomCode] = useState('');

@@ -1,6 +1,6 @@
 import { createContext, Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Outlet } from 'react-router-dom';
 import { useAuth } from '../components/hooks/UseAuth';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 interface ClassroomContextType {
 	classroom: Classroom;
@@ -48,11 +48,12 @@ export const ClassroomProvider = () => {
 
 	const { user, tokenCheck } = useAuth();
 
-	useEffect(() => {
-		if (!classroom.code) return;
+	const navigate = useNavigate();
 
-		const webSocketURL = 
-			`ws://localhost:8000/ws/${classroom.code}/?token=${user!.token}`;
+	useEffect(() => {
+		if (!classroom.code || !classroom.activeChannelCode) return;
+
+		const webSocketURL = `ws://localhost:8000/ws/${classroom.code}/${classroom.activeChannelCode}/?token=${user!.token}`;
 
 		const ws = new WebSocket(webSocketURL);
 		setWebsocket(ws);
@@ -63,16 +64,18 @@ export const ClassroomProvider = () => {
 
 		ws.onclose = () => {
 			console.log('WebSocket connection closed');
-		}
+		};
 
 		ws.onerror = () => {
-			console.log('Error trying to connect to socket. Trying to reconnect in one second..')
-			setTimeout(() => {
-				const ws = new WebSocket(webSocketURL);
-				setWebsocket(ws);
-			})
-			tokenCheck()
-		}
+			navigate('/404');
+			console.log('WebSocket connection error');
+			// console.log('Error trying to connect to socket. Trying to reconnect in one second..');
+			// setTimeout(() => {
+			// 	const ws = new WebSocket(webSocketURL);
+			// 	setWebsocket(ws);
+			// });
+			// tokenCheck();
+		};
 
 		ws.onmessage = (event) => {
 			const data = JSON.parse(event.data);

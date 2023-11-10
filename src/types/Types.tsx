@@ -34,6 +34,7 @@ export interface ResponseData {
 export interface User {
 	username: string;
 	token: string;
+	refreshToken: string;
 	user_id: number;
 	avatar: string;
-};
+}

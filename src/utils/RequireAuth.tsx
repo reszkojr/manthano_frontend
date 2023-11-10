@@ -10,7 +10,7 @@ const RequireAuth = () => {
 		if (!user) {
 			navigate('/auth/login');
 		}
-	});
+	}, [user]);
 
 	return <>{user ? <Outlet /> : null}</>;
 };
