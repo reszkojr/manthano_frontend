@@ -26,13 +26,13 @@ const ChannelInput = () => {
 			avatar: '',
 		};
 		sendMessage(message);
+		setInputContent('');
 	};
 
 	const handleTextAreaEnter = (event: KeyboardEvent<HTMLTextAreaElement>) => {
 		if (event.key === 'Enter' && !event.shiftKey) {
 			event.preventDefault();
 			handleMessageSend();
-			setInputContent('');
 		}
 	};
 
