@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, createContext, useEffect, useState } from 'react';
 import jwt_decode, { InvalidTokenError } from 'jwt-decode';
 import axios from 'axios';
 
@@ -6,10 +6,11 @@ import Props from '../utils/Props';
 import AuthService from '../services/AuthService';
 
 import { LoginUserData, RegistrationUserData, ResponseData, Token, User } from '../types/Types';
-import api from '../api';
+import useApi from '../hooks/useApi';
 
 interface AuthContextData {
 	user: User | null;
+	setUser: Dispatch<SetStateAction<User | null>>;
 	login(userData: LoginUserData): Promise<ResponseData>;
 	logout(): void;
 	getClassroom(): Promise<string | null>;
@@ -23,9 +24,12 @@ export const AuthProvider = ({ children }: Props) => {
 	const [user, setUser] = useState<User | null>(null);
 	const [loading, setLoading] = useState<boolean>(true);
 
+	const api = useApi();
+
 	useEffect(() => {
 		const storageToken = localStorage.getItem('token');
-		if (storageToken === undefined || storageToken === null) {
+		const refreshToken = localStorage.getItem('refreshToken');
+		if (storageToken === undefined || storageToken === null || refreshToken === undefined || refreshToken === null) {
 			setUser(null);
 			setLoading(false);
 			return;
@@ -45,6 +49,7 @@ export const AuthProvider = ({ children }: Props) => {
 		setUser({
 			username,
 			token: storageToken,
+			refreshToken: refreshToken,
 			user_id,
 			avatar: '', // TODO
 		});
@@ -55,7 +60,7 @@ export const AuthProvider = ({ children }: Props) => {
 	}, []);
 
 	const login = async (userData: LoginUserData): Promise<ResponseData> => {
-		return await AuthService.handleLogin(userData)
+		return await AuthService.handleLogin(userData, api)
 			.then((response) => {
 				const token = response?.data.access;
 				const refreshToken = response?.data.refresh;
@@ -65,6 +70,7 @@ export const AuthProvider = ({ children }: Props) => {
 				setUser({
 					username,
 					token,
+					refreshToken,
 					user_id,
 					avatar: '', // TODO
 				});
@@ -83,7 +89,7 @@ export const AuthProvider = ({ children }: Props) => {
 	};
 
 	const register = async (userData: RegistrationUserData) => {
-		return await AuthService.handleRegister(userData)
+		return await AuthService.handleRegister(userData, api)
 			.then(() => {
 				return {
 					message: 'Your account was successfully created!',
@@ -117,8 +123,8 @@ export const AuthProvider = ({ children }: Props) => {
 	};
 
 	const tokenCheck = async () => {
-		if (!user) return
-		await AuthService.loginCheck(user.token);
+		if (!user) return;
+		await AuthService.loginCheck(user.token, api);
 	};
 
 	const storeTokens = (token: string, refreshToken: string) => {
@@ -149,6 +155,7 @@ export const AuthProvider = ({ children }: Props) => {
 		<AuthContext.Provider
 			value={{
 				user,
+				setUser,
 				login,
 				logout,
 				getClassroom,

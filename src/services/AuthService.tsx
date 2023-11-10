@@ -1,5 +1,4 @@
-import api from '../api';
-
+import { Axios } from 'axios';
 import { LoginUserData, RegistrationUserData } from '../types/Types';
 
 class AuthService {
@@ -7,17 +6,17 @@ class AuthService {
 		'Content-Type': 'application/json',
 	};
 
-	public handleLogin = async (userData: LoginUserData) => {
+	public handleLogin = async (userData: LoginUserData, api: Axios) => {
 		const response = await api.post('/auth/token/', userData, { headers: AuthService.jsonHeaders });
 		return response;
 	};
 
-	public handleRegister = async (userData: RegistrationUserData) => {
+	public handleRegister = async (userData: RegistrationUserData, api: Axios) => {
 		const response = await api.post('/auth/register/', userData, { headers: AuthService.jsonHeaders });
 		return response;
 	};
 
-	public loginCheck = async (token: string | undefined) => {
+	public loginCheck = async (token: string | undefined, api: Axios) => {
 		if (!token) return false;
 
 		const response = await api.post('/auth/token/check', { token: token });
