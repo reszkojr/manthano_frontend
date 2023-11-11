@@ -1,7 +1,7 @@
 import { createContext, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useAuth } from '../components/hooks/UseAuth';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { Classroom, Message } from '../types/Types';
+import { Channel, Classroom, Message } from '../types/Types';
 import useApi from '../hooks/useApi';
 
 interface ClassroomContextType {
@@ -38,10 +38,11 @@ export const ClassroomProvider = () => {
 	const navigate = useNavigate();
 	const api = useApi();
 
+	// Instantiate WebSocket instance
 	useEffect(() => {
 		if (!classroom.code || !classroom.activeChannel) return;
 
-		const webSocketURL = `ws://localhost:8000/ws/${classroom.code}/${classroom.activeChannel}/?token=${user!.token}`;
+		const webSocketURL = `ws://localhost:8000/ws/${classroom.code}/${classroom.activeChannel.name}/?token=${user!.token}`;
 
 		const ws = new WebSocket(webSocketURL);
 		setWebsocket(ws);
@@ -72,24 +73,33 @@ export const ClassroomProvider = () => {
 			setMessages((prevMessages) => [...prevMessages, newMessage]);
 		};
 
+		return () => {
+			ws.close();
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [classroom.activeChannel]);
+
+	// Set Classroom's channels
+	useEffect(() => {
 		const getChannels = async () => {
 			await api.get('classroom/channels/').then((response) => {
-				setClassroom((prev) => ({ ...prev, channels: response.data }));
+				const channels: Channel[] = [];
+				for (const key in response.data) {
+					const id = Number(key);
+					channels.push({ id: id, name: response.data[id] });
+				}
+				setClassroom((prev) => ({ ...prev, channels: [...channels] }));
 			});
 		};
 
 		getChannels();
+	}, []);
 
-		return () => {
-			ws.close();
-		};
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [classroom.code]);
-
+	// Change URL based on the current active channel
 	useEffect(() => {
-		// const url = `/classroom/${classroom.code}/${classroom.activeChannel}`;
-		// navigate(url);
+		if (classroom.activeChannel?.name === undefined) return;
+		const url = `/classroom/${classroom.code}/${classroom.activeChannel.name}`;
+		navigate(url);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [classroom.activeChannel]);
 
