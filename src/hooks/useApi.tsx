@@ -38,9 +38,12 @@ const useApi = () => {
 				const newToken = response.data.access;
 
 				// Atualiza o token no contexto
-				setUser({ ...user, token: newToken });
+				localStorage.removeItem('token');
+				localStorage.removeItem('refreshToken');
+				setUser(null);
+				// setUser({ ...user, token: newToken });
 
-				localStorage.setItem('token', newToken);
+				// localStorage.setItem('token', newToken);
 				originalRequest.headers.Authorization = `Bearer ${newToken}`;
 				return axios(originalRequest);
 			} catch (refreshError) {
