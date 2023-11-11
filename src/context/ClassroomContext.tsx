@@ -97,11 +97,14 @@ export const ClassroomProvider = () => {
 
 	// Change URL based on the current active channel
 	useEffect(() => {
-		if (classroom.activeChannel?.name === undefined) return;
-		const url = `/classroom/${classroom.code}/${classroom.activeChannel.name}`;
+		if (classroom.activeChannel === undefined) {
+			if (classroom.code) navigate(`/classroom/${classroom.code}/`);
+			return;
+		}
+		const url = `/classroom/${classroom.code}/${classroom.activeChannel?.name}`;
 		navigate(url);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [classroom.activeChannel]);
+	}, [classroom.activeChannel, classroom.code]);
 
 	const sendMessage = (message: Message) => {
 		if (websocket) {
