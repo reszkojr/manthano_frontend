@@ -38,3 +38,22 @@ export interface User {
 	user_id: number;
 	avatar: string;
 }
+
+export interface Classroom {
+	name: string;
+	code: string;
+	channels: Channel[];
+	activeChannel: Channel | undefined;
+}
+
+export interface Channel {
+	id: number;
+	name: string;
+}
+
+export interface Message {
+	user: string;
+	user_id: number;
+	message: string;
+	avatar: string;
+}
