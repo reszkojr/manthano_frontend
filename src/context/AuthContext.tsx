@@ -1,19 +1,20 @@
 import { Dispatch, SetStateAction, createContext, useEffect, useState } from 'react';
 import jwt_decode, { InvalidTokenError } from 'jwt-decode';
-import axios from 'axios';
+import axios, { Axios } from 'axios';
 
 import Props from '../utils/Props';
 import AuthService from '../services/AuthService';
 
-import { LoginUserData, RegistrationUserData, ResponseData, Token, User } from '../types/Types';
+import { LoginUserData, RegistrationUserData, ResponseData, User } from '../types/Types';
 import useApi from '../hooks/useApi';
+import { removeTokens, storeTokens, userIdFromToken, usernameFromToken } from '../utils/Utils';
 
 interface AuthContextData {
 	user: User | null;
 	setUser: Dispatch<SetStateAction<User | null>>;
 	login(userData: LoginUserData): Promise<ResponseData>;
 	logout(): void;
-	getClassroom(): Promise<string | null>;
+	getClassroom(newApi: Axios): Promise<string | null>;
 	register(userData: RegistrationUserData): Promise<ResponseData>;
 	tokenCheck(): void;
 }
@@ -112,7 +113,7 @@ export const AuthProvider = ({ children }: Props) => {
 		return true;
 	};
 
-	const getClassroom = async () => {
+	const getClassroom = async (api: Axios) => {
 		return await api
 			.get('/classroom/user')
 			.then((response) => response.data.classroom_code)
@@ -122,26 +123,6 @@ export const AuthProvider = ({ children }: Props) => {
 	const tokenCheck = async () => {
 		if (!user) return;
 		await AuthService.loginCheck(user.token, api);
-	};
-
-	const storeTokens = (token: string, refreshToken: string) => {
-		localStorage.setItem('token', token);
-		localStorage.setItem('refreshToken', refreshToken);
-	};
-
-	const removeTokens = () => {
-		localStorage.removeItem('token');
-		localStorage.removeItem('refreshToken');
-	};
-
-	const usernameFromToken = (token: string) => {
-		const decodedToken: Token = jwt_decode(token);
-		return decodedToken.username;
-	};
-
-	const userIdFromToken = (token: string) => {
-		const decodedToken: Token = jwt_decode(token);
-		return decodedToken.user_id;
 	};
 
 	if (loading) {

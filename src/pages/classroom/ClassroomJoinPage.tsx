@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 import TextInputWithButton from '../../components/elements/TextInputWithButton';
 import Card from '../../components/elements/Card';
-import api from '../../hooks/useApi';
+import useApi from '../../hooks/useApi';
 
 const ClassroomJoinPage = () => {
 	const [classroomCode, setClassroomCode] = useState('');
@@ -16,11 +16,13 @@ const ClassroomJoinPage = () => {
 
 	const { getClassroom } = useAuth();
 	const navigate = useNavigate();
+	const api = useApi();
 
 	useEffect(() => {
 		const checkUserClassroom = async () => {
-			return await getClassroom().then((response) => {
-				if (response !== null) navigate(`/classroom/${response}`);
+			return await getClassroom(api).then((response) => {
+				if (response === null) return;
+				navigate(`/classroom/${response}`);
 				setLoading(false);
 			});
 		};
