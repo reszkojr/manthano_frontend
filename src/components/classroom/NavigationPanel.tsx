@@ -29,7 +29,7 @@ const NavigationPanel = () => {
 						<AiOutlinePlus className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
 					</li>
 					{classroom.channels.map((channel) => (
-						<li key={channel.id} className={`flex cursor-pointer items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600 ${classroom.activeChannel === channel ? 'bg-gray-700 brightness-150' : ''}`} onClick={() => handleChannelChange(channel.id)}>
+						<li key={channel.id} className={`flex cursor-pointer items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600 ${classroom.activeChannel?.name === channel.name ? 'bg-gray-700 brightness-150' : ''}`} onClick={() => handleChannelChange(channel.id)}>
 							<FaHashtag className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
 							{channel.name}
 						</li>
