@@ -10,6 +10,7 @@ const RequireAuth = () => {
 		if (!user) {
 			navigate('/auth/login');
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user]);
 
 	return <>{user ? <Outlet /> : null}</>;
