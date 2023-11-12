@@ -53,7 +53,7 @@ export interface Channel {
 
 export interface Message {
 	text: string;
-	user?: User;
+	user?: string;
 	date?: Date;
 	id?: number;
 	avatar?: string;

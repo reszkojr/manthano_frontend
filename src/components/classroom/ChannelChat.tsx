@@ -4,11 +4,7 @@ import { useClassroomContext } from '../hooks/UseClassroomContext';
 const ChannelChat = () => {
 	const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-	const { messages, message } = useClassroomContext();
-
-	useEffect(() => {
-		console.log(message.id);
-	}, [message]);
+	const { messages } = useClassroomContext();
 
 	// scroll to the bottom when new messages are added
 	useEffect(() => scrollToBottom(), [messages]);
