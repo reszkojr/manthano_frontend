@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import { ResponseData } from '../../types/Types';
 
 const LoginPage = () => {
-	const { login, getClassroom } = useAuth();
+	const { login } = useAuth();
 	const navigate = useNavigate();
 
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -29,7 +29,7 @@ const LoginPage = () => {
 		}
 
 		toast.success(response.message);
-		return navigate('/classroom/join');
+		return navigate('/join');
 	};
 
 	return (
