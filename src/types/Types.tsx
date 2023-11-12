@@ -52,8 +52,9 @@ export interface Channel {
 }
 
 export interface Message {
-	user: string;
-	user_id: number;
-	message: string;
-	avatar: string;
+	text: string;
+	user?: User;
+	date?: Date;
+	id?: number;
+	avatar?: string;
 }

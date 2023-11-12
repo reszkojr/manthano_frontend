@@ -34,7 +34,7 @@ export const ClassroomProvider = () => {
 	const [isPanelCollapsed, setPanelCollapsed] = useState(false);
 	const [websocket, setWebsocket] = useState<WebSocket | null>(null);
 
-	const { user } = useAuth();
+	const { user, tokenCheck } = useAuth();
 	const navigate = useNavigate();
 	const api = useApi();
 
@@ -47,29 +47,13 @@ export const ClassroomProvider = () => {
 		const ws = new WebSocket(webSocketURL);
 		setWebsocket(ws);
 
-		ws.onopen = () => {
-			console.log('WebSocket connection opened');
-		};
-
-		ws.onclose = () => {
-			console.log('WebSocket connection closed');
-		};
-
 		ws.onerror = () => {
-			navigate('/404');
-			console.log('WebSocket connection error');
-			// console.log('Error trying to connect to socket. Trying to reconnect in one second..');
-			// setTimeout(() => {
-			// 	const ws = new WebSocket(webSocketURL);
-			// 	setWebsocket(ws);
-			// });
-			// tokenCheck();
+			tokenCheck(); // Checking the token makes the user refresh
 		};
 
 		ws.onmessage = (event) => {
-			const data = JSON.parse(event.data);
-			const { user, user_id, avatar, message } = data;
-			const newMessage = { user, user_id, avatar, message };
+			const { text, user, data, id, avatar } = JSON.parse(event.data);
+			const newMessage = { text, user, data, id, avatar };
 			setMessages((prevMessages) => [...prevMessages, newMessage]);
 		};
 
@@ -77,7 +61,7 @@ export const ClassroomProvider = () => {
 			ws.close();
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [classroom.activeChannel]);
+	}, [classroom.activeChannel, user!]);
 
 	// Set Classroom's channels
 	useEffect(() => {
@@ -93,7 +77,8 @@ export const ClassroomProvider = () => {
 		};
 
 		getChannels();
-	}, []);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [classroom.activeChannel]);
 
 	// Change URL based on the current active channel
 	useEffect(() => {
@@ -105,6 +90,16 @@ export const ClassroomProvider = () => {
 		navigate(url);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [classroom.activeChannel, classroom.code]);
+
+	// Fetch Channel messages
+	useEffect(() => {
+		if (classroom.activeChannel === undefined) return;
+
+		api.get('classroom/messages', { params: { channel_name: classroom.activeChannel?.name } }).then((response) => {
+			setMessages(response.data);
+		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [classroom.activeChannel]);
 
 	const sendMessage = (message: Message) => {
 		if (websocket) {

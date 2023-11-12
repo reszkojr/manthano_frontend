@@ -5,14 +5,12 @@ import { AiOutlineGif } from 'react-icons/ai';
 
 import { KeyboardEvent, useRef, useState } from 'react';
 import { useClassroomContext } from '../hooks/UseClassroomContext';
-import { useAuth } from '../hooks/UseAuth';
 
 import './ChannelInput.css';
 
 const ChannelInput = () => {
 	const [inputContent, setInputContent] = useState('');
 
-	const { user } = useAuth();
 	const { sendMessage } = useClassroomContext();
 
 	const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -20,10 +18,7 @@ const ChannelInput = () => {
 	const handleMessageSend = () => {
 		if (inputContent.trim() == '') return;
 		const message = {
-			user: user!.username,
-			user_id: user!.user_id,
-			message: inputContent,
-			avatar: '',
+			text: inputContent,
 		};
 		sendMessage(message);
 		setInputContent('');
