@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useAuth } from '../components/hooks/UseAuth';
+import { removeTokens, storeTokens } from '../utils/Utils';
 
 const useApi = () => {
 	const { user, setUser } = useAuth();
@@ -27,31 +28,25 @@ const useApi = () => {
 		async (error) => {
 			const originalRequest = error.config;
 
-			if (!user?.token || !user?.refreshToken) return axios(originalRequest);
+			if (!user?.token || !user?.refreshToken) return Promise.reject(error);
 
 			if (error.response.status === 401 && !originalRequest._retry) {
 				originalRequest._retry = true;
-			}
 
-			try {
-				const response = await instance.post('/auth/token/refresh', { refresh: user.refreshToken });
-				const newToken = response.data.access;
+				try {
+					const response = await instance.post('/auth/token/refresh', { refresh: user.refreshToken });
+					const newToken = response.data.access;
 
-				// Atualiza o token no contexto
-				localStorage.removeItem('token');
-				localStorage.removeItem('refreshToken');
-				setUser(null);
-				// setUser({ ...user, token: newToken });
+					setUser({ ...user, token: newToken });
+					storeTokens(newToken, user?.refreshToken);
 
-				// localStorage.setItem('token', newToken);
-				originalRequest.headers.Authorization = `Bearer ${newToken}`;
-				return axios(originalRequest);
-			} catch (refreshError) {
-				// Limpa os tokens em caso de erro no refresh
-				localStorage.removeItem('token');
-				localStorage.removeItem('refreshToken');
-				window.location.reload();
-				return axios(originalRequest);
+					originalRequest.headers.Authorization = `Bearer ${newToken}`;
+					return axios(originalRequest);
+				} catch (refreshError) {
+					removeTokens();
+					setUser(null);
+					return axios(originalRequest);
+				}
 			}
 		}
 	);

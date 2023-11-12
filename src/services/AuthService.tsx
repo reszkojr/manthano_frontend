@@ -18,9 +18,7 @@ class AuthService {
 
 	public loginCheck = async (token: string | undefined, api: Axios) => {
 		if (!token) return false;
-
-		const response = await api.post('/auth/token/check', { token: token });
-		return response.status === 200;
+		await api.post('/auth/token/check', { token: token })
 	};
 }
 

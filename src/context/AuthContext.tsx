@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }: Props) => {
 	useEffect(() => {
 		const storageToken = localStorage.getItem('token');
 		const refreshToken = localStorage.getItem('refreshToken');
-		if (storageToken === undefined || storageToken === null || refreshToken === undefined || refreshToken === null) {
+		if (!storageToken || !refreshToken) {
 			setUser(null);
 			setLoading(false);
 			return;
@@ -53,9 +53,6 @@ export const AuthProvider = ({ children }: Props) => {
 			user_id,
 			avatar: '', // TODO
 		});
-		(async () => {
-			await tokenCheck();
-		})();
 		setLoading(false);
 	}, []);
 
