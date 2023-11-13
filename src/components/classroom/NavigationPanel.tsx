@@ -29,7 +29,10 @@ const NavigationPanel = () => {
 
 	useEffect(() => {
 		const mobileMediaQuery = window.matchMedia('(max-width: 767px)');
-		setIsMobile(mobileMediaQuery.matches);
+		if (mobileMediaQuery.matches) {
+			setIsMobile(true);
+			setPanelCollapsed(true);
+		}
 		mobileMediaQuery.addEventListener('change', (event) => setIsMobile(event.matches));
 		return () => {
 			mobileMediaQuery.removeEventListener('change', (event) => setIsMobile(event.matches));
@@ -63,7 +66,7 @@ const NavigationPanel = () => {
 	};
 
 	return (
-		<div className={classNames('h-full overflow-auto border-r border-r-gray-600 bg-gray-800 transition-[width] duration-200', { collapsed: isPanelCollapsed, 'w-56': !isPanelCollapsed })}>
+		<div className={classNames('max-h-screen overflow-hidden border-r border-r-gray-600 bg-gray-800 transition-[width] duration-200', { collapsed: isPanelCollapsed, 'w-56': !isPanelCollapsed })}>
 			<div className={classNames('flex flex-col gap-3 transition-opacity duration-200', { 'invisible opacity-0': isPanelCollapsed })}>
 				<div className='flex h-12 w-full items-center justify-between border-b border-b-gray-600 px-4'>
 					<span className='my-auto min-w-max text-xl font-bold text-gray-50'>{classroom?.name}</span>
