@@ -21,9 +21,7 @@ const ClassroomJoinPage = () => {
 	useEffect(() => {
 		const checkUserClassroom = async () => {
 			return await getClassroom(api).then((data) => {
-				if (data === null) return;
-				const { code } = data;
-				navigate(`/classroom/${code}`);
+				if (data !== null) navigate(`/classroom/${data.code}`);
 				setLoading(false);
 			});
 		};

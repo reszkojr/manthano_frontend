@@ -6,7 +6,7 @@ const useApi = () => {
 	const { user, setUser } = useAuth();
 
 	const instance = axios.create({
-		baseURL: import.meta.env.VITE_REACT_APP_API,
+		baseURL: `http://${import.meta.env.VITE_REACT_APP_API}`,
 	});
 
 	instance.interceptors.request.use(
