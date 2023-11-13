@@ -126,9 +126,9 @@ const NavigationPanel = () => {
 						<h2 className='mb-4 text-gray-200'>What's gonna be the subject of your channel?</h2>
 						<TextInput value={channelName} type='text' label='Channel name' name='channel_name' placeholder='philosophy' onChange={(event) => setChannelName(event.target.value)} />
 					</div>
-					<div className='bottom-0 mt-auto flex w-full justify-end gap-2 bg-gray-700 py-3 pr-2'>
-						<Button label='Cancel' className='my-auto w-32' />
-						<Submit label='Create' className='my-auto w-32' />
+					<div className='bottom-0 mt-auto flex w-full justify-end gap-2 bg-gray-700 px-2 py-3'>
+						<Button label='Cancel' className='w-32' />
+						<Submit label='Create' className='w-32' />
 					</div>
 				</form>
 			</Modal>
