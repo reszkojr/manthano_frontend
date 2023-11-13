@@ -11,8 +11,8 @@ interface ClassroomContextType {
 	message: Message;
 	setMessage: Dispatch<SetStateAction<Message>>;
 
-	messages: Message[];
-	setMessages: Dispatch<SetStateAction<Message[]>>;
+	messages: Message[] | undefined;
+	setMessages: Dispatch<SetStateAction<Message[] | undefined>>;
 
 	sendMessage: (message: Message) => void;
 
@@ -25,7 +25,7 @@ export const ClassroomContext = createContext<ClassroomContextType>({} as Classr
 export const ClassroomProvider = () => {
 	const [classroom, setClassroom] = useState<Classroom | undefined>(undefined);
 	const [message, setMessage] = useState<Message>({} as Message);
-	const [messages, setMessages] = useState<Message[]>([] as Message[]);
+	const [messages, setMessages] = useState<Message[] | undefined>([] as Message[]);
 	const [isPanelCollapsed, setPanelCollapsed] = useState(false);
 	const [websocket, setWebsocket] = useState<WebSocket | null>(null);
 
@@ -59,7 +59,10 @@ export const ClassroomProvider = () => {
 		ws.onmessage = (event) => {
 			const { text, user, data, id, avatar } = JSON.parse(event.data);
 			const newMessage = { text, user, data, id, avatar };
-			setMessages((prevMessages) => [...prevMessages, newMessage]);
+			setMessages((prevMessages) => {
+				if (prevMessages) return [...prevMessages, newMessage];
+				else return [newMessage];
+			});
 		};
 
 		return () => {
@@ -92,6 +95,7 @@ export const ClassroomProvider = () => {
 	// Fetch Channel messages
 	useEffect(() => {
 		if (classroom?.activeChannel === undefined) return;
+		setMessages(undefined);
 
 		api.get('classroom/messages', { params: { channel_name: classroom?.activeChannel?.name } }).then((response) => {
 			setMessages(response.data);

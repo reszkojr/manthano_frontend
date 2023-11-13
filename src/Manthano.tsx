@@ -1,7 +1,6 @@
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { Slide, ToastContainer } from 'react-toastify';
-import useApi from './hooks/useApi';
 import Root from './components/Root';
 import LandingPage from './pages/landingpage/LandingPage';
 import LoginPage from './pages/authentication/LoginPage';
@@ -15,6 +14,7 @@ import ErrorPage from './pages/ErrorPage';
 
 import '../index.css';
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const Manthano = () => {
 	const router = createBrowserRouter(
