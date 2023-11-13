@@ -1,6 +1,6 @@
 type SubmitProps = {
 	label: string;
-	className: string;
+	className?: string;
 };
 
 const Submit = (props: SubmitProps) => {
