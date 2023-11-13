@@ -1,6 +1,6 @@
 import { createContext, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useAuth } from '../components/hooks/UseAuth';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { Channel, Classroom, Message } from '../types/Types';
 import useApi from '../hooks/useApi';
 
@@ -30,7 +30,6 @@ export const ClassroomProvider = () => {
 	const [websocket, setWebsocket] = useState<WebSocket | null>(null);
 
 	const { user, tokenCheck, getClassroom } = useAuth();
-	const navigate = useNavigate();
 	const api = useApi();
 
 	// Get Classroom information
@@ -64,7 +63,11 @@ export const ClassroomProvider = () => {
 		};
 
 		return () => {
-			ws.close();
+			try {
+				ws.close();
+			} catch (error) {
+				console.log('error');
+			}
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [classroom?.activeChannel]);
@@ -78,24 +81,13 @@ export const ClassroomProvider = () => {
 					const id = Number(key);
 					channels.push({ id: id, name: response.data[id] });
 				}
-				setClassroom((prev) => ({ ...prev!, channels: [...channels] }));
+				setClassroom((prev) => ({ ...prev!, channels: [...channels], activeChannel: channels[0] }));
 			});
 		};
 
 		getChannels();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [classroom?.activeChannel]);
-
-	// Change URL based on the current active channel
-	useEffect(() => {
-		if (classroom?.activeChannel === undefined) {
-			if (classroom?.code) navigate(`/classroom/${classroom?.code}/`);
-			return;
-		}
-		const url = `/classroom/${classroom?.code}/${classroom?.activeChannel?.name}`;
-		navigate(url);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [classroom?.activeChannel, classroom?.code]);
+	}, []);
 
 	// Fetch Channel messages
 	useEffect(() => {

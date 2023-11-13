@@ -12,6 +12,7 @@ import TextInput from '../elements/TextInput';
 import Button from '../elements/Button';
 import Submit from '../elements/Submit';
 import useApi from '../../hooks/useApi';
+import { useNavigate } from 'react-router-dom';
 
 Modal.setAppElement('#root');
 Modal.defaultStyles.overlay!.backgroundColor = 'rgba(0, 0, 0, 0.6)';
@@ -19,6 +20,7 @@ Modal.defaultStyles.overlay!.backgroundColor = 'rgba(0, 0, 0, 0.6)';
 const NavigationPanel = () => {
 	const [modalOpen, setModalOpen] = useState(false);
 	const [channelName, setChannelName] = useState('');
+	const navigate = useNavigate();
 
 	const { classroom, setClassroom, isPanelCollapsed } = useClassroomContext();
 	const api = useApi();
@@ -26,6 +28,7 @@ const NavigationPanel = () => {
 	const handleChannelChange = (key: number) => {
 		const channel = classroom?.channels.find((ch) => ch.id === key);
 		setClassroom((prev) => ({ ...prev!, activeChannel: channel }));
+		navigate(`${channel?.name}`);
 	};
 
 	const handleAddChannelSubmit = () => {
