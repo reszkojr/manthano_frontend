@@ -9,6 +9,7 @@ import Checkbox from '../../components/elements/Checkbox';
 import { useNavigate } from 'react-router';
 import { ResponseData } from '../../types/Types';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 const SignUpPage = () => {
 	const { register } = useAuth();
@@ -45,9 +46,9 @@ const SignUpPage = () => {
 					<h2 className='text-gray-300'>Creating your classroom is gonna be as easy as Plato finding a cave.</h2>
 					<h2 className='text-gray-300'>
 						Already have an account?{' '}
-						<a href='/login' className='text-lapis-500'>
+						<Link to='/auth/login' className='text-lapis-500'>
 							Then Login here
-						</a>
+						</Link>
 					</h2>
 				</div>
 				<form className='flex flex-col gap-4' method='POST' onSubmit={handleSubmit}>

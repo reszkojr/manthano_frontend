@@ -1,6 +1,6 @@
 import { FormEvent } from 'react';
 import { useAuth } from '../../components/hooks/UseAuth';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import TextInput from '../../components/elements/TextInput';
 import Submit from '../../components/elements/Submit';
@@ -40,9 +40,9 @@ const LoginPage = () => {
 					<h2 className='text-gray-300'>Let's start your classroom in just a few clicks.</h2>
 					<h2 className='text-gray-300'>
 						Still don't have an account?{' '}
-						<a href='/auth/signup' className='text-lapis-500'>
+						<Link to='/auth/signup' className='text-lapis-500'>
 							Sign up
-						</a>
+						</Link>
 					</h2>
 				</div>
 				<form method='POST' onSubmit={handleSubmit}>
