@@ -11,11 +11,11 @@ const ClassroomPage = () => {
 	const { setClassroom } = useClassroomContext();
 
 	useEffect(() => {
-		setClassroom((prev) => ({ ...prev, code: classroom_code || '' }));
+		setClassroom((prev) => ({ ...prev!, code: classroom_code || '' }));
 	}, []);
 
 	return (
-		<div className='flex w-full'>
+		<div className='flex h-[100dvh] w-screen'>
 			<div className='flex w-min'>
 				<Sidebar />
 				<NavigationPanel />

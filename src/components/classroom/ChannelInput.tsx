@@ -24,18 +24,23 @@ const ChannelInput = () => {
 		setInputContent('');
 	};
 
-	const handleTextAreaEnter = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+	const handleTextAreaEnter = (event: KeyboardEvent) => {
 		if (event.key === 'Enter' && !event.shiftKey) {
 			event.preventDefault();
 			handleMessageSend();
 		}
 	};
 
+	const handleTouchEnd = (event: TouchEvent) => {
+		event.preventDefault();
+		handleMessageSend();
+	};
+
 	return (
-		<div className='m-4 overflow-auto rounded-md border border-gray-600 px-2 pt-2 shadow-2xl'>
+		<div className='m-4 mt-0 overflow-auto rounded-md border border-gray-600 px-2 pt-2 shadow-2xl'>
 			<div className='mb-2 flex gap-4'>
 				<textarea ref={textAreaRef} value={inputContent} onKeyDown={handleTextAreaEnter} onChange={(event) => setInputContent(event.target.value)} spellCheck={false} id='message_input' className='min-h-8 max-h-28 w-full resize-none border-none bg-transparent p-0 text-gray-50 outline-none' />
-				<BiSolidSend onClick={handleMessageSend} className='mb-auto h-auto w-6 hover:cursor-pointer hover:brightness-150 hover:filter' />
+				<BiSolidSend onTouchEnd={handleTouchEnd} onClick={handleMessageSend} className='mb-auto h-auto w-6 hover:cursor-pointer hover:brightness-150 hover:filter' />
 			</div>
 			<div className='h-8'>
 				<ul className='mb-auto flex items-center gap-3'>

@@ -4,7 +4,7 @@ import ChannelChat from './ChannelChat';
 
 const ClassroomChannel = () => {
 	return (
-		<div className='flex h-screen w-full flex-col bg-gray-800'>
+		<div className='flex h-full w-full flex-col bg-gray-800'>
 			<ChannelHeader />
 			<ChannelChat />
 			<ChannelInput />
