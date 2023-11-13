@@ -7,7 +7,7 @@ import Modal from 'react-modal';
 import { useClassroomContext } from '../hooks/UseClassroomContext';
 
 import './NavigationPanel.css';
-import { FormEvent, useState } from 'react';
+import { useState } from 'react';
 import TextInput from '../elements/TextInput';
 import Button from '../elements/Button';
 import Submit from '../elements/Submit';
@@ -24,8 +24,8 @@ const NavigationPanel = () => {
 	const api = useApi();
 
 	const handleChannelChange = (key: number) => {
-		const channel = classroom.channels.find((ch) => ch.id === key);
-		setClassroom((prev) => ({ ...prev, activeChannel: channel }));
+		const channel = classroom?.channels.find((ch) => ch.id === key);
+		setClassroom((prev) => ({ ...prev!, activeChannel: channel }));
 	};
 
 	const handleAddChannelSubmit = () => {
@@ -33,8 +33,8 @@ const NavigationPanel = () => {
 		api.post('/classroom/channel/add', { channel_name: channelName }).then((response) => {
 			const channel = response.data;
 			setClassroom((prev) => ({
-				...prev,
-				channels: [...prev.channels, channel],
+				...prev!,
+				channels: [...prev!.channels, channel],
 				activeChannel: channel,
 			}));
 		});
@@ -44,7 +44,7 @@ const NavigationPanel = () => {
 		<div className={classNames('h-screen border-r border-r-gray-600 bg-gray-800 transition-[width] duration-200', { collapsed: isPanelCollapsed, 'w-56': !isPanelCollapsed })}>
 			<div className={classNames('flex flex-col gap-3 transition-opacity duration-200', { 'invisible opacity-0': isPanelCollapsed })}>
 				<div className='flex h-12 w-full items-center justify-between border-b border-b-gray-600 px-4'>
-					<span className='my-auto min-w-max text-xl font-bold text-gray-50'>Classroom Name</span>
+					<span className='my-auto min-w-max text-xl font-bold text-gray-50'>{classroom?.name}</span>
 				</div>
 				<div className='space-y-4 px-3'>
 					<ul className='flex flex-col gap-2'>
@@ -54,8 +54,8 @@ const NavigationPanel = () => {
 							</div>
 							<AiOutlinePlus onClick={() => setModalOpen(true)} className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
 						</li>
-						{classroom.channels.map((channel) => (
-							<li key={channel.id} className={`flex min-w-max cursor-pointer items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600 ${classroom.activeChannel?.name === channel.name ? 'bg-gray-700 brightness-150' : ''}`} onClick={() => handleChannelChange(channel.id)}>
+						{classroom?.channels.map((channel) => (
+							<li key={channel.id} className={classNames('flex min-w-max cursor-pointer items-center gap-2 rounded-md  px-4 py-[4px] hover:bg-gray-600', { 'bg-gray-600 text-gray-200 brightness-125': classroom?.activeChannel?.name === channel.name })} onClick={() => handleChannelChange(channel.id)}>
 								<FaHashtag className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
 								{channel.name}
 							</li>

@@ -5,8 +5,8 @@ import { Channel, Classroom, Message } from '../types/Types';
 import useApi from '../hooks/useApi';
 
 interface ClassroomContextType {
-	classroom: Classroom;
-	setClassroom: Dispatch<SetStateAction<Classroom>>;
+	classroom: Classroom | undefined;
+	setClassroom: Dispatch<SetStateAction<Classroom | undefined>>;
 
 	message: Message;
 	setMessage: Dispatch<SetStateAction<Message>>;
@@ -23,24 +23,30 @@ interface ClassroomContextType {
 export const ClassroomContext = createContext<ClassroomContextType>({} as ClassroomContextType);
 
 export const ClassroomProvider = () => {
-	const [classroom, setClassroom] = useState<Classroom>({
-		name: '',
-		code: '',
-		channels: [],
-		activeChannel: undefined,
-	});
+	const [classroom, setClassroom] = useState<Classroom | undefined>(undefined);
 	const [message, setMessage] = useState<Message>({} as Message);
 	const [messages, setMessages] = useState<Message[]>([] as Message[]);
 	const [isPanelCollapsed, setPanelCollapsed] = useState(false);
 	const [websocket, setWebsocket] = useState<WebSocket | null>(null);
 
-	const { user, tokenCheck } = useAuth();
+	const { user, tokenCheck, getClassroom } = useAuth();
 	const navigate = useNavigate();
 	const api = useApi();
 
+	// Get Classroom information
+	useEffect(() => {
+		const retrieveAndSetClassroom = async () => {
+			return await getClassroom(api).then((data) => {
+				if (data) setClassroom(data);
+			});
+		};
+
+		retrieveAndSetClassroom();
+	}, []);
+
 	// Instantiate WebSocket instance
 	useEffect(() => {
-		if (!classroom.code || !classroom.activeChannel) return;
+		if (classroom === undefined || !classroom.activeChannel) return;
 
 		const webSocketURL = `ws://localhost:8000/ws/${classroom.code}/${classroom.activeChannel.name}/?token=${user!.token}`;
 
@@ -61,7 +67,7 @@ export const ClassroomProvider = () => {
 			ws.close();
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [classroom.activeChannel, user!]);
+	}, [classroom?.activeChannel]);
 
 	// Set Classroom's channels
 	useEffect(() => {
@@ -72,34 +78,34 @@ export const ClassroomProvider = () => {
 					const id = Number(key);
 					channels.push({ id: id, name: response.data[id] });
 				}
-				setClassroom((prev) => ({ ...prev, channels: [...channels] }));
+				setClassroom((prev) => ({ ...prev!, channels: [...channels] }));
 			});
 		};
 
 		getChannels();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [classroom.activeChannel]);
+	}, [classroom?.activeChannel]);
 
 	// Change URL based on the current active channel
 	useEffect(() => {
-		if (classroom.activeChannel === undefined) {
-			if (classroom.code) navigate(`/classroom/${classroom.code}/`);
+		if (classroom?.activeChannel === undefined) {
+			if (classroom?.code) navigate(`/classroom/${classroom?.code}/`);
 			return;
 		}
-		const url = `/classroom/${classroom.code}/${classroom.activeChannel?.name}`;
+		const url = `/classroom/${classroom?.code}/${classroom?.activeChannel?.name}`;
 		navigate(url);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [classroom.activeChannel, classroom.code]);
+	}, [classroom?.activeChannel, classroom?.code]);
 
 	// Fetch Channel messages
 	useEffect(() => {
-		if (classroom.activeChannel === undefined) return;
+		if (classroom?.activeChannel === undefined) return;
 
-		api.get('classroom/messages', { params: { channel_name: classroom.activeChannel?.name } }).then((response) => {
+		api.get('classroom/messages', { params: { channel_name: classroom?.activeChannel?.name } }).then((response) => {
 			setMessages(response.data);
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [classroom.activeChannel]);
+	}, [classroom?.activeChannel]);
 
 	const sendMessage = (message: Message) => {
 		if (websocket) {
@@ -107,6 +113,10 @@ export const ClassroomProvider = () => {
 			websocket.send(messageString);
 		}
 	};
+
+	if (classroom === undefined || classroom === null) {
+		return <div>Loading...</div>;
+	}
 
 	return (
 		<ClassroomContext.Provider

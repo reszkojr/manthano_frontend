@@ -5,7 +5,7 @@ import axios, { Axios } from 'axios';
 import Props from '../utils/Props';
 import AuthService from '../services/AuthService';
 
-import { LoginUserData, RegistrationUserData, ResponseData, User } from '../types/Types';
+import { Classroom, LoginUserData, RegistrationUserData, ResponseData, User } from '../types/Types';
 import useApi from '../hooks/useApi';
 import { removeTokens, storeTokens, userIdFromToken, usernameFromToken } from '../utils/Utils';
 
@@ -14,7 +14,7 @@ interface AuthContextData {
 	setUser: Dispatch<SetStateAction<User | null>>;
 	login(userData: LoginUserData): Promise<ResponseData>;
 	logout(): void;
-	getClassroom(newApi: Axios): Promise<string | null>;
+	getClassroom(newApi: Axios): Promise<Classroom | null>;
 	register(userData: RegistrationUserData): Promise<ResponseData>;
 	tokenCheck(): void;
 }
@@ -116,7 +116,7 @@ export const AuthProvider = ({ children }: Props) => {
 	const getClassroom = async (api: Axios) => {
 		return await api
 			.get('/classroom/user')
-			.then((response) => response.data.classroom_code)
+			.then((response) => response.data)
 			.catch(() => null);
 	};
 

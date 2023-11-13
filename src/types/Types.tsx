@@ -40,10 +40,19 @@ export interface User {
 }
 
 export interface Classroom {
+	id: number;
 	name: string;
 	code: string;
+	description: string;
+	schedule: Schedule | null;
+	created_at: Date;
+	updated_at: Date
 	channels: Channel[];
-	activeChannel: Channel | undefined;
+	activeChannel: Channel | undefined | null;
+}
+
+export interface Schedule {
+	
 }
 
 export interface Channel {

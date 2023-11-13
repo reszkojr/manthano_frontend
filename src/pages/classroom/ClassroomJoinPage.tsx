@@ -20,9 +20,10 @@ const ClassroomJoinPage = () => {
 
 	useEffect(() => {
 		const checkUserClassroom = async () => {
-			return await getClassroom(api).then((response) => {
-				if (response === null) return;
-				navigate(`/classroom/${response}`);
+			return await getClassroom(api).then((data) => {
+				if (data === null) return;
+				const { code } = data;
+				navigate(`/classroom/${code}`);
 				setLoading(false);
 			});
 		};
