@@ -1,18 +1,43 @@
 import { FaHashtag, FaVolumeDown } from 'react-icons/fa';
-import { AiOutlinePlus } from 'react-icons/ai';
+import { AiFillCloseCircle, AiOutlinePlus } from 'react-icons/ai';
 import { MdExpandMore } from 'react-icons/md';
 import classNames from 'classnames';
+import Modal from 'react-modal';
 
 import { useClassroomContext } from '../hooks/UseClassroomContext';
 
 import './NavigationPanel.css';
+import { FormEvent, useState } from 'react';
+import TextInput from '../elements/TextInput';
+import Button from '../elements/Button';
+import Submit from '../elements/Submit';
+import useApi from '../../hooks/useApi';
+
+Modal.setAppElement('#root');
+Modal.defaultStyles.overlay!.backgroundColor = 'rgba(0, 0, 0, 0.6)';
 
 const NavigationPanel = () => {
+	const [modalOpen, setModalOpen] = useState(false);
+	const [channelName, setChannelName] = useState('');
+
 	const { classroom, setClassroom, isPanelCollapsed } = useClassroomContext();
+	const api = useApi();
 
 	const handleChannelChange = (key: number) => {
 		const channel = classroom.channels.find((ch) => ch.id === key);
 		setClassroom((prev) => ({ ...prev, activeChannel: channel }));
+	};
+
+	const handleAddChannelSubmit = () => {
+		setModalOpen(false);
+		api.post('/classroom/channel/add', { channel_name: channelName }).then((response) => {
+			const channel = response.data;
+			setClassroom((prev) => ({
+				...prev,
+				channels: [...prev.channels, channel],
+				activeChannel: channel,
+			}));
+		});
 	};
 
 	return (
@@ -27,7 +52,7 @@ const NavigationPanel = () => {
 							<div className='flex min-w-max items-center gap-2 text-sm text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter'>
 								CHANNELS <MdExpandMore />
 							</div>
-							<AiOutlinePlus className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
+							<AiOutlinePlus onClick={() => setModalOpen(true)} className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
 						</li>
 						{classroom.channels.map((channel) => (
 							<li key={channel.id} className={`flex min-w-max cursor-pointer items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600 ${classroom.activeChannel?.name === channel.name ? 'bg-gray-700 brightness-150' : ''}`} onClick={() => handleChannelChange(channel.id)}>
@@ -68,6 +93,20 @@ const NavigationPanel = () => {
 					</div>
 				</div>
 			</div>
+			<Modal isOpen={modalOpen} className={'absolute bottom-1/2 right-1/2 h-40 w-[400px] translate-x-1/2 translate-y-1/2 rounded-lg border border-gray-700 bg-gray-800 shadow outline-none transition-all md:w-[500px]'} onRequestClose={() => setModalOpen(false)} contentLabel='Create Channel'>
+				<form method='POST' className='flex h-full flex-col items-center justify-center' onSubmit={handleAddChannelSubmit}>
+					<AiFillCloseCircle className='absolute right-2 top-2 h-auto w-5 text-gray-300 hover:cursor-pointer' onClick={() => setModalOpen(false)} />
+					<div className='mb-3 mt-6 w-full p-3'>
+						<h1 className='text-gray-200'>Choose a name for your new Channel.</h1>
+						<h1 className='text-gray-200'>It can be based on a subject or whatever you want.</h1>
+						<TextInput value={channelName} type='text' name='channel_name' placeholder='Channel name' onChange={(event) => setChannelName(event.target.value)} />
+					</div>
+					<div className='mt-auto flex w-full'>
+						<Button label='Cancel' className='mt-auto w-full rounded-none rounded-bl-lg' />
+						<Submit label='Create' className='mt-auto w-full rounded-none rounded-br-lg' />
+					</div>
+				</form>
+			</Modal>
 		</div>
 	);
 };
