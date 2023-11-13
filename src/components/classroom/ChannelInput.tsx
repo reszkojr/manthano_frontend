@@ -37,7 +37,7 @@ const ChannelInput = () => {
 	};
 
 	return (
-		<div className='m-4 mt-0 overflow-auto rounded-md border border-gray-600 px-2 pt-2 shadow-2xl'>
+		<div className='m-4 mt-auto overflow-auto rounded-md border border-gray-600 px-2 pt-2 shadow-2xl'>
 			<div className='mb-2 flex gap-4'>
 				<textarea ref={textAreaRef} value={inputContent} onKeyDown={handleTextAreaEnter} onChange={(event) => setInputContent(event.target.value)} spellCheck={false} id='message_input' className='min-h-8 max-h-28 w-full resize-none border-none bg-transparent p-0 text-gray-50 outline-none' />
 				<BiSolidSend onTouchEnd={handleTouchEnd} onClick={handleMessageSend} className='mb-auto h-auto w-6 hover:cursor-pointer hover:brightness-150 hover:filter' />
