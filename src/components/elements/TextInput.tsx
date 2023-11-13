@@ -1,3 +1,5 @@
+import classNames from 'classnames';
+
 type TextInputProps = {
 	type: string;
 	name: string;
@@ -6,6 +8,7 @@ type TextInputProps = {
 	onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined;
 	placeholder?: string;
 	className?: string;
+	boldLabel?: string;
 };
 
 const styles = {
@@ -16,7 +19,9 @@ const styles = {
 const TextInput = (props: TextInputProps) => {
 	return (
 		<div className={`${styles.container}${props.className ? ' ' + props.className : ''}`}>
-			<label htmlFor={props.name}>{props.label}</label>
+			<label htmlFor={props.name} className={classNames('text-gray-200', { 'font-bold': props.boldLabel })}>
+				{props.label}
+			</label>
 			<input onChange={props.onChange} value={props.value} className={`${styles.input}`} type={props.type} name={props.name} placeholder={props.placeholder} />
 		</div>
 	);

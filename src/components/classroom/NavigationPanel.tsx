@@ -7,12 +7,13 @@ import Modal from 'react-modal';
 import { useClassroomContext } from '../hooks/UseClassroomContext';
 
 import './NavigationPanel.css';
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import TextInput from '../elements/TextInput';
 import Button from '../elements/Button';
 import Submit from '../elements/Submit';
 import useApi from '../../hooks/useApi';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 Modal.setAppElement('#root');
 Modal.defaultStyles.overlay!.backgroundColor = 'rgba(0, 0, 0, 0.6)';
@@ -44,8 +45,12 @@ const NavigationPanel = () => {
 		navigate(`${channel?.name}`);
 	};
 
-	const handleAddChannelSubmit = () => {
-		setModalOpen(false);
+	const handleAddChannelSubmit = (event: FormEvent) => {
+		event.preventDefault();
+		if (channelName.trim().length === 0) {
+			toast.error('The Channel name cannot be empty!');
+			return;
+		}
 		api.post('/classroom/channel/add', { channel_name: channelName }).then((response) => {
 			const channel = response.data;
 			setClassroom((prev) => ({
@@ -54,10 +59,11 @@ const NavigationPanel = () => {
 				activeChannel: channel,
 			}));
 		});
+		setModalOpen(false);
 	};
 
 	return (
-		<div className={classNames('h-full border-r border-r-gray-600 bg-gray-800 transition-[width] duration-200', { collapsed: isPanelCollapsed, 'w-56': !isPanelCollapsed })}>
+		<div className={classNames('h-full overflow-auto border-r border-r-gray-600 bg-gray-800 transition-[width] duration-200', { collapsed: isPanelCollapsed, 'w-56': !isPanelCollapsed })}>
 			<div className={classNames('flex flex-col gap-3 transition-opacity duration-200', { 'invisible opacity-0': isPanelCollapsed })}>
 				<div className='flex h-12 w-full items-center justify-between border-b border-b-gray-600 px-4'>
 					<span className='my-auto min-w-max text-xl font-bold text-gray-50'>{classroom?.name}</span>
@@ -109,17 +115,17 @@ const NavigationPanel = () => {
 					</div>
 				</div>
 			</div>
-			<Modal isOpen={modalOpen} className={'absolute bottom-1/2 right-1/2 h-40 w-[400px] translate-x-1/2 translate-y-1/2 rounded-lg border border-gray-700 bg-gray-800 shadow outline-none transition-all md:w-[500px]'} onRequestClose={() => setModalOpen(false)} contentLabel='Create Channel'>
+			<Modal isOpen={modalOpen} className={'absolute bottom-1/2 right-1/2 w-[400px] translate-x-1/2 translate-y-1/2 overflow-hidden rounded-lg border border-gray-700 bg-gray-800 shadow outline-none transition-all md:w-[500px]'} onRequestClose={() => setModalOpen(false)} contentLabel='Create Channel'>
 				<form method='POST' className='flex h-full flex-col items-center justify-center' onSubmit={handleAddChannelSubmit}>
 					<AiFillCloseCircle className='absolute right-2 top-2 h-auto w-5 text-gray-300 transition-all duration-150 hover:cursor-pointer hover:brightness-150' onClick={() => setModalOpen(false)} />
-					<div className='mb-3 mt-6 w-full p-3'>
-						<h1 className='text-gray-200'>Choose a name for your new Channel.</h1>
-						<h1 className='text-gray-200'>It can be based on a subject or whatever you want.</h1>
-						<TextInput value={channelName} type='text' name='channel_name' placeholder='Channel name' onChange={(event) => setChannelName(event.target.value)} />
+					<div className='mb-3 w-full p-3'>
+						<h1 className='text-lg font-bold'>Create text Channel</h1>
+						<h2 className='mb-4 text-gray-200'>What's gonna be the subject of your channel?</h2>
+						<TextInput value={channelName} type='text' label='Channel name' name='channel_name' placeholder='philosophy' onChange={(event) => setChannelName(event.target.value)} />
 					</div>
-					<div className='mt-auto flex w-full'>
-						<Button label='Cancel' className='mt-auto w-full rounded-none rounded-bl-lg' />
-						<Submit label='Create' className='mt-auto w-full rounded-none rounded-br-lg' />
+					<div className='bottom-0 mt-auto flex w-full justify-end gap-2 bg-gray-700 py-3 pr-2'>
+						<Button label='Cancel' className='my-auto w-32' />
+						<Submit label='Create' className='my-auto w-32' />
 					</div>
 				</form>
 			</Modal>
