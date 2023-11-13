@@ -98,7 +98,7 @@ const NavigationPanel = () => {
 			</div>
 			<Modal isOpen={modalOpen} className={'absolute bottom-1/2 right-1/2 h-40 w-[400px] translate-x-1/2 translate-y-1/2 rounded-lg border border-gray-700 bg-gray-800 shadow outline-none transition-all md:w-[500px]'} onRequestClose={() => setModalOpen(false)} contentLabel='Create Channel'>
 				<form method='POST' className='flex h-full flex-col items-center justify-center' onSubmit={handleAddChannelSubmit}>
-					<AiFillCloseCircle className='absolute right-2 top-2 h-auto w-5 text-gray-300 hover:cursor-pointer' onClick={() => setModalOpen(false)} />
+					<AiFillCloseCircle className='absolute right-2 top-2 h-auto w-5 text-gray-300 transition-all duration-150 hover:cursor-pointer hover:brightness-150' onClick={() => setModalOpen(false)} />
 					<div className='mb-3 mt-6 w-full p-3'>
 						<h1 className='text-gray-200'>Choose a name for your new Channel.</h1>
 						<h1 className='text-gray-200'>It can be based on a subject or whatever you want.</h1>
