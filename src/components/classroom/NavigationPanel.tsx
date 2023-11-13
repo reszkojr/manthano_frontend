@@ -7,7 +7,7 @@ import Modal from 'react-modal';
 import { useClassroomContext } from '../hooks/UseClassroomContext';
 
 import './NavigationPanel.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TextInput from '../elements/TextInput';
 import Button from '../elements/Button';
 import Submit from '../elements/Submit';
@@ -20,12 +20,25 @@ Modal.defaultStyles.overlay!.backgroundColor = 'rgba(0, 0, 0, 0.6)';
 const NavigationPanel = () => {
 	const [modalOpen, setModalOpen] = useState(false);
 	const [channelName, setChannelName] = useState('');
+	const [isMobile, setIsMobile] = useState(false);
 	const navigate = useNavigate();
 
-	const { classroom, setClassroom, isPanelCollapsed } = useClassroomContext();
+	const { classroom, setClassroom, isPanelCollapsed, setPanelCollapsed } = useClassroomContext();
 	const api = useApi();
 
+	useEffect(() => {
+		const mobileMediaQuery = window.matchMedia('(max-width: 767px)');
+		setIsMobile(mobileMediaQuery.matches);
+		mobileMediaQuery.addEventListener('change', (event) => setIsMobile(event.matches));
+		return () => {
+			mobileMediaQuery.removeEventListener('change', (event) => setIsMobile(event.matches));
+		};
+	}, []);
+
 	const handleChannelChange = (key: number) => {
+		if (isMobile) {
+			setPanelCollapsed(true);
+		}
 		const channel = classroom?.channels.find((ch) => ch.id === key);
 		setClassroom((prev) => ({ ...prev!, activeChannel: channel }));
 		navigate(`${channel?.name}`);
