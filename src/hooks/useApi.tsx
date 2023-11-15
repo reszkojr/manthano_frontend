@@ -48,6 +48,7 @@ const useApi = () => {
 					return axios(originalRequest);
 				}
 			}
+			return Promise.reject(error);
 		}
 	);
 
