@@ -1,6 +1,6 @@
 import { createContext, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useAuth } from '../components/hooks/UseAuth';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { Channel, Classroom, Message } from '../types/Types';
 import useApi from '../hooks/useApi';
 
@@ -29,6 +29,7 @@ export const ClassroomProvider = () => {
 	const [isPanelCollapsed, setPanelCollapsed] = useState(false);
 	const [websocket, setWebsocket] = useState<WebSocket | null>(null);
 
+	const navigate = useNavigate();
 	const { user, tokenCheck, getClassroom } = useAuth();
 	const api = useApi();
 
@@ -45,7 +46,12 @@ export const ClassroomProvider = () => {
 
 	// Instantiate WebSocket instance
 	useEffect(() => {
-		if (classroom === undefined || !classroom.code || !classroom.activeChannel) return;
+		if (classroom === undefined || !classroom.code) return;
+
+		if (!classroom.activeChannel) {
+			navigate(`/classroom/${classroom?.code}/${classroom?.channels[0].name}`);
+			return;
+		}
 
 		const webSocketURL = `ws://${import.meta.env.VITE_REACT_APP_API}/ws/${classroom.code}/${classroom.activeChannel.name}/?token=${user!.token}`;
 
