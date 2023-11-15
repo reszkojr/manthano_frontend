@@ -1,3 +1,5 @@
+import IconType from 'react-icon';
+
 export interface RefreshAuthResponse {
 	token: string;
 	refreshToken: string;
@@ -66,4 +68,11 @@ export interface Message {
 	date?: Date;
 	id?: number;
 	avatar?: string;
+}
+
+
+export interface ContextMenuOption {
+    icon?: IconType,
+	label: string,
+    onClick: (context: unknown) => void
 }

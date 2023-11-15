@@ -1,30 +1,34 @@
 import { FaHashtag, FaVolumeDown } from 'react-icons/fa';
-import { AiFillCloseCircle, AiOutlinePlus } from 'react-icons/ai';
+import { AiOutlinePlus } from 'react-icons/ai';
 import { MdExpandMore } from 'react-icons/md';
 import classNames from 'classnames';
 import Modal from 'react-modal';
-
-import { useClassroomContext } from '../hooks/UseClassroomContext';
-
-import './NavigationPanel.css';
-import { FormEvent, useEffect, useState } from 'react';
-import TextInput from '../elements/TextInput';
-import Button from '../elements/Button';
-import Submit from '../elements/Submit';
-import useApi from '../../hooks/useApi';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useContextMenu } from '../../hooks/useContextMenu';
+import { FormEvent, useEffect, useState } from 'react';
+
+import { useClassroomContext } from '../hooks/UseClassroomContext';
+import useApi from '../../hooks/useApi';
+import { FaRegEdit, FaRegTrashAlt } from 'react-icons/fa';
+import {} from 'react-icons/fa';
+import ContextMenu from '../elements/ContextMenu';
+
+import './NavigationPanel.css';
+import { Channel } from '../../types/Types';
+import CustomModal from '../elements/CustomModal';
+import TextInput from '../elements/TextInput';
 
 Modal.setAppElement('#root');
 Modal.defaultStyles.overlay!.backgroundColor = 'rgba(0, 0, 0, 0.6)';
 
 const NavigationPanel = () => {
-	const [modalOpen, setModalOpen] = useState(false);
+	const { classroom, setClassroom, isPanelCollapsed, setPanelCollapsed } = useClassroomContext();
+	const { clicked, setClicked, context, setContext, coords, setCoords } = useContextMenu();
 	const [channelName, setChannelName] = useState('');
+	const [modalOpen, setModalOpen] = useState(false);
 	const [isMobile, setIsMobile] = useState(false);
 	const navigate = useNavigate();
-
-	const { classroom, setClassroom, isPanelCollapsed, setPanelCollapsed } = useClassroomContext();
 	const api = useApi();
 
 	useEffect(() => {
@@ -48,21 +52,36 @@ const NavigationPanel = () => {
 		navigate(`${channel?.name}`);
 	};
 
-	const handleAddChannelSubmit = (event: FormEvent) => {
+	const handleAddChannelSubmit = async (event: FormEvent) => {
 		event.preventDefault();
 		if (channelName.trim().length === 0) {
 			toast.error('The Channel name cannot be empty!');
 			return;
 		}
-		api.post('/classroom/channel/add', { channel_name: channelName }).then((response) => {
-			const channel = response.data;
-			setClassroom((prev) => ({
-				...prev!,
-				channels: [...prev!.channels, channel],
-				activeChannel: channel,
-			}));
-		});
-		setModalOpen(false);
+		await api
+			.post('/classroom/channel/add', { channel_name: channelName })
+			.then((response) => {
+				const channel = response.data;
+				setClassroom((prev) => ({
+					...prev!,
+					channels: [...prev!.channels, channel],
+					activeChannel: channel,
+				}));
+				setChannelName('');
+				setModalOpen(false);
+			})
+			.catch((err) => {
+				const data = JSON.parse(err.response.data);
+				toast.error(data.error.message);
+				return;
+			});
+	};
+
+	const handleChannelContextMenu = (event: MouseEvent, channel: Channel) => {
+		event.preventDefault();
+		setClicked(true);
+		setContext(channel);
+		setCoords({ x: event.clientX, y: event.pageY });
 	};
 
 	return (
@@ -80,7 +99,7 @@ const NavigationPanel = () => {
 							<AiOutlinePlus onClick={() => setModalOpen(true)} className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
 						</li>
 						{classroom?.channels.map((channel) => (
-							<li key={channel.id} className={classNames('flex min-w-max cursor-pointer items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600', { 'bg-gray-600 text-gray-200 brightness-125': classroom?.activeChannel?.name === channel.name })} onClick={() => handleChannelChange(channel.id)}>
+							<li key={channel.id} onContextMenu={(event) => handleChannelContextMenu(event, channel)} className={classNames('flex min-w-max cursor-pointer items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600', { 'bg-gray-600 text-gray-200 brightness-125': classroom?.activeChannel?.name === channel.name })} onClick={() => handleChannelChange(channel.id)}>
 								<FaHashtag className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
 								{channel.name}
 							</li>
@@ -118,20 +137,57 @@ const NavigationPanel = () => {
 					</div>
 				</div>
 			</div>
-			<Modal isOpen={modalOpen} className={'absolute bottom-1/2 right-1/2 w-[400px] translate-x-1/2 translate-y-1/2 overflow-hidden rounded-lg border border-gray-700 bg-gray-800 shadow outline-none transition-all md:w-[500px]'} onRequestClose={() => setModalOpen(false)} contentLabel='Create Channel'>
-				<form method='POST' className='flex h-full flex-col items-center justify-center' onSubmit={handleAddChannelSubmit}>
-					<AiFillCloseCircle className='absolute right-2 top-2 h-auto w-5 text-gray-300 transition-all duration-150 hover:cursor-pointer hover:brightness-150' onClick={() => setModalOpen(false)} />
-					<div className='mb-3 w-full p-3'>
-						<h1 className='text-lg font-bold'>Create text Channel</h1>
-						<h2 className='mb-4 text-gray-200'>What's gonna be the subject of your channel?</h2>
-						<TextInput value={channelName} type='text' label='Channel name' name='channel_name' placeholder='philosophy' onChange={(event) => setChannelName(event.target.value)} />
-					</div>
-					<div className='bottom-0 mt-auto flex w-full justify-end gap-2 bg-gray-700 px-2 py-3'>
-						<Button label='Cancel' className='w-32' />
-						<Submit label='Create' className='w-32' />
-					</div>
-				</form>
-			</Modal>
+			{
+				// prettier-ignore
+			}
+			<CustomModal 
+				title='Create Text Channel'
+				subtitle="What's gonna be the subject of your channel?"
+				submitLabel='Create'
+				isOpen={modalOpen}
+				onRequestClose={() => setModalOpen(false)}
+				handleSubmit={handleAddChannelSubmit}
+				textInput={
+					<TextInput
+						value={channelName}
+						type='text'
+						label='Channel name'
+						name='channel_name'
+						placeholder='philosophy'
+						onChange={(event) => setChannelName(event.target.value)} />
+				}
+				/>
+			{clicked && (
+				<ContextMenu
+					top={coords.y}
+					left={coords.x}
+					context={context}
+					options={[
+						{
+							icon: <FaRegEdit />,
+							label: 'Rename',
+							onClick: (context) => {
+								const targetChannel = context as Channel;
+								api.put(`/classroom/channel/edit/${targetChannel.id}`, {
+									params: {
+										channel_name: (context as Channel).name,
+									},
+								});
+							},
+						},
+						{
+							icon: <FaRegTrashAlt />,
+							label: 'Delete',
+							onClick: (context) => {
+								const targetChannel = context as Channel;
+								api.delete(`/classroom/channel/delete/${targetChannel.id}`);
+								const updatedChannels = classroom?.channels.filter((c) => c.id !== targetChannel.id) || [];
+								setClassroom((prev) => ({ ...prev!, channels: updatedChannels, activeChannel: updatedChannels[0] }));
+							},
+						},
+					]}
+				/>
+			)}
 		</div>
 	);
 };
