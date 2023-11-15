@@ -74,13 +74,13 @@ const ChannelChat = () => {
 							<>
 								{msgs[index - 1] !== undefined ? (
 									message.user === msgs[index - 1].user ? (
-										<li key={index} className='mb-1 flex'>
+										<li key={message.id} className='mb-1 flex'>
 											<div className='ml-14 w-11/12'>
 												<div className='whitespace-pre-line'>{message.text}</div>
 											</div>
 										</li>
 									) : (
-										<li key={index} className='mt-4 flex'>
+										<li key={message.id} className='mt-4 flex'>
 											<div className='mr-4 mt-2 h-10 w-10 overflow-hidden rounded-full'>
 												<img src={message.avatar} alt='pp' className='h-10 w-10 object-cover' />
 											</div>
@@ -94,7 +94,7 @@ const ChannelChat = () => {
 										</li>
 									)
 								) : (
-									<li key={index} className='flex'>
+									<li key={message.id} className='flex'>
 										<div className='mr-4 mt-2 h-10 w-10 overflow-hidden rounded-full'>
 											<img src={message.avatar} alt='pp' className='h-10 w-10 object-cover' />
 										</div>
