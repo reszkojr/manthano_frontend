@@ -11,7 +11,7 @@ interface Props {
 const ContextMenu = (props: Props) => {
 	return (
 		<div
-			className={`text-md absolute flex min-w-[200px] flex-col gap-1 overflow-hidden rounded-sm border border-gray-500 bg-gray-700 p-2 shadow-md`}
+			className={`text-md absolute z-10 flex min-w-[200px] flex-col gap-1 overflow-hidden rounded-sm border border-gray-500 bg-gray-700 p-2 shadow-md`}
 			style={{
 				top: `${props.top}px`,
 				left: `${props.left}px`,
