@@ -45,7 +45,7 @@ export const ClassroomProvider = () => {
 
 	// Instantiate WebSocket instance
 	useEffect(() => {
-		if (classroom === undefined || !classroom.activeChannel) return;
+		if (classroom === undefined || !classroom.code || !classroom.activeChannel) return;
 
 		const webSocketURL = `ws://${import.meta.env.VITE_REACT_APP_API}/ws/${classroom.code}/${classroom.activeChannel.name}/?token=${user!.token}`;
 

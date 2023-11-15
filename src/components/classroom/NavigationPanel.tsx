@@ -28,8 +28,10 @@ const NavigationPanel = () => {
 	const { clicked, setClicked, context, setContext, coords, setCoords } = useContextMenu();
 	const [modalAddChannelOpen, setModalAddChannelOpen] = useState(false);
 	const [modalEditChannelOpen, setModalEditChannelOpen] = useState(false);
+	const [modalDeleteChannelOpen, setModalDeleteChannelOpen] = useState(false);
 	const [channelName, setChannelName] = useState('');
 	const [currentEditChannel, setCurrentEditChannel] = useState<Channel | undefined>(undefined);
+	const [currentDeleteChannel, setCurrentDeleteChannel] = useState<Channel | undefined>(undefined);
 	const [isMobile, setIsMobile] = useState(false);
 	const navigate = useNavigate();
 	const api = useApi();
@@ -51,7 +53,6 @@ const NavigationPanel = () => {
 			setPanelCollapsed(true);
 		}
 		const channel = classroom?.channels.find((ch) => ch.id === key);
-		setClassroom((prev) => ({ ...prev!, activeChannel: channel }));
 		navigate(`/classroom/${classroom?.code}/${channel?.name}`);
 	};
 
@@ -92,16 +93,26 @@ const NavigationPanel = () => {
 				setClassroom((prev) => ({
 					...prev!,
 					channels: [...prev!.channels, channel],
-					activeChannel: channel,
 				}));
 				setChannelName('');
 				setModalAddChannelOpen(false);
+				navigate(`/classroom/${classroom?.code}/${channel?.name}`);
 			})
 			.catch((err) => {
 				const data = JSON.parse(err.response.data);
 				toast.error(data.error.message);
 				return;
 			});
+	};
+
+	const handleDeleteChannelSubmit = async (event: FormEvent) => {
+		event.preventDefault();
+		await api.delete(`/classroom/channel/delete/${currentDeleteChannel?.id}`).then(() => {
+			const updatedChannels = classroom?.channels.filter((c) => c.id !== currentDeleteChannel?.id) || [];
+			setClassroom((prev) => ({ ...prev!, channels: updatedChannels }));
+			setModalDeleteChannelOpen(false);
+			navigate(`/classroom/${classroom?.code}/${classroom?.channels[0]?.name}`);
+		});
 	};
 
 	const handleChannelContextMenu = (event: MouseEvent<HTMLLIElement, MouseEvent>, channel: Channel) => {
@@ -132,10 +143,8 @@ const NavigationPanel = () => {
 							icon: <FaRegTrashAlt />,
 							label: 'Delete',
 							onClick: (context) => {
-								const targetChannel = context as Channel;
-								api.delete(`/classroom/channel/delete/${targetChannel.id}`);
-								const updatedChannels = classroom?.channels.filter((c) => c.id !== targetChannel.id) || [];
-								setClassroom((prev) => ({ ...prev!, channels: updatedChannels, activeChannel: updatedChannels[0] }));
+								setCurrentDeleteChannel(context as Channel);
+								setModalDeleteChannelOpen(true);
 							},
 						},
 					]}
@@ -216,7 +225,7 @@ const NavigationPanel = () => {
 				subtitle="What's gonna be the new name of your Channel?"
 				submitLabel='Rename'
 				isOpen={modalEditChannelOpen}
-				onRequestClose={() => setModalAddChannelOpen(false)}
+				onRequestClose={() => setModalEditChannelOpen(false)}
 				handleSubmit={handleEditChannelSubmit}
 				textInput={
 					<TextInput
@@ -227,6 +236,16 @@ const NavigationPanel = () => {
 						placeholder='philosophy'
 						onChange={(event) => setCurrentEditChannel(prev => ({...prev!, name: event.target.value}))} />
 				}
+			/>
+			{/* prettier-ignore */}
+			<CustomModal 
+				title='Delete Text Channel'
+				subtitle="Are you sure you want to delete this Channel?"
+				submitLabel='Delete'
+				submitColor='bg-red-500'
+				isOpen={modalDeleteChannelOpen}
+				onRequestClose={() => setModalDeleteChannelOpen(false)}
+				handleSubmit={handleDeleteChannelSubmit}
 			/>
 		</div>
 	);
