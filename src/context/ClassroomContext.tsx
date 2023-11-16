@@ -49,11 +49,13 @@ export const ClassroomProvider = () => {
 		if (classroom === undefined || !classroom.code) return;
 
 		if (!classroom.activeChannel) {
-			navigate(`/classroom/${classroom?.code}/${classroom?.channels[0].name}`);
-			return;
+			if (classroom.channels.length > 0) {
+				return navigate(`/classroom/${classroom?.code}`);
+			}
+			return navigate(`/classroom/${classroom?.code}/${classroom.channels[0].name}`);
 		}
 
-		const webSocketURL = `ws://${import.meta.env.VITE_REACT_APP_API}/ws/${classroom.code}/${classroom.activeChannel.name}/?token=${user!.token}`;
+		const webSocketURL = `ws://${import.meta.env.VITE_REACT_APP_API}/ws/${classroom.code}/${classroom.activeChannel?.name}/?token=${user!.token}`;
 
 		const ws = new WebSocket(webSocketURL);
 		setWebsocket(ws);
