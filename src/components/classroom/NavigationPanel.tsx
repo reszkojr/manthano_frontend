@@ -1,4 +1,4 @@
-import { FaHashtag, FaVolumeDown } from 'react-icons/fa';
+import { FaHashtag } from 'react-icons/fa';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { MdExpandMore } from 'react-icons/md';
 import classNames from 'classnames';
@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useContextMenu } from '../../hooks/useContextMenu';
 import { FormEvent, useEffect, useState } from 'react';
+import { DragDropContext, Draggable } from 'react-beautiful-dnd';
 
 import { useClassroomContext } from '../hooks/UseClassroomContext';
 import useApi from '../../hooks/useApi';
@@ -19,6 +20,7 @@ import { Channel } from '../../types/Types';
 import CustomModal from '../elements/CustomModal';
 import TextInput from '../elements/TextInput';
 import axios from 'axios';
+import { StrictModeDroppable } from '../elements/StrictModeDroppable';
 
 Modal.setAppElement('#root');
 Modal.defaultStyles.overlay!.backgroundColor = 'rgba(0, 0, 0, 0.6)';
@@ -33,6 +35,7 @@ const NavigationPanel = () => {
 	const [currentEditChannel, setCurrentEditChannel] = useState<Channel | undefined>(undefined);
 	const [currentDeleteChannel, setCurrentDeleteChannel] = useState<Channel | undefined>(undefined);
 	const [isMobile, setIsMobile] = useState(false);
+	const [enabled, setEnabled] = useState(false);
 	const navigate = useNavigate();
 	const api = useApi();
 
@@ -122,6 +125,18 @@ const NavigationPanel = () => {
 		setCoords({ x: event.clientX, y: event.pageY });
 	};
 
+	const handleOnDragEnd = (result) => {
+		if (!result.destination) return;
+		const tasks = [...(classroom?.channels || [])];
+		const [reorderedItem] = tasks.splice(result.source.index, 1);
+
+		tasks.splice(result.destination.index, 0, reorderedItem);
+		setClassroom((prev) => ({
+			...prev!,
+			channels: tasks,
+		}));
+	};
+
 	return (
 		<div className={classNames('max-h-screen overflow-hidden border-r border-r-gray-600 bg-gray-800 transition-[width] duration-200', { collapsed: isPanelCollapsed, 'w-56': !isPanelCollapsed })}>
 			{/* Context menu logic */}
@@ -164,12 +179,26 @@ const NavigationPanel = () => {
 							</div>
 							<AiOutlinePlus onClick={() => setModalAddChannelOpen(true)} className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
 						</li>
-						{classroom?.channels.map((channel) => (
-							<li key={channel.id} onContextMenu={(event) => handleChannelContextMenu(event, channel)} className={classNames('flex min-w-max cursor-pointer items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600', { 'bg-gray-600 text-gray-200 brightness-125': classroom?.activeChannel?.name === channel.name })} onClick={() => handleChannelChange(channel.id)}>
-								<FaHashtag className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
-								<span className='select-none'>{channel.name}</span>
-							</li>
-						))}
+
+						<DragDropContext onDragEnd={handleOnDragEnd}>
+							<StrictModeDroppable droppableId='channels'>
+								{(provided) => (
+									<section {...provided.droppableProps} ref={provided.innerRef} className='flex flex-col gap-2'>
+										{classroom?.channels.map((channel, index) => (
+											<Draggable key={channel.id} draggableId={channel.id.toString()} index={index}>
+												{(provided) => (
+													<li {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} onContextMenu={(event) => handleChannelContextMenu(event, channel)} className={classNames('flex min-w-max cursor-pointer items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600', { 'bg-gray-600 text-gray-200 brightness-125': classroom?.activeChannel?.name === channel.name })} onClick={() => handleChannelChange(channel.id)}>
+														<FaHashtag className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
+														<span className='select-none'>{channel.name}</span>
+													</li>
+												)}
+											</Draggable>
+										))}
+										{provided.placeholder}
+									</section>
+								)}
+							</StrictModeDroppable>
+						</DragDropContext>
 					</ul>
 					<ul className='flex flex-col gap-2'>
 						<li className='flex items-center justify-between'>
@@ -178,12 +207,12 @@ const NavigationPanel = () => {
 							</div>
 							<AiOutlinePlus className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
 						</li>
-						{classroom?.channels.map((channel) => (
+						{/* {classroom?.channels.map((channel) => (
 							<li key={channel.id} className={classNames('flex min-w-max cursor-pointer items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600')}>
 								<FaVolumeDown className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
 								<span className='select-none'>{channel.name}</span>
 							</li>
-						))}
+						))} */}
 					</ul>
 				</div>
 			</div>
