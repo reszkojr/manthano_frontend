@@ -157,48 +157,34 @@ const NavigationPanel = () => {
 				<div className='space-y-4 px-3'>
 					<ul className='flex flex-col gap-2'>
 						<li className='flex min-w-max items-center justify-between'>
-							<div className='flex min-w-max items-center gap-2 text-sm text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter'>
-								CHANNELS <MdExpandMore />
+							<div className='min-w-max items-center text-sm text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter'>
+								<span className='flex select-none gap-2'>
+									CHANNELS <MdExpandMore />
+								</span>
 							</div>
 							<AiOutlinePlus onClick={() => setModalAddChannelOpen(true)} className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
 						</li>
 						{classroom?.channels.map((channel) => (
 							<li key={channel.id} onContextMenu={(event) => handleChannelContextMenu(event, channel)} className={classNames('flex min-w-max cursor-pointer items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600', { 'bg-gray-600 text-gray-200 brightness-125': classroom?.activeChannel?.name === channel.name })} onClick={() => handleChannelChange(channel.id)}>
 								<FaHashtag className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
-								{channel.name}
+								<span className='select-none'>{channel.name}</span>
 							</li>
 						))}
 					</ul>
-					<div className='flex flex-col gap-2'>
-						<div className='flex items-center justify-between'>
+					<ul className='flex flex-col gap-2'>
+						<li className='flex items-center justify-between'>
 							<div className='flex min-w-max items-center gap-2 text-sm text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter'>
-								VOICE CHANNELS <MdExpandMore />
+								<span className='select-none'>VOICE CHANNELS</span> <MdExpandMore />
 							</div>
 							<AiOutlinePlus className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
-						</div>
-						<div className='text-md ml-4 flex min-w-max flex-col gap-1 text-lg'>
-							<div className='flex cursor-pointer items-center gap-2 rounded-md px-4 py-[2px] text-gray-200 hover:bg-gray-600'>
-								<FaVolumeDown className='h-auto w-4' />
-								math
-							</div>
-							<div className='flex cursor-pointer items-center gap-2 rounded-md px-4 py-[2px] text-gray-200 hover:bg-gray-600'>
-								<FaVolumeDown className='h-auto w-4' />
-								science
-							</div>
-							<div className='flex cursor-pointer items-center gap-2 rounded-md px-4 py-[2px] text-gray-200 hover:bg-gray-600'>
-								<FaVolumeDown className='h-auto w-4' />
-								geography
-							</div>
-							<div className='flex cursor-pointer items-center gap-2 rounded-md px-4 py-[2px] text-gray-200 hover:bg-gray-600'>
-								<FaVolumeDown className='h-auto w-4' />
-								chemistry
-							</div>
-							<div className='flex cursor-pointer items-center gap-2 rounded-md px-4 py-[2px] text-gray-200 hover:bg-gray-600'>
-								<FaVolumeDown className='h-auto w-4' />
-								english
-							</div>
-						</div>
-					</div>
+						</li>
+						{classroom?.channels.map((channel) => (
+							<li key={channel.id} className={classNames('flex min-w-max cursor-pointer items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600')}>
+								<FaVolumeDown className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
+								<span className='select-none'>{channel.name}</span>
+							</li>
+						))}
+					</ul>
 				</div>
 			</div>
 			{/* prettier-ignore */}

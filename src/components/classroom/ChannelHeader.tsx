@@ -12,7 +12,7 @@ const ChannelHeader = () => {
 			</button>
 			<div className='flex gap-2'>
 				<FaHashtag className='mt-1 h-auto w-4' />
-				<span className='min-w-max text-xl font-bold'>{classroom?.activeChannel?.name}</span>
+				<span className='min-w-max select-none text-xl font-bold'>{classroom?.activeChannel?.name}</span>
 			</div>
 		</div>
 	);
