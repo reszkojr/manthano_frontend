@@ -6,8 +6,8 @@ import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useContextMenu } from '../../hooks/useContextMenu';
-import { FormEvent, useEffect, useState } from 'react';
-import { DragDropContext, Draggable } from 'react-beautiful-dnd';
+import { FormEvent, MouseEvent, useEffect, useState } from 'react';
+import { DragDropContext, Draggable, DropResult } from 'react-beautiful-dnd';
 
 import { useClassroomContext } from '../hooks/UseClassroomContext';
 import useApi from '../../hooks/useApi';
@@ -35,7 +35,6 @@ const NavigationPanel = () => {
 	const [currentEditChannel, setCurrentEditChannel] = useState<Channel | undefined>(undefined);
 	const [currentDeleteChannel, setCurrentDeleteChannel] = useState<Channel | undefined>(undefined);
 	const [isMobile, setIsMobile] = useState(false);
-	const [enabled, setEnabled] = useState(false);
 	const navigate = useNavigate();
 	const api = useApi();
 
@@ -49,6 +48,7 @@ const NavigationPanel = () => {
 		return () => {
 			mobileMediaQuery.removeEventListener('change', (event) => setIsMobile(event.matches));
 		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const handleChannelChange = (key: number) => {
@@ -118,23 +118,27 @@ const NavigationPanel = () => {
 		});
 	};
 
-	const handleChannelContextMenu = (event: MouseEvent<HTMLLIElement, MouseEvent>, channel: Channel) => {
+	const handleChannelContextMenu = (event: MouseEvent, channel: Channel) => {
 		event.preventDefault();
 		setClicked(true);
 		setContext(channel);
 		setCoords({ x: event.clientX, y: event.pageY });
 	};
 
-	const handleOnDragEnd = (result) => {
+	const handleOnDragEnd = (result: DropResult) => {
 		if (!result.destination) return;
-		const tasks = [...(classroom?.channels || [])];
-		const [reorderedItem] = tasks.splice(result.source.index, 1);
 
-		tasks.splice(result.destination.index, 0, reorderedItem);
+		const channels = classroom?.channels || [];
+		const [reorderedItem] = channels.splice(result.source.index, 1);
+
+		channels.splice(result.destination.index, 0, reorderedItem);
 		setClassroom((prev) => ({
 			...prev!,
-			channels: tasks,
+			channels,
 		}));
+
+		const channelsIds = channels.map((ch) => ch.id);
+		localStorage.setItem('channels_order', JSON.stringify(channelsIds));
 	};
 
 	return (

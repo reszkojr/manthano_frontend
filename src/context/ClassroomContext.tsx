@@ -100,6 +100,21 @@ export const ClassroomProvider = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
+	useEffect(() => {
+		const ids = JSON.parse(localStorage.getItem('channels_order') || '');
+		if (ids !== undefined) {
+			console.log('ids');
+			if (!classroom?.channels.length) return;
+
+			const orderedChannels = classroom.channels.sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id));
+			setClassroom((prev) => ({
+				...prev!,
+				channels: orderedChannels,
+			}));
+			return;
+		}
+	}, [classroom?.channels]);
+
 	// Fetch Channel messages
 	useEffect(() => {
 		if (classroom?.activeChannel === undefined) return;
