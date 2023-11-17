@@ -48,14 +48,12 @@ export interface Classroom {
 	description: string;
 	schedule: Schedule | null;
 	created_at: Date;
-	updated_at: Date
+	updated_at: Date;
 	channels: Channel[];
 	activeChannel: Channel | undefined | null;
 }
 
-export interface Schedule {
-	
-}
+export interface Schedule {}
 
 export interface Channel {
 	id: number;
@@ -64,15 +62,14 @@ export interface Channel {
 
 export interface Message {
 	text: string;
-	user?: string;
+	user?: number;
 	date?: Date;
 	id?: number;
 	avatar?: string;
 }
 
-
 export interface ContextMenuOption {
-    icon?: IconType,
-	label: string,
-    onClick: (context: unknown) => void
+	icon?: IconType;
+	label: string;
+	onClick: (context: unknown) => void;
 }
