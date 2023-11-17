@@ -62,10 +62,12 @@ export interface Channel {
 
 export interface Message {
 	text: string;
-	user?: number;
+	user_id?: number;
+	username?: string;
 	date?: Date;
 	id?: number;
 	avatar?: string;
+	edited?: boolean;
 }
 
 export interface ContextMenuOption {
