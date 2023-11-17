@@ -1,19 +1,35 @@
+import EmojiPicker, { EmojiStyle, SuggestionMode, Theme } from 'emoji-picker-react';
 import { BiImageAdd, BiSolidSend } from 'react-icons/bi';
 import { HiOutlineEmojiHappy } from 'react-icons/hi';
 import { FiAtSign } from 'react-icons/fi';
+import classNames from 'classnames';
 import { AiOutlineGif } from 'react-icons/ai';
 
-import { KeyboardEvent, useRef, useState } from 'react';
+import { KeyboardEvent, useEffect, useRef, useState } from 'react';
 import { useClassroomContext } from '../hooks/UseClassroomContext';
 
 import './ChannelInput.css';
 
 const ChannelInput = () => {
 	const [inputContent, setInputContent] = useState('');
+	const [emojiPickerVisible, setEmojiPickerVisible] = useState(false);
 
 	const { sendMessage } = useClassroomContext();
 
 	const textAreaRef = useRef<HTMLTextAreaElement>(null);
+	const emojiPickerRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const handleClickEmojiPicker = (event: MouseEvent) => {
+			if (emojiPickerRef === null || !emojiPickerVisible || !emojiPickerRef.current) return;
+			if (!emojiPickerRef.current.contains(event.target as Node)) {
+				setEmojiPickerVisible(false);
+			}
+		};
+
+		document.addEventListener('mousedown', handleClickEmojiPicker);
+		return () => document.removeEventListener('mousedown', handleClickEmojiPicker);
+	}, [emojiPickerVisible]);
 
 	const handleMessageSend = () => {
 		if (inputContent.trim() == '') return;
@@ -37,7 +53,7 @@ const ChannelInput = () => {
 	};
 
 	return (
-		<div className='m-4 mt-auto overflow-auto rounded-md border border-gray-600 px-2 pt-2 shadow-2xl'>
+		<div className='relative m-4 mt-auto rounded-md border border-gray-600 px-2 pt-2 shadow-2xl'>
 			<div className='mb-2 flex gap-4'>
 				<textarea ref={textAreaRef} value={inputContent} onKeyDown={handleTextAreaEnter} onChange={(event) => setInputContent(event.target.value)} spellCheck={false} id='message_input' className='min-h-8 max-h-28 w-full resize-none border-none bg-transparent p-0 text-gray-50 outline-none' />
 				<BiSolidSend onTouchEnd={handleTouchEnd} onClick={handleMessageSend} className='mb-auto h-auto w-6 hover:cursor-pointer hover:brightness-150 hover:filter' />
@@ -51,12 +67,24 @@ const ChannelInput = () => {
 						<AiOutlineGif className='h-auto w-6 hover:cursor-pointer hover:brightness-150 hover:filter' />
 					</li>
 					<li>
-						<HiOutlineEmojiHappy className='h-auto w-5 hover:cursor-pointer hover:brightness-150 hover:filter' />
+						<HiOutlineEmojiHappy onClick={() => setEmojiPickerVisible((prev) => !prev)} className='h-auto w-5 hover:cursor-pointer hover:brightness-150 hover:filter' />
 					</li>
 					<li>
 						<FiAtSign className='h-auto w-5 hover:cursor-pointer hover:brightness-150 hover:filter' />
 					</li>
 				</ul>
+			</div>
+			<div ref={emojiPickerRef} className={classNames('z-index-30 absolute bottom-28 overflow-auto', { hidden: !emojiPickerVisible })}>
+				<EmojiPicker
+					theme={Theme.DARK}
+					lazyLoadEmojis={true}
+					suggestedEmojisMode={SuggestionMode.RECENT}
+					emojiStyle={EmojiStyle.TWITTER}
+					searchDisabled
+					onEmojiClick={(emoji) => {
+						setInputContent((prev) => prev + ` ${emoji.emoji} `);
+					}}
+				/>
 			</div>
 		</div>
 	);

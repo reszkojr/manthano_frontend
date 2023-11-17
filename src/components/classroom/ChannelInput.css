@@ -7,3 +7,10 @@ textarea {
     -moz-box-shadow: none !important;
     box-shadow: none !important;
 }
+
+.EmojiPickerReact {
+    --epr-bg-color: var(--color-gray-700) !important;
+    --epr-category-label-bg-color: var(--color-gray-700) !important;
+    --epr-picker-border-color: var(--color-gray-500) !important;
+    --epr-hover-bg-color: var(--color-gray-500) !important;
+}
