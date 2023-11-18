@@ -15,7 +15,7 @@ const ClassroomPage = () => {
 	}, []);
 
 	return (
-		<div className='flex h-[100dvh] w-screen'>
+		<div className='flex h-[100dvh] w-screen overflow-hidden'>
 			<div className='flex w-min'>
 				<Sidebar />
 				<NavigationPanel />

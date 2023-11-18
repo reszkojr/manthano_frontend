@@ -51,6 +51,10 @@ const NavigationPanel = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
+	useEffect(() => {
+		if (classroom?.activeChannel === undefined) setPanelCollapsed(false);
+	}, []);
+
 	const handleChannelChange = (key: number) => {
 		if (isMobile) {
 			setPanelCollapsed(true);
@@ -142,7 +146,7 @@ const NavigationPanel = () => {
 	};
 
 	return (
-		<div className={classNames('max-h-screen overflow-hidden border-r border-r-gray-600 bg-gray-800 transition-[width] duration-200', { collapsed: isPanelCollapsed, 'w-56': !isPanelCollapsed })}>
+		<div className={classNames('max-h-screen overflow-hidden border-r border-r-gray-600 bg-gray-800 transition-[width] duration-200', { collapsed: isPanelCollapsed, 'w-[80vw] md:w-56': !isPanelCollapsed })}>
 			{/* Context menu logic */}
 			{clicked && (
 				<ContextMenu

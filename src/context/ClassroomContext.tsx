@@ -119,7 +119,6 @@ export const ClassroomProvider = () => {
 	// Fetch Channel messages
 	useEffect(() => {
 		if (classroom?.activeChannel === undefined) return;
-		setPanelCollapsed(false);
 		setMessages(undefined);
 
 		api.get('classroom/messages', { params: { channel_name: classroom?.activeChannel?.name } }).then((response) => {
