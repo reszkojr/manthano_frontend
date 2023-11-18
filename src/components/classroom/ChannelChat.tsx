@@ -19,8 +19,15 @@ const ChannelChat = () => {
 	const { messages, setMessages } = useClassroomContext();
 
 	useEffect(() => {
-		if (messages === undefined || messages === null) return;
+		if (messages === undefined || messages === null) {
+			setLoading(true);
+			return;
+		}
 		setLoading(false);
+	}, [messages]);
+
+	useEffect(() => {
+		if (messages === undefined || messages === null) return;
 		if (messages.length > 0) messagesRef.current = messagesRef.current?.slice(0, messages?.length);
 	}, [messages]);
 
@@ -53,7 +60,6 @@ const ChannelChat = () => {
 					message: JSON.stringify(message),
 				})
 				.then(() => {
-					console.log('asdfsa');
 					messageEl.contentEditable = 'false';
 					messageEl.className = '';
 					if (!message.edited) {
@@ -112,8 +118,53 @@ const ChannelChat = () => {
 					]}
 				/>
 			)}
-			<ul className='h-full'>
-				{loading && (
+			<div className='h-5/6'>{/* TODO */}</div>
+			<ul className='bottom-0 justify-end'>
+				{messages ? (
+					messages.length > 0 ? (
+						messages.map((message, index, msgs) => {
+							let content = null;
+							if (msgs[index - 1] !== undefined && msgs[index - 1].user_id === message.user_id) {
+								content = (
+									<li key={index} onContextMenu={(event) => handleMessageContextMenu(event, message)} className='flex gap-4'>
+										<div className='w-10'></div>
+										<div className='flex w-11/12 items-center gap-2'>
+											<div message-id={message.id} ref={(el) => (messagesRef.current[index] = el)} className='my-[2px] whitespace-pre-line'>
+												{message.text}
+											</div>
+											{message.edited && <span className='text-[12px] text-gray-500'>edited</span>}
+										</div>
+									</li>
+								);
+							} else {
+								content = (
+									<li key={index} onContextMenu={(event) => handleMessageContextMenu(event, message)} className='mt-4 flex gap-4'>
+										<div className='mt-2 h-10 w-10 overflow-hidden rounded-full'>
+											<img src={message.avatar} alt='pp' className='h-10 w-10 object-cover' />
+										</div>
+										<div className='w-11/12'>
+											<div className='flex items-center gap-2'>
+												<div className='font-semibold'>{message.username}</div>
+												<span className='text-sm text-gray-400'>{`${message.date}`}</span>
+											</div>
+											<div className='flex items-center gap-2'>
+												<div message-id={message.id} ref={(el) => (messagesRef.current[index] = el)} className='whitespace-pre-line'>
+													{message.text}
+												</div>
+												{message.edited && <span className='text-[12px] text-gray-500'>edited</span>}
+											</div>
+										</div>
+									</li>
+								);
+							}
+							return content;
+						})
+					) : (
+						<div className='flex h-full select-none items-center justify-center'>
+							<div className='my-auto text-center text-2xl text-gray-400'>No messages here!</div>
+						</div>
+					)
+				) : (
 					<>
 						<li className='mt-4 flex'>
 							<div className='mb-2 mr-4 h-12 w-12'>
@@ -159,50 +210,6 @@ const ChannelChat = () => {
 						</li>
 					</>
 				)}
-				{messages &&
-					(messages.length > 0 ? (
-						messages.map((message, index, msgs) => {
-							let content = null;
-							if (msgs[index - 1] !== undefined && msgs[index - 1].user_id === message.user_id) {
-								content = (
-									<li key={index} onContextMenu={(event) => handleMessageContextMenu(event, message)} className='flex gap-4'>
-										<div className='w-10'></div>
-										<div className='flex w-11/12 items-center gap-2'>
-											<div message-id={message.id} ref={(el) => (messagesRef.current[index] = el)} className='my-[2px] whitespace-pre-line'>
-												{message.text}
-											</div>
-											{message.edited && <span className='text-[12px] text-gray-500'>edited</span>}
-										</div>
-									</li>
-								);
-							} else {
-								content = (
-									<li key={index} onContextMenu={(event) => handleMessageContextMenu(event, message)} className='mt-4 flex gap-4'>
-										<div className='mt-2 h-10 w-10 overflow-hidden rounded-full'>
-											<img src={message.avatar} alt='pp' className='h-10 w-10 object-cover' />
-										</div>
-										<div className='w-11/12'>
-											<div className='flex items-center gap-2'>
-												<div className='font-semibold'>{message.username}</div>
-												<span className='text-sm text-gray-400'>{`${message.date}`}</span>
-											</div>
-											<div className='flex items-center gap-2'>
-												<div message-id={message.id} ref={(el) => (messagesRef.current[index] = el)} className='whitespace-pre-line'>
-													{message.text}
-												</div>
-												{message.edited && <span className='text-[12px] text-gray-500'>edited</span>}
-											</div>
-										</div>
-									</li>
-								);
-							}
-							return content;
-						})
-					) : (
-						<div className='flex h-full select-none items-center justify-center'>
-							<div className='my-auto text-center text-2xl text-gray-400'>No messages here!</div>
-						</div>
-					))}
 				<div ref={messagesEndRef}></div>
 			</ul>
 		</div>
