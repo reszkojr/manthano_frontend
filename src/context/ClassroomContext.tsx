@@ -26,7 +26,7 @@ export const ClassroomProvider = () => {
 	const [classroom, setClassroom] = useState<Classroom | undefined>(undefined);
 	const [message, setMessage] = useState<Message>({} as Message);
 	const [messages, setMessages] = useState<Message[] | undefined>([] as Message[]);
-	const [isPanelCollapsed, setPanelCollapsed] = useState(false);
+	const [isPanelCollapsed, setPanelCollapsed] = useState(true);
 	const [websocket, setWebsocket] = useState<WebSocket | null>(null);
 
 	const navigate = useNavigate();
