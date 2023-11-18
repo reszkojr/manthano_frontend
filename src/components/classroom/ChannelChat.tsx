@@ -15,8 +15,8 @@ const ChannelChat = () => {
 	const [loading, setLoading] = useState(true);
 
 	const { clicked, setClicked, context, setContext, coords, setCoords } = useContextMenu();
+	const { messages, setMessages, classroom } = useClassroomContext();
 	const api = useApi();
-	const { messages, setMessages } = useClassroomContext();
 
 	useEffect(() => {
 		if (messages === undefined || messages === null) {
@@ -30,6 +30,17 @@ const ChannelChat = () => {
 		if (messages === undefined || messages === null) return;
 		if (messages.length > 0) messagesRef.current = messagesRef.current?.slice(0, messages?.length);
 	}, [messages]);
+
+	// Fetch Channel messages
+	useEffect(() => {
+		if (classroom?.activeChannel === undefined) return;
+		setMessages(undefined);
+
+		api.get('classroom/messages', { params: { channel_name: classroom?.activeChannel?.name } }).then((response) => {
+			setMessages(response.data);
+		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [classroom?.activeChannel]);
 
 	// scroll to the bottom when new messages are added
 	useEffect(() => messagesEndRef.current?.scrollIntoView({ behavior: 'instant' }), [messages]);
@@ -118,11 +129,11 @@ const ChannelChat = () => {
 					]}
 				/>
 			)}
-			<div className='h-5/6'>{/* TODO */}</div>
-			<ul className='bottom-0 justify-end'>
-				{messages ? (
-					messages.length > 0 ? (
-						messages.map((message, index, msgs) => {
+			{messages ? (
+				messages.length > 0 ? (
+					<ul className='bottom-0 justify-end'>
+						<div className='h-5/6' />
+						{messages.map((message, index, msgs) => {
 							let content = null;
 							if (msgs[index - 1] !== undefined && msgs[index - 1].user_id === message.user_id) {
 								content = (
@@ -158,60 +169,61 @@ const ChannelChat = () => {
 								);
 							}
 							return content;
-						})
-					) : (
-						<div className='flex h-full select-none items-center justify-center'>
-							<div className='my-auto text-center text-2xl text-gray-400'>No messages here!</div>
-						</div>
-					)
+						})}
+					</ul>
 				) : (
-					<>
-						<li className='mt-4 flex'>
-							<div className='mb-2 mr-4 h-12 w-12'>
-								<SkeletonTheme circle baseColor='#2f363b' height='100%' highlightColor='#1a2329' />
+					<div className='flex h-full select-none items-center justify-center'>
+						<div className='my-auto text-center text-2xl text-gray-400'>No messages here!</div>
+					</div>
+				)
+			) : (
+				<ul>
+					<div className='h-5/6'>{/* TODO */}</div>
+					<li className='mt-4 flex'>
+						<div className='mb-2 mr-4 h-12 w-12'>
+							<SkeletonTheme circle baseColor='#2f363b' height='100%' highlightColor='#1a2329' />
+						</div>
+						<div className='w-full'>
+							<div className='mb-2'>
+								<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'90px'} highlightColor='#1a2329' count={1} />
 							</div>
-							<div className='w-full'>
-								<div className='mb-2'>
-									<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'90px'} highlightColor='#1a2329' count={1} />
-								</div>
-								<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'40%'} highlightColor='#1a2329' count={1} />
-								<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'35%'} highlightColor='#1a2329' count={1} />
-								<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'19%'} highlightColor='#1a2329' count={1} />
-								<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'22%'} highlightColor='#1a2329' count={1} />
+							<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'40%'} highlightColor='#1a2329' count={1} />
+							<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'35%'} highlightColor='#1a2329' count={1} />
+							<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'19%'} highlightColor='#1a2329' count={1} />
+							<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'22%'} highlightColor='#1a2329' count={1} />
+						</div>
+					</li>
+					<li className='mt-4 flex'>
+						<div className='mb-2 mr-4 h-12 w-12'>
+							<SkeletonTheme circle baseColor='#2f363b' height='100%' highlightColor='#1a2329' />
+						</div>
+						<div className='w-full'>
+							<div className='mb-2'>
+								<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'80px'} highlightColor='#1a2329' count={1} />
 							</div>
-						</li>
-						<li className='mt-4 flex'>
-							<div className='mb-2 mr-4 h-12 w-12'>
-								<SkeletonTheme circle baseColor='#2f363b' height='100%' highlightColor='#1a2329' />
+							<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'12%'} highlightColor='#1a2329' count={1} />
+							<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'37%'} highlightColor='#1a2329' count={1} />
+							<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'5%'} highlightColor='#1a2329' count={1} />
+						</div>
+					</li>
+					<li className='mt-4 flex'>
+						<div className='mb-2 mr-4 h-12 w-12'>
+							<SkeletonTheme circle baseColor='#2f363b' height='100%' highlightColor='#1a2329' />
+						</div>
+						<div className='w-full'>
+							<div className='mb-2'>
+								<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'140px'} highlightColor='#1a2329' count={1} />
 							</div>
-							<div className='w-full'>
-								<div className='mb-2'>
-									<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'80px'} highlightColor='#1a2329' count={1} />
-								</div>
-								<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'12%'} highlightColor='#1a2329' count={1} />
-								<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'37%'} highlightColor='#1a2329' count={1} />
-								<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'5%'} highlightColor='#1a2329' count={1} />
-							</div>
-						</li>
-						<li className='mt-4 flex'>
-							<div className='mb-2 mr-4 h-12 w-12'>
-								<SkeletonTheme circle baseColor='#2f363b' height='100%' highlightColor='#1a2329' />
-							</div>
-							<div className='w-full'>
-								<div className='mb-2'>
-									<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'140px'} highlightColor='#1a2329' count={1} />
-								</div>
-								<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'35%'} highlightColor='#1a2329' count={1} />
-								<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'40%'} highlightColor='#1a2329' count={1} />
-								<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'61%'} highlightColor='#1a2329' count={1} />
-								<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'24%'} highlightColor='#1a2329' count={1} />
-								<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'22%'} highlightColor='#1a2329' count={1} />
-							</div>
-						</li>
-					</>
-				)}
-				<div ref={messagesEndRef}></div>
-			</ul>
+							<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'35%'} highlightColor='#1a2329' count={1} />
+							<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'40%'} highlightColor='#1a2329' count={1} />
+							<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'61%'} highlightColor='#1a2329' count={1} />
+							<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'24%'} highlightColor='#1a2329' count={1} />
+							<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'22%'} highlightColor='#1a2329' count={1} />
+						</div>
+					</li>
+				</ul>
+			)}
+			<div ref={messagesEndRef}></div>
 		</div>
 	);
 };

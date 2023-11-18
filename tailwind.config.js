@@ -51,6 +51,7 @@ export default {
           800: "#55515c",
           900: "#2a292e"
         },
+
         gray: {
           100: "#d7dadc",
           200: "#afb5b9",
@@ -62,6 +63,7 @@ export default {
           800: "#161c20",
           900: "#0b0e10"
         },
+        'dark': "rgb(0,0,0,0.2)",
         'black': '#040403',
       },
       fontFamily: {

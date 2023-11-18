@@ -13,7 +13,7 @@ const ClassroomChannel = () => {
 	useEffect(() => {
 		const channel = classroom?.channels.find((ch) => ch.name === channel_code);
 		setClassroom((prev) => ({ ...prev!, activeChannel: channel }));
-	}, [channel_code, classroom?.channels, setClassroom]);
+	}, [channel_code]);
 
 	return (
 		<div className='flex h-full flex-col bg-gray-800'>

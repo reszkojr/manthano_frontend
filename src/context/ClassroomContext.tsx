@@ -48,14 +48,6 @@ export const ClassroomProvider = () => {
 	// Instantiate WebSocket instance
 	useEffect(() => {
 		if (classroom === undefined || !classroom.code) return;
-
-		if (!classroom.activeChannel) {
-			if (classroom.channels.length > 0) {
-				return navigate(`/classroom/${classroom?.code}`);
-			}
-			return navigate(`/classroom/${classroom?.code}/${classroom.channels[0].name}`);
-		}
-
 		const webSocketURL = `ws://${import.meta.env.VITE_REACT_APP_API}/ws/${classroom.code}/${classroom.activeChannel?.name}/?token=${user!.token}`;
 
 		const ws = new WebSocket(webSocketURL);
@@ -67,7 +59,6 @@ export const ClassroomProvider = () => {
 
 		ws.onmessage = (event) => {
 			const { text, user_id, username, date, id, avatar } = JSON.parse(event.data);
-			console.log(JSON.parse(event.data));
 			const newMessage = { text, user_id, username, date, id, avatar };
 			setMessages((prevMessages) => {
 				if (prevMessages) return [...prevMessages, newMessage];
@@ -94,7 +85,6 @@ export const ClassroomProvider = () => {
 					const id = Number(key);
 					channels.push({ id: id, name: response.data[id] });
 				}
-				setClassroom((prev) => ({ ...prev!, channels: [...channels], activeChannel: channels[0] }));
 			});
 		};
 
@@ -117,17 +107,6 @@ export const ClassroomProvider = () => {
 		}
 	}, [classroom?.channels]);
 
-	// Fetch Channel messages
-	useEffect(() => {
-		if (classroom?.activeChannel === undefined) return;
-		setMessages(undefined);
-
-		api.get('classroom/messages', { params: { channel_name: classroom?.activeChannel?.name } }).then((response) => {
-			setMessages(response.data);
-		});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [classroom?.activeChannel]);
-
 	const sendMessage = (message: Message) => {
 		if (websocket) {
 			const messageString = JSON.stringify(message);
@@ -135,7 +114,7 @@ export const ClassroomProvider = () => {
 		}
 	};
 
-	if (classroom === undefined || classroom === null) {
+	if (classroom === undefined || classroom === null || classroom.channels === undefined || classroom.channels === null) {
 		return <div>Loading...</div>;
 	}
 

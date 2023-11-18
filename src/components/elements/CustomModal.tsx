@@ -17,7 +17,7 @@ interface CustomModalProps {
 
 const CustomModal = ({ title, subtitle, submitLabel, submitColor, isOpen, onRequestClose, handleSubmit, textInput }: CustomModalProps) => {
 	return (
-		<Modal isOpen={isOpen} className={'absolute bottom-1/2 right-1/2 w-[400px] translate-x-1/2 translate-y-1/2 overflow-hidden rounded-lg border border-gray-700 bg-gray-800 shadow outline-none transition-all md:w-[500px]'} onRequestClose={onRequestClose} contentLabel='Create Channel'>
+		<Modal isOpen={isOpen} overlayClassName={'fixed inset-0 bg-dark z-10'} className={'absolute bottom-1/2 right-1/2 z-50 w-[400px] translate-x-1/2 translate-y-1/2 overflow-hidden rounded-lg border border-gray-700 bg-gray-800 shadow outline-none transition-all md:w-[500px]'} onRequestClose={onRequestClose} contentLabel='Create Channel'>
 			<form method='POST' className='flex h-full flex-col items-center justify-center' onSubmit={handleSubmit}>
 				<AiFillCloseCircle className='absolute right-2 top-2 h-auto w-5 text-gray-300 transition-all duration-150 hover:cursor-pointer hover:brightness-150' onClick={() => onRequestClose()} />
 				<div className='mb-3 w-full p-3'>

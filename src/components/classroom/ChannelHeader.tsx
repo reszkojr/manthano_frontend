@@ -6,7 +6,7 @@ const ChannelHeader = () => {
 	const { setPanelCollapsed, classroom } = useClassroomContext();
 
 	return (
-		<div className='flex h-12 items-center gap-2 border-b border-b-gray-600 px-4 text-gray-200'>
+		<div className='custom-shadow flex h-12 items-center gap-2 border-b border-b-gray-600 bg-gray-800 px-4 text-gray-200'>
 			<button onClick={() => setPanelCollapsed((prev) => !prev)}>
 				<AiOutlineMenu />
 			</button>

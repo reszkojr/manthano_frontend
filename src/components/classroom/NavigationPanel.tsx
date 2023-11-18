@@ -42,7 +42,7 @@ const NavigationPanel = () => {
 		const mobileMediaQuery = window.matchMedia('(max-width: 767px)');
 		if (mobileMediaQuery.matches) {
 			setIsMobile(true);
-			setPanelCollapsed(true);
+			if (classroom?.activeChannel) setPanelCollapsed(true);
 		}
 		mobileMediaQuery.addEventListener('change', (event) => setIsMobile(event.matches));
 		return () => {
@@ -146,7 +146,7 @@ const NavigationPanel = () => {
 	};
 
 	return (
-		<div className={classNames('max-h-screen overflow-hidden border-r border-r-gray-600 bg-gray-800 transition-[width] duration-200', { collapsed: isPanelCollapsed, 'w-[80vw] md:w-56': !isPanelCollapsed })}>
+		<div className={classNames('z-[1] max-h-screen overflow-hidden border-r border-r-gray-600 bg-gray-800 transition-[width] duration-200', { collapsed: isPanelCollapsed, 'w-[80vw] md:w-56': !isPanelCollapsed })}>
 			{/* Context menu logic */}
 			{clicked && (
 				<ContextMenu
@@ -174,7 +174,7 @@ const NavigationPanel = () => {
 				/>
 			)}
 			<div className={classNames('flex flex-col gap-3 transition-opacity duration-200', { 'invisible opacity-0': isPanelCollapsed })}>
-				<div className='flex h-12 w-full items-center justify-between border-b border-b-gray-600 px-4'>
+				<div className='custom-shadow flex h-12 w-full items-center justify-between border-b border-b-gray-600 px-4'>
 					<span className='my-auto min-w-max text-xl font-bold text-gray-50'>{classroom?.name}</span>
 				</div>
 				<div className='space-y-4 px-3'>

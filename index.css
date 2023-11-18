@@ -129,11 +129,16 @@
 
 	*::-webkit-scrollbar-thumb {
 		background-color: rgba(220, 220, 255, 0.1);
-		;
 		border-radius: 6px;
 	}
 
 	*::-webkit-scrollbar-thumb:hover {
 		background-color: #555;
+	}
+
+	.custom-shadow {
+		box-shadow: 0px 7px 0px -1px rgba(0, 0, 0, 0.20);
+		-webkit-box-shadow: 0px 7px 0px -1px rgba(0, 0, 0, 0.20);
+		-moz-box-shadow: 0px 7px 0px -1px rgba(0, 0, 0, 0.20);
 	}
 }
