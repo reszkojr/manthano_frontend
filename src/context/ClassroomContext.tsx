@@ -42,6 +42,7 @@ export const ClassroomProvider = () => {
 		};
 
 		retrieveAndSetClassroom();
+		if (classroom?.activeChannel) return navigate(`/classroom/${classroom?.code}/${classroom.activeChannel.name}`);
 	}, []);
 
 	// Instantiate WebSocket instance
