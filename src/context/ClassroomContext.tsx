@@ -102,8 +102,9 @@ export const ClassroomProvider = () => {
 	}, []);
 
 	useEffect(() => {
-		const ids = JSON.parse(localStorage.getItem('channels_order') || '');
-		if (ids !== undefined) {
+		const channelsOrder = localStorage.getItem('channels_order');
+		if (channelsOrder) {
+			const ids = JSON.parse(channelsOrder || '');
 			if (!classroom?.channels.length) return;
 
 			const orderedChannels = classroom.channels.sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id));
