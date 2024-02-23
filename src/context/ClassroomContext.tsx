@@ -1,7 +1,7 @@
 import { createContext, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useAuth } from '../components/hooks/UseAuth';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { Channel, Classroom, Message } from '../types/Types';
+import { Channel, Classroom, JitsiChannel, Message } from '../types/Types';
 import useApi from '../hooks/useApi';
 
 interface ClassroomContextType {
@@ -84,6 +84,17 @@ export const ClassroomProvider = () => {
 				for (const key in response.data) {
 					const id = Number(key);
 					channels.push({ id: id, name: response.data[id] });
+				}
+			});
+			await api.get('classroom/jitsi_channels/').then((response) => {
+				const jitsi_channels: JitsiChannel[] = [];
+				for (const key in response.data) {
+					const id = Number(key);
+					jitsi_channels.push({ id: id, name: response.data[id], room_name: response.data['room_name'] });
+					setClassroom((prev) => ({
+						...prev!,
+						jitsi_channels: jitsi_channels || [],
+					}));
 				}
 			});
 		};

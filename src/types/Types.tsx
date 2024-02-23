@@ -50,6 +50,7 @@ export interface Classroom {
 	created_at: Date;
 	updated_at: Date;
 	channels: Channel[];
+	jitsi_channels: JitsiChannel[];
 	activeChannel: Channel | undefined | null;
 }
 
@@ -58,6 +59,12 @@ export interface Schedule {}
 export interface Channel {
 	id: number;
 	name: string;
+}
+
+export interface JitsiChannel {
+	id: number;
+	name: string;
+	room_name: string;
 }
 
 export interface Message {

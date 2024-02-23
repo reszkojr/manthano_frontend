@@ -1,4 +1,4 @@
-import { FaHashtag } from 'react-icons/fa';
+import { FaHashtag, FaVolumeDown } from 'react-icons/fa';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { MdExpandMore } from 'react-icons/md';
 import classNames from 'classnames';
@@ -16,7 +16,7 @@ import {} from 'react-icons/fa';
 import ContextMenu from '../elements/ContextMenu';
 
 import './NavigationPanel.css';
-import { Channel } from '../../types/Types';
+import { Channel, JitsiChannel } from '../../types/Types';
 import CustomModal from '../elements/CustomModal';
 import TextInput from '../elements/TextInput';
 import axios from 'axios';
@@ -28,12 +28,19 @@ Modal.defaultStyles.overlay!.backgroundColor = 'rgba(0, 0, 0, 0.6)';
 const NavigationPanel = () => {
 	const { classroom, setClassroom, isPanelCollapsed, setPanelCollapsed } = useClassroomContext();
 	const { clicked, setClicked, context, setContext, coords, setCoords } = useContextMenu();
+
 	const [modalAddChannelOpen, setModalAddChannelOpen] = useState(false);
 	const [modalEditChannelOpen, setModalEditChannelOpen] = useState(false);
 	const [modalDeleteChannelOpen, setModalDeleteChannelOpen] = useState(false);
+
+	const [modalJitsiAddChannelOpen, setModalJitsiAddChannelOpen] = useState(false);
+	const [modalJitsiEditChannelOpen, setModalJitsiEditChannelOpen] = useState(false);
+	const [modalJitsiDeleteChannelOpen, setModalJitsiDeleteChannelOpen] = useState(false);
+
 	const [channelName, setChannelName] = useState('');
-	const [currentEditChannel, setCurrentEditChannel] = useState<Channel | undefined>(undefined);
-	const [currentDeleteChannel, setCurrentDeleteChannel] = useState<Channel | undefined>(undefined);
+
+	const [selectedChannel, setSelectedChannel] = useState<Channel | JitsiChannel | undefined>(undefined);
+
 	const [isMobile, setIsMobile] = useState(false);
 	const navigate = useNavigate();
 	const api = useApi();
@@ -63,22 +70,30 @@ const NavigationPanel = () => {
 		navigate(`/classroom/${classroom?.code}/${channel?.name}`);
 	};
 
-	const handleEditChannelSubmit = async (event: FormEvent) => {
+	const handleEditChannelSubmit = async (event: FormEvent, jitsi: boolean) => {
 		event.preventDefault();
 		await api
-			.put(`/classroom/channel/edit/${currentEditChannel?.id}`, {
-				channel: JSON.stringify(currentEditChannel),
+			.put(`/classroom/${jitsi ? 'jitsi_' : ''}channel/edit/${selectedChannel?.id}`, {
+				channel: JSON.stringify(selectedChannel),
 			})
 			.then((response) => {
-				const updatedChannel: Channel = response.data;
-				setCurrentEditChannel(undefined);
-				setModalEditChannelOpen(false);
+				const updatedChannel = response.data;
+				setSelectedChannel(undefined);
 
-				setClassroom((prev) => ({
-					...prev!,
-					channels: [...prev!.channels.map((ch) => (ch.id === updatedChannel.id ? updatedChannel : ch))],
-				}));
-				navigate(`/classroom/${classroom?.code}/${updatedChannel?.name}`);
+				if (jitsi) {
+					setClassroom((prev) => ({
+						...prev!,
+						jitsi_channels: [...prev!.jitsi_channels.map((ch) => (ch.id === updatedChannel.id ? updatedChannel : ch))],
+					}));
+					setModalJitsiEditChannelOpen(false);
+				} else {
+					setClassroom((prev) => ({
+						...prev!,
+						channels: [...prev!.channels.map((ch) => (ch.id === updatedChannel.id ? updatedChannel : ch))],
+					}));
+					setModalEditChannelOpen(false);
+					navigate(`/classroom/${classroom?.code}/${updatedChannel?.name}`);
+				}
 			})
 			.catch((err) => {
 				if (axios.isAxiosError(err)) {
@@ -87,23 +102,31 @@ const NavigationPanel = () => {
 			});
 	};
 
-	const handleAddChannelSubmit = async (event: FormEvent) => {
+	const handleAddChannelSubmit = async (event: FormEvent, jitsi: boolean) => {
 		event.preventDefault();
 		if (channelName.trim().length === 0) {
 			toast.error('The Channel name cannot be empty!');
 			return;
 		}
 		await api
-			.post('/classroom/channel/add', { channel_name: channelName })
+			.post(`/classroom/${jitsi ? 'jitsi_' : ''}channel/add`, { channel_name: channelName })
 			.then((response) => {
 				const channel = response.data;
-				setClassroom((prev) => ({
-					...prev!,
-					channels: [...prev!.channels, channel],
-				}));
+				if (jitsi) {
+					setClassroom((prev) => ({
+						...prev!,
+						jitsi_channels: [...(prev!.jitsi_channels || []), channel],
+					}));
+					setModalJitsiAddChannelOpen(false);
+				} else {
+					setClassroom((prev) => ({
+						...prev!,
+						channels: [...prev!.channels, channel],
+					}));
+					setModalAddChannelOpen(false);
+					navigate(`/classroom/${classroom?.code}/${channel?.name}`);
+				}
 				setChannelName('');
-				setModalAddChannelOpen(false);
-				navigate(`/classroom/${classroom?.code}/${channel?.name}`);
 			})
 			.catch((err) => {
 				const data = JSON.parse(err.response.data);
@@ -112,17 +135,23 @@ const NavigationPanel = () => {
 			});
 	};
 
-	const handleDeleteChannelSubmit = async (event: FormEvent) => {
+	const handleDeleteChannelSubmit = async (event: FormEvent, jitsi: boolean) => {
 		event.preventDefault();
-		await api.delete(`/classroom/channel/delete/${currentDeleteChannel?.id}`).then(() => {
-			const updatedChannels = classroom?.channels.filter((c) => c.id !== currentDeleteChannel?.id) || [];
-			setClassroom((prev) => ({ ...prev!, channels: updatedChannels }));
-			setModalDeleteChannelOpen(false);
+		await api.delete(`/classroom/${jitsi ? 'jitsi_' : ''}channel/delete/${selectedChannel?.id}`).then(() => {
+			if (jitsi) {
+				const updatedChannels = classroom?.jitsi_channels.filter((c) => c.id !== selectedChannel?.id) || [];
+				setClassroom((prev) => ({ ...prev!, jitsi_channels: updatedChannels }));
+				setModalJitsiDeleteChannelOpen(false);
+			} else {
+				const updatedChannels = classroom?.channels.filter((c) => c.id !== selectedChannel?.id) || [];
+				setClassroom((prev) => ({ ...prev!, channels: updatedChannels }));
+				setModalDeleteChannelOpen(false);
+			}
 			navigate(`/classroom/${classroom?.code}/${classroom?.channels[0]?.name}`);
 		});
 	};
 
-	const handleChannelContextMenu = (event: MouseEvent, channel: Channel) => {
+	const handleChannelContextMenu = (event: MouseEvent, channel: Channel | JitsiChannel) => {
 		event.preventDefault();
 		setClicked(true);
 		setContext(channel);
@@ -136,6 +165,7 @@ const NavigationPanel = () => {
 		const [reorderedItem] = channels.splice(result.source.index, 1);
 
 		channels.splice(result.destination.index, 0, reorderedItem);
+
 		setClassroom((prev) => ({
 			...prev!,
 			channels,
@@ -158,7 +188,12 @@ const NavigationPanel = () => {
 							icon: <FaRegEdit />,
 							label: 'Rename',
 							onClick: (context) => {
-								setCurrentEditChannel(context as Channel);
+								setSelectedChannel(context as Channel | JitsiChannel);
+								const channel = context as Channel;
+								if ('room_name' in channel) {
+									setModalJitsiEditChannelOpen(true);
+									return;
+								}
 								setModalEditChannelOpen(true);
 							},
 						},
@@ -166,7 +201,13 @@ const NavigationPanel = () => {
 							icon: <FaRegTrashAlt />,
 							label: 'Delete',
 							onClick: (context) => {
-								setCurrentDeleteChannel(context as Channel);
+								setSelectedChannel(context as Channel | JitsiChannel);
+								const channel = context as Channel;
+
+								if ('room_name' in channel) {
+									setModalJitsiDeleteChannelOpen(true);
+									return;
+								}
 								setModalDeleteChannelOpen(true);
 							},
 						},
@@ -213,14 +254,28 @@ const NavigationPanel = () => {
 							<div className='flex min-w-max items-center gap-2 text-sm text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter'>
 								<span className='select-none'>VOICE CHANNELS</span> <MdExpandMore />
 							</div>
-							<AiOutlinePlus onClick={() => setModalAddChannelOpen(true)} className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
+							<AiOutlinePlus onClick={() => setModalJitsiAddChannelOpen(true)} className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
 						</li>
-						{/* {classroom?.channels.map((channel) => (
-							<li key={channel.id} className={classNames('flex min-w-max cursor-pointer items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600')}>
-								<FaVolumeDown className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
-								<span className='select-none'>{channel.name}</span>
-							</li>
-						))} */}
+						<DragDropContext onDragEnd={handleOnDragEnd}>
+							<StrictModeDroppable droppableId='channels'>
+								{(provided) => (
+									<section {...provided.droppableProps} ref={provided.innerRef} className='flex flex-col gap-2'>
+										{classroom?.jitsi_channels &&
+											classroom?.jitsi_channels.map((channel, index) => (
+												<Draggable key={channel.id} draggableId={channel.id.toString()} index={index}>
+													{(provided) => (
+														<li {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} onContextMenu={(event) => handleChannelContextMenu(event, channel)} className={classNames('flex min-w-max cursor-pointer place-content-center place-items-center items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600', { 'bg-gray-600 text-gray-200 brightness-125': classroom?.activeChannel?.name === channel.name })} onClick={() => handleChannelChange(channel.id)}>
+															<FaVolumeDown className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
+															<span className='select-none'>{channel.name}</span>
+														</li>
+													)}
+												</Draggable>
+											))}
+										{provided.placeholder}
+									</section>
+								)}
+							</StrictModeDroppable>
+						</DragDropContext>
 					</ul>
 				</div>
 			</div>
@@ -231,7 +286,7 @@ const NavigationPanel = () => {
 				submitLabel='Create'
 				isOpen={modalAddChannelOpen}
 				onRequestClose={() => setModalAddChannelOpen(false)}
-				handleSubmit={handleAddChannelSubmit}
+				handleSubmit={(e) => handleAddChannelSubmit(e, false)}
 				textInput={
 					<TextInput
 						value={channelName}
@@ -249,15 +304,15 @@ const NavigationPanel = () => {
 				submitLabel='Rename'
 				isOpen={modalEditChannelOpen}
 				onRequestClose={() => setModalEditChannelOpen(false)}
-				handleSubmit={handleEditChannelSubmit}
+				handleSubmit={(e) => handleEditChannelSubmit(e, false)}
 				textInput={
 					<TextInput
-						value={currentEditChannel?.name}
+						value={selectedChannel?.name}
 						type='text'
 						label='New Channel name'
 						name='channel_name'
 						placeholder='philosophy'
-						onChange={(event) => setCurrentEditChannel(prev => ({...prev!, name: event.target.value}))} />
+						onChange={(event) => setSelectedChannel(prev => ({...prev!, name: event.target.value}))} />
 				}
 			/>
 			{/* prettier-ignore */}
@@ -268,7 +323,56 @@ const NavigationPanel = () => {
 				submitColor='bg-red-500'
 				isOpen={modalDeleteChannelOpen}
 				onRequestClose={() => setModalDeleteChannelOpen(false)}
-				handleSubmit={handleDeleteChannelSubmit}
+				handleSubmit={(e) => handleDeleteChannelSubmit(e, false)}
+			/>
+
+			{/* 			Jitsi Channels			 */}
+
+			{/* prettier-ignore */}
+			<CustomModal 
+				title='Create Voice Channel'
+				subtitle="What's gonna be the subject of your Channel?"
+				submitLabel='Create'
+				isOpen={modalJitsiAddChannelOpen}
+				onRequestClose={() => setModalJitsiAddChannelOpen(false)}
+				handleSubmit={(e) => handleAddChannelSubmit(e, true)}
+				textInput={
+					<TextInput
+						value={channelName}
+						type='text'
+						label='Channel name'
+						name='channel_name'
+						placeholder='philosophy'
+						onChange={(event) => setChannelName(event.target.value)} />
+				}
+			/>
+			{/* prettier-ignore */}
+			<CustomModal 
+				title='Edit Voice Channel'
+				subtitle="What's gonna be the new name of your Channel?"
+				submitLabel='Rename'
+				isOpen={modalJitsiEditChannelOpen}
+				onRequestClose={() => setModalJitsiEditChannelOpen(false)}
+				handleSubmit={(e) => handleEditChannelSubmit(e, true)}
+				textInput={
+					<TextInput
+						value={selectedChannel?.name}
+						type='text'
+						label='New Channel name'
+						name='channel_name'
+						placeholder='philosophy'
+						onChange={(event) => setSelectedChannel(prev => ({...prev!, name: event.target.value}))} />
+				}
+			/>
+			{/* prettier-ignore */}
+			<CustomModal 
+				title='Delete Voice Channel'
+				subtitle="Are you sure you want to delete this Channel?"
+				submitLabel='Delete'
+				submitColor='bg-red-500'
+				isOpen={modalJitsiDeleteChannelOpen}
+				onRequestClose={() => setModalJitsiDeleteChannelOpen(false)}
+				handleSubmit={(e) => handleDeleteChannelSubmit(e, true)}
 			/>
 		</div>
 	);
