@@ -67,7 +67,7 @@ export default {
         'black': '#040403',
       },
       fontFamily: {
-        sans: '"Familjen Grotesk", sans-serif',
+        sans: '"Lato", sans-serif',
         serif: '"DM Serif Display", sans-serif',
         highlight: 'Montserrat, sans-serif',
       }
