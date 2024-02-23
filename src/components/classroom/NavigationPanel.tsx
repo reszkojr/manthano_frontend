@@ -213,7 +213,7 @@ const NavigationPanel = () => {
 							<div className='flex min-w-max items-center gap-2 text-sm text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter'>
 								<span className='select-none'>VOICE CHANNELS</span> <MdExpandMore />
 							</div>
-							<AiOutlinePlus className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
+							<AiOutlinePlus onClick={() => setModalAddChannelOpen(true)} className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
 						</li>
 						{/* {classroom?.channels.map((channel) => (
 							<li key={channel.id} className={classNames('flex min-w-max cursor-pointer items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600')}>
