@@ -135,7 +135,7 @@ const ChannelChat = () => {
 						<div className='h-5/6' />
 						{messages.map((message, index, msgs) => {
 							let content = null;
-							if (msgs[index - 1] !== undefined && msgs[index - 1].user_id === message.user_id) {
+							if (msgs[index - 1] !== undefined && msgs[index - 1].user === message.user) {
 								content = (
 									<li key={index} onContextMenu={(event) => handleMessageContextMenu(event, message)} className='flex gap-4'>
 										<div className='w-10'></div>

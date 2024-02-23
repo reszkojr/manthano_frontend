@@ -10,7 +10,7 @@ export interface Token {
 	iat: number;
 	jti: string;
 	token_type: string;
-	user_id: number;
+	user: number;
 	username: string;
 }
 
@@ -37,7 +37,7 @@ export interface User {
 	username: string;
 	token: string;
 	refreshToken: string;
-	user_id: number;
+	user: number;
 	avatar: string;
 }
 
@@ -62,7 +62,7 @@ export interface Channel {
 
 export interface Message {
 	text: string;
-	user_id?: number;
+	user?: number;
 	username?: string;
 	date?: Date;
 	id?: number;

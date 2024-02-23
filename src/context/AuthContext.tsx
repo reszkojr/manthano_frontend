@@ -45,13 +45,13 @@ export const AuthProvider = ({ children }: Props) => {
 		}
 
 		const username = usernameFromToken(storageToken);
-		const user_id = userIdFromToken(storageToken);
+		const user = userIdFromToken(storageToken);
 
 		setUser({
 			username,
 			token: storageToken,
 			refreshToken: refreshToken,
-			user_id,
+			user,
 			avatar: '', // TODO
 		});
 		setLoading(false);
@@ -64,12 +64,12 @@ export const AuthProvider = ({ children }: Props) => {
 				const refreshToken = response?.data.refresh;
 
 				const username = usernameFromToken(token);
-				const user_id = userIdFromToken(token);
+				const user = userIdFromToken(token);
 				setUser({
 					username,
 					token,
 					refreshToken,
-					user_id,
+					user,
 					avatar: '', // TODO
 				});
 				storeTokens(token, refreshToken);

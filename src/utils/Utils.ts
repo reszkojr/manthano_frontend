@@ -18,5 +18,5 @@ export const usernameFromToken = (token: string) => {
 
 export const userIdFromToken = (token: string) => {
     const decodedToken: Token = jwt_decode(token);
-    return decodedToken.user_id;
+    return decodedToken.user;
 };

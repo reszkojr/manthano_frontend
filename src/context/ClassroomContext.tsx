@@ -58,8 +58,8 @@ export const ClassroomProvider = () => {
 		};
 
 		ws.onmessage = (event) => {
-			const { text, user_id, username, date, id, avatar } = JSON.parse(event.data);
-			const newMessage = { text, user_id, username, date, id, avatar };
+			const { text, user, username, date, id, avatar } = JSON.parse(event.data);
+			const newMessage = { text, user, username, date, id, avatar };
 			setMessages((prevMessages) => {
 				if (prevMessages) return [...prevMessages, newMessage];
 				else return [newMessage];
