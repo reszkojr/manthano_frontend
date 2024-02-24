@@ -47,6 +47,7 @@ export const ClassroomProvider = () => {
 
 	// Instantiate WebSocket instance
 	useEffect(() => {
+		if (classroom?.activeChannel && 'room_name' in classroom.activeChannel) return;
 		if (classroom === undefined || !classroom.code) return;
 		const webSocketURL = `ws://${import.meta.env.VITE_REACT_APP_API}/ws/${classroom.code}/${classroom.activeChannel?.name}/?token=${user!.token}`;
 
@@ -89,8 +90,8 @@ export const ClassroomProvider = () => {
 			await api.get('classroom/jitsi_channels/').then((response) => {
 				const jitsi_channels: JitsiChannel[] = [];
 				for (const key in response.data) {
-					const id = Number(key);
-					jitsi_channels.push({ id: id, name: response.data[id], room_name: response.data['room_name'] });
+					const channel: JitsiChannel = response.data[0];
+					jitsi_channels.push({ id: channel['id'], name: channel['name'], room_name: channel['room_name'] });
 					setClassroom((prev) => ({
 						...prev!,
 						jitsi_channels: jitsi_channels || [],

@@ -4,6 +4,7 @@ import ChannelChat from './ChannelChat';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useClassroomContext } from '../hooks/UseClassroomContext';
+import VoiceChannel from './VoiceChannel';
 
 const ClassroomChannel = () => {
 	const { channel_code } = useParams();
@@ -18,8 +19,13 @@ const ClassroomChannel = () => {
 	return (
 		<div className='flex h-full flex-col bg-gray-800'>
 			<ChannelHeader />
-			<ChannelChat />
-			<ChannelInput />
+			{classroom?.activeChannel && 'room_name' in classroom.activeChannel ? (
+				<VoiceChannel room_name={classroom.activeChannel.room_name} />
+			) : (
+				<>
+					<ChannelChat /> <ChannelInput />
+				</>
+			)}
 		</div>
 	);
 };

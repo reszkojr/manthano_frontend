@@ -51,7 +51,7 @@ export interface Classroom {
 	updated_at: Date;
 	channels: Channel[];
 	jitsi_channels: JitsiChannel[];
-	activeChannel: Channel | undefined | null;
+	activeChannel: Channel | JitsiChannel | undefined | null;
 }
 
 export interface Schedule {}

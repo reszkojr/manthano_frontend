@@ -62,11 +62,17 @@ const NavigationPanel = () => {
 		if (classroom?.activeChannel === undefined) setPanelCollapsed(false);
 	}, []);
 
-	const handleChannelChange = (key: number) => {
+	const handleChannelChange = (channel: Channel | JitsiChannel) => {
 		if (isMobile) {
 			setPanelCollapsed(true);
 		}
-		const channel = classroom?.channels.find((ch) => ch.id === key);
+		if ('room_name' in channel) {
+			setClassroom((prev) => ({
+				...prev!,
+				activeChannel: channel,
+			}));
+			return;
+		}
 		navigate(`/classroom/${classroom?.code}/${channel?.name}`);
 	};
 
@@ -236,7 +242,7 @@ const NavigationPanel = () => {
 										{classroom?.channels.map((channel, index) => (
 											<Draggable key={channel.id} draggableId={channel.id.toString()} index={index}>
 												{(provided) => (
-													<li {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} onContextMenu={(event) => handleChannelContextMenu(event, channel)} className={classNames('flex min-w-max cursor-pointer items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600', { 'bg-gray-600 text-gray-200 brightness-125': classroom?.activeChannel?.name === channel.name })} onClick={() => handleChannelChange(channel.id)}>
+													<li {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} onContextMenu={(event) => handleChannelContextMenu(event, channel)} className={classNames('flex min-w-max cursor-pointer items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600', { 'bg-gray-600 text-gray-200 brightness-125': classroom?.activeChannel?.name === channel.name })} onClick={() => handleChannelChange(channel)}>
 														<FaHashtag className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
 														<span className='select-none'>{channel.name}</span>
 													</li>
@@ -264,7 +270,7 @@ const NavigationPanel = () => {
 											classroom?.jitsi_channels.map((channel, index) => (
 												<Draggable key={channel.id} draggableId={channel.id.toString()} index={index}>
 													{(provided) => (
-														<li {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} onContextMenu={(event) => handleChannelContextMenu(event, channel)} className={classNames('flex min-w-max cursor-pointer place-content-center place-items-center items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600', { 'bg-gray-600 text-gray-200 brightness-125': classroom?.activeChannel?.name === channel.name })} onClick={() => handleChannelChange(channel.id)}>
+														<li {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} onContextMenu={(event) => handleChannelContextMenu(event, channel)} className={classNames('flex min-w-max cursor-pointer place-content-center place-items-center items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600', { 'bg-gray-600 text-gray-200 brightness-125': classroom?.activeChannel?.name === channel.name })} onClick={() => handleChannelChange(channel)}>
 															<FaVolumeDown className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
 															<span className='select-none'>{channel.name}</span>
 														</li>
