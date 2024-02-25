@@ -16,6 +16,8 @@ const ClassroomPage = () => {
 	}, []);
 
 	useEffect(() => {
+		if (classroom?.jitsi_channels === undefined) return;
+
 		let channel = null;
 		if (location.pathname.includes('/vc/')) {
 			channel = classroom?.jitsi_channels.find((ch) => ch.name === channel_code);
