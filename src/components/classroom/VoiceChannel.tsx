@@ -29,6 +29,7 @@ const VoiceChannel = ({ room_name }: VoiceChannelProps) => {
 					disableModeratorIndicator: true,
 					enableEmailInStats: false,
 					prejoinPageEnabled: false,
+					disableDeepLinking: true,
 				}}
 				interfaceConfigOverwrite={{
 					DISABLE_JOIN_LEAVE_NOTIFICATIONS: true,
@@ -37,6 +38,7 @@ const VoiceChannel = ({ room_name }: VoiceChannelProps) => {
 					SHOW_WATERMARK_FOR_GUESTS: false,
 					PROVIDER_NAME: 'Manthano',
 					REMOVE_LOBBY_CHAT_WITH_MODERATOR: false,
+					MOBILE_APP_PROMO: false,
 				}}
 				userInfo={{
 					displayName: user?.username || '',
@@ -47,6 +49,9 @@ const VoiceChannel = ({ room_name }: VoiceChannelProps) => {
 				}}
 				getIFrameRef={(iframeRef) => {
 					iframeRef.style.height = '100%';
+					iframeRef.style.minWidth = '400px';
+					// iframeRef.style.maxWidth = '';
+					iframeRef.style.width = '100%';
 				}}
 			/>
 		</div>
