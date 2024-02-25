@@ -26,10 +26,10 @@ const useApi = () => {
 	instance.interceptors.response.use(
 		(response) => response,
 		async (error) => {
+			if (!error.response) return;
 			const originalRequest = error.config;
 
 			if (!user?.token || !user?.refreshToken) return Promise.reject(error);
-
 			if (error.response.status === 401 && !originalRequest._retry) {
 				originalRequest._retry = true;
 
