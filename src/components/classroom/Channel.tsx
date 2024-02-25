@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { useClassroomContext } from '../hooks/UseClassroomContext';
 import VoiceChannel from './VoiceChannel';
 
-const ClassroomChannel = () => {
+const Channel = () => {
 	const { channel_code } = useParams();
 
 	const { classroom, setClassroom } = useClassroomContext();
@@ -30,4 +30,4 @@ const ClassroomChannel = () => {
 	);
 };
 
-export default ClassroomChannel;
+export default Channel;

@@ -9,7 +9,7 @@ import RequireAuth from './utils/RequireAuth';
 import ClassroomJoinPage from './pages/classroom/ClassroomJoinPage';
 import { ClassroomProvider } from './context/ClassroomContext';
 import ClassroomPage from './pages/classroom/ClassroomPage';
-import ClassroomChannel from './components/classroom/ClassroomChannel';
+import Channel from './components/classroom/Channel';
 import ErrorPage from './pages/ErrorPage';
 
 import '../index.css';
@@ -29,7 +29,7 @@ const Manthano = () => {
 					<Route path='join' Component={ClassroomJoinPage} />
 					<Route path='classroom' Component={ClassroomProvider}>
 						<Route path=':classroom_code' Component={ClassroomPage}>
-							<Route path=':channel_code' Component={ClassroomChannel} />
+							<Route path=':channel_code' Component={Channel} />
 						</Route>
 					</Route>
 				</Route>
