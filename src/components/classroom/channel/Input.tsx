@@ -5,7 +5,7 @@ import { FiAtSign } from 'react-icons/fi';
 import classNames from 'classnames';
 import { AiOutlineGif } from 'react-icons/ai';
 
-import { KeyboardEvent, useEffect, useRef, useState } from 'react';
+import { KeyboardEvent, TouchEvent, useEffect, useRef, useState } from 'react';
 import { useClassroomContext } from '../../hooks/UseClassroomContext';
 
 import './Input.css';
@@ -47,7 +47,7 @@ const Input = () => {
 		}
 	};
 
-	const handleTouchEnd = (event: TouchEvent) => {
+	const handleTouchEnd = (event: TouchEvent<SVGElement>) => {
 		event.preventDefault();
 		handleMessageSend();
 	};

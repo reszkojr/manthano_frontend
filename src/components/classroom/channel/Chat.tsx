@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 const Chat = () => {
 	const messagesRef = useRef<Array<HTMLDivElement | null>>([]);
 	const messagesEndRef = useRef<HTMLDivElement | null>(null);
-	const [loading, setLoading] = useState(true);
+	const [, setLoading] = useState(true);
 
 	const { clicked, setClicked, context, setContext, coords, setCoords } = useContextMenu();
 	const { messages, setMessages, classroom } = useClassroomContext();
@@ -45,7 +45,7 @@ const Chat = () => {
 	// scroll to the bottom when new messages are added
 	useEffect(() => messagesEndRef.current?.scrollIntoView({ behavior: 'instant' }), [messages]);
 
-	const handleMessageContextMenu = (event: MouseEvent, message: Message) => {
+	const handleMessageContextMenu = (event: React.MouseEvent<HTMLLIElement, MouseEvent>, message: Message) => {
 		event.preventDefault();
 		setClicked(true);
 		setContext(message);
