@@ -43,13 +43,40 @@ export const ClassroomProvider = () => {
 		};
 
 		retrieveAndSetClassroom();
-		if (classroom?.activeChannel) return navigate(`/classroom/${classroom?.code}/${classroom.activeChannel.name}`);
+
+		const getChannels = async () => {
+			await api.get('classroom/channels/').then((response) => {
+				const channels: Channel[] = [];
+				for (const key in response.data) {
+					const id = Number(key);
+					channels.push({ id: id, name: response.data[id] });
+				}
+			});
+			await api.get('classroom/jitsi_channels/').then((response) => {
+				const jitsi_channels: JitsiChannel[] = [];
+				response.data.forEach((ch: JitsiChannel) => {
+					jitsi_channels.push({ id: ch['id'], name: ch['name'], room_name: ch['room_name'] });
+					setClassroom((prev) => ({
+						...prev!,
+						jitsi_channels: jitsi_channels || [],
+					}));
+				});
+			});
+		};
+
+		getChannels();
+
+		if (classroom?.activeChannel !== undefined && classroom?.activeChannel !== null) {
+			const channelType = isJitsiChannel(classroom?.activeChannel) ? 'vc' : 'c';
+
+			return navigate(`/classroom/${classroom?.code}/${channelType}}/${classroom.activeChannel.name}`);
+		}
 	}, []);
 
 	// Instantiate WebSocket instance
 	useEffect(() => {
 		if (classroom === undefined || !classroom.code) return;
-		if (classroom.activeChannel !== undefined || classroom.activeChannel !== undefined) return;
+		if (classroom.activeChannel === null || classroom.activeChannel === undefined) return;
 		if (isJitsiChannel(classroom.activeChannel)) return;
 		const webSocketURL = `ws://${import.meta.env.VITE_REACT_APP_API}/ws/${classroom.code}/${classroom.activeChannel?.name}/?token=${user!.token}`;
 
@@ -78,32 +105,6 @@ export const ClassroomProvider = () => {
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [classroom?.activeChannel]);
-
-	// Set Classroom's channels
-	useEffect(() => {
-		const getChannels = async () => {
-			await api.get('classroom/channels/').then((response) => {
-				const channels: Channel[] = [];
-				for (const key in response.data) {
-					const id = Number(key);
-					channels.push({ id: id, name: response.data[id] });
-				}
-			});
-			await api.get('classroom/jitsi_channels/').then((response) => {
-				const jitsi_channels: JitsiChannel[] = [];
-				response.data.forEach((ch: JitsiChannel) => {
-					jitsi_channels.push({ id: ch['id'], name: ch['name'], room_name: ch['room_name'] });
-					setClassroom((prev) => ({
-						...prev!,
-						jitsi_channels: jitsi_channels || [],
-					}));
-				});
-			});
-		};
-
-		getChannels();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
 
 	useEffect(() => {
 		const channelsOrder = localStorage.getItem('channels_order');
