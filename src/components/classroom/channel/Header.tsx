@@ -1,8 +1,8 @@
 import { FaHashtag } from 'react-icons/fa';
-import { useClassroomContext } from '../hooks/UseClassroomContext';
+import { useClassroomContext } from '../../hooks/UseClassroomContext';
 import { AiOutlineMenu } from 'react-icons/ai';
 
-const ChannelHeader = () => {
+const Header = () => {
 	const { setPanelCollapsed, classroom } = useClassroomContext();
 
 	return (
@@ -18,4 +18,4 @@ const ChannelHeader = () => {
 	);
 };
 
-export default ChannelHeader;
+export default Header;

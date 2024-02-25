@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import SkeletonTheme from 'react-loading-skeleton';
-import { useClassroomContext } from '../hooks/UseClassroomContext';
-import { useContextMenu } from '../../hooks/useContextMenu';
+import { useClassroomContext } from '../../hooks/UseClassroomContext';
+import { useContextMenu } from '../../../hooks/useContextMenu';
 import { FaRegEdit, FaRegTrashAlt } from 'react-icons/fa';
-import ContextMenu from '../elements/ContextMenu';
-import { Message } from '../../types/Types';
-import useApi from '../../hooks/useApi';
+import ContextMenu from '../../elements/ContextMenu';
+import { Message } from '../../../types/Types';
+import useApi from '../../../hooks/useApi';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-const ChannelChat = () => {
+const Chat = () => {
 	const messagesRef = useRef<Array<HTMLDivElement | null>>([]);
 	const messagesEndRef = useRef<HTMLDivElement | null>(null);
 	const [loading, setLoading] = useState(true);
@@ -228,4 +228,4 @@ const ChannelChat = () => {
 	);
 };
 
-export default ChannelChat;
+export default Chat;

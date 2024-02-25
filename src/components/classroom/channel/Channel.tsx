@@ -1,10 +1,10 @@
-import ChannelHeader from './ChannelHeader';
-import ChannelInput from './ChannelInput';
-import ChannelChat from './ChannelChat';
+import Header from './Header';
+import Input from './Input';
+import Chat from './Chat';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useClassroomContext } from '../hooks/UseClassroomContext';
-import VoiceChannel from './VoiceChannel';
+import { useClassroomContext } from '../../hooks/UseClassroomContext';
+import VoiceChannel from '../VoiceChannel';
 
 const Channel = () => {
 	const { channel_code } = useParams();
@@ -18,12 +18,12 @@ const Channel = () => {
 
 	return (
 		<div className='flex h-full flex-col bg-gray-800'>
-			<ChannelHeader />
+			<Header />
 			{classroom?.activeChannel && 'room_name' in classroom.activeChannel ? (
 				<VoiceChannel room_name={classroom.activeChannel.room_name} />
 			) : (
 				<>
-					<ChannelChat /> <ChannelInput />
+					<Chat /> <Input />
 				</>
 			)}
 		</div>

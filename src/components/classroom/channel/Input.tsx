@@ -6,11 +6,11 @@ import classNames from 'classnames';
 import { AiOutlineGif } from 'react-icons/ai';
 
 import { KeyboardEvent, useEffect, useRef, useState } from 'react';
-import { useClassroomContext } from '../hooks/UseClassroomContext';
+import { useClassroomContext } from '../../hooks/UseClassroomContext';
 
-import './ChannelInput.css';
+import './Input.css';
 
-const ChannelInput = () => {
+const Input = () => {
 	const [inputContent, setInputContent] = useState('');
 	const [emojiPickerVisible, setEmojiPickerVisible] = useState(false);
 
@@ -90,4 +90,4 @@ const ChannelInput = () => {
 	);
 };
 
-export default ChannelInput;
+export default Input;
