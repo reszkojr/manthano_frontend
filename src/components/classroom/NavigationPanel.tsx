@@ -1,4 +1,4 @@
-import { FaHashtag, FaVolumeDown } from 'react-icons/fa';
+import { FaHashtag, FaVolumeUp } from 'react-icons/fa';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { MdExpandMore } from 'react-icons/md';
 import classNames from 'classnames';
@@ -182,7 +182,7 @@ const NavigationPanel = () => {
 	};
 
 	return (
-		<div className={classNames('z-[1] max-h-screen overflow-hidden border-r border-r-gray-600 bg-gray-800 transition-[width] duration-200', { collapsed: isPanelCollapsed, 'w-[80vw] md:w-56': !isPanelCollapsed })}>
+		<div className={classNames('z-[1] max-h-screen flex-grow overflow-hidden border-r border-r-gray-600 bg-gray-800 transition-[width] duration-200', { collapsed: isPanelCollapsed, 'w-[80vw] md:w-56': !isPanelCollapsed })}>
 			{/* Context menu logic */}
 			{clicked && (
 				<ContextMenu
@@ -256,9 +256,9 @@ const NavigationPanel = () => {
 						</DragDropContext>
 					</ul>
 					<ul className='flex flex-col gap-2'>
-						<li className='flex items-center justify-between'>
+						<li className='flex min-w-max items-center justify-between'>
 							<div className='flex min-w-max items-center gap-2 text-sm text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter'>
-								<span className='select-none'>VOICE CHANNELS</span> <MdExpandMore />
+								<span className='flex select-none gap-2'>VOICE CHANNELS</span> <MdExpandMore />
 							</div>
 							<AiOutlinePlus onClick={() => setModalJitsiAddChannelOpen(true)} className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
 						</li>
@@ -270,8 +270,8 @@ const NavigationPanel = () => {
 											classroom?.jitsi_channels.map((channel, index) => (
 												<Draggable key={channel.id} draggableId={channel.id.toString()} index={index}>
 													{(provided) => (
-														<li {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} onContextMenu={(event) => handleChannelContextMenu(event, channel)} className={classNames('flex min-w-max cursor-pointer place-content-center place-items-center items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600', { 'bg-gray-600 text-gray-200 brightness-125': classroom?.activeChannel?.name === channel.name })} onClick={() => handleChannelChange(channel)}>
-															<FaVolumeDown className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
+														<li {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} onContextMenu={(event) => handleChannelContextMenu(event, channel)} className={classNames('flex min-w-max cursor-pointer items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600', { 'bg-gray-600 text-gray-200 brightness-125': classroom?.activeChannel?.name === channel.name })} onClick={() => handleChannelChange(channel)}>
+															<FaVolumeUp className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
 															<span className='select-none'>{channel.name}</span>
 														</li>
 													)}
