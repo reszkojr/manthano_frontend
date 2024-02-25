@@ -3,6 +3,7 @@ import { useAuth } from '../components/hooks/UseAuth';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { Channel, Classroom, JitsiChannel, Message } from '../types/Types';
 import useApi from '../hooks/useApi';
+import { isJitsiChannel } from '../utils/Utils';
 
 interface ClassroomContextType {
 	classroom: Classroom | undefined;
@@ -47,8 +48,9 @@ export const ClassroomProvider = () => {
 
 	// Instantiate WebSocket instance
 	useEffect(() => {
-		if (classroom?.activeChannel && 'room_name' in classroom.activeChannel) return;
 		if (classroom === undefined || !classroom.code) return;
+		if (classroom.activeChannel !== undefined || classroom.activeChannel !== undefined) return;
+		if (isJitsiChannel(classroom.activeChannel)) return;
 		const webSocketURL = `ws://${import.meta.env.VITE_REACT_APP_API}/ws/${classroom.code}/${classroom.activeChannel?.name}/?token=${user!.token}`;
 
 		const ws = new WebSocket(webSocketURL);
@@ -89,14 +91,13 @@ export const ClassroomProvider = () => {
 			});
 			await api.get('classroom/jitsi_channels/').then((response) => {
 				const jitsi_channels: JitsiChannel[] = [];
-				for (const key in response.data) {
-					const channel: JitsiChannel = response.data[0];
-					jitsi_channels.push({ id: channel['id'], name: channel['name'], room_name: channel['room_name'] });
+				response.data.forEach((ch: JitsiChannel) => {
+					jitsi_channels.push({ id: ch['id'], name: ch['name'], room_name: ch['room_name'] });
 					setClassroom((prev) => ({
 						...prev!,
 						jitsi_channels: jitsi_channels || [],
 					}));
-				}
+				});
 			});
 		};
 

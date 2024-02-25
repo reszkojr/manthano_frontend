@@ -6,7 +6,7 @@ import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useContextMenu } from '../../hooks/useContextMenu';
-import { gFormEvent, MouseEvent, useEffect, useState } from 'react';
+import { FormEvent, MouseEvent, useEffect, useState } from 'react';
 import { DragDropContext, Draggable, DropResult } from 'react-beautiful-dnd';
 
 import { useClassroomContext } from '../hooks/UseClassroomContext';
@@ -15,12 +15,13 @@ import { FaRegEdit, FaRegTrashAlt } from 'react-icons/fa';
 import {} from 'react-icons/fa';
 import ContextMenu from '../elements/ContextMenu';
 
-import './ActionsPanel.css';
+import './Sidebar.css';
 import { Channel, JitsiChannel } from '../../types/Types';
 import CustomModal from '../elements/CustomModal';
 import TextInput from '../elements/TextInput';
 import axios from 'axios';
 import { StrictModeDroppable } from '../elements/StrictModeDroppable';
+import { isJitsiChannel } from '../../utils/Utils';
 
 Modal.setAppElement('#root');
 Modal.defaultStyles.overlay!.backgroundColor = 'rgba(0, 0, 0, 0.6)';
@@ -66,14 +67,8 @@ const Sidebar = () => {
 		if (isMobile) {
 			setPanelCollapsed(true);
 		}
-		if ('room_name' in channel) {
-			setClassroom((prev) => ({
-				...prev!,
-				activeChannel: channel,
-			}));
-			return;
-		}
-		navigate(`/classroom/${classroom?.code}/${channel?.name}`);
+
+		navigate(`/classroom/${classroom?.code}/${isJitsiChannel(channel) ? 'vc' : 'c'}/${channel?.name}`);
 	};
 
 	const handleEditChannelSubmit = async (event: FormEvent, jitsi: boolean) => {
@@ -98,7 +93,7 @@ const Sidebar = () => {
 						channels: [...prev!.channels.map((ch) => (ch.id === updatedChannel.id ? updatedChannel : ch))],
 					}));
 					setModalEditChannelOpen(false);
-					navigate(`/classroom/${classroom?.code}/${updatedChannel?.name}`);
+					navigate(`/classroom/${classroom?.code}/c/${updatedChannel?.name}`);
 				}
 			})
 			.catch((err) => {
@@ -130,7 +125,7 @@ const Sidebar = () => {
 						channels: [...prev!.channels, channel],
 					}));
 					setModalAddChannelOpen(false);
-					navigate(`/classroom/${classroom?.code}/${channel?.name}`);
+					navigate(`/classroom/${classroom?.code}/c/${channel?.name}`);
 				}
 				setChannelName('');
 			})
@@ -153,7 +148,7 @@ const Sidebar = () => {
 				setClassroom((prev) => ({ ...prev!, channels: updatedChannels }));
 				setModalDeleteChannelOpen(false);
 			}
-			navigate(`/classroom/${classroom?.code}/${classroom?.channels[0]?.name}`);
+			navigate(`/classroom/${classroom?.code}/c/${classroom?.channels[0]?.name}`);
 		});
 	};
 
@@ -195,7 +190,7 @@ const Sidebar = () => {
 							onClick: (context) => {
 								setSelectedChannel(context as Channel | JitsiChannel);
 								const channel = context as Channel;
-								if ('room_name' in channel) {
+								if (isJitsiChannel(channel)) {
 									setModalJitsiEditChannelOpen(true);
 									return;
 								}
@@ -209,7 +204,7 @@ const Sidebar = () => {
 								setSelectedChannel(context as Channel | JitsiChannel);
 								const channel = context as Channel;
 
-								if ('room_name' in channel) {
+								if (isJitsiChannel(channel)) {
 									setModalJitsiDeleteChannelOpen(true);
 									return;
 								}
@@ -270,7 +265,7 @@ const Sidebar = () => {
 												classroom?.jitsi_channels.map((channel, index) => (
 													<Draggable key={channel.id} draggableId={channel.id.toString()} index={index}>
 														{(provided) => (
-															<li {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} onContextMenu={(event) => handleChannelContextMenu(event, channel)} className={classNames('flex min-w-max cursor-pointer items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600', { 'bg-gray-600 text-gray-200 brightness-125': classroom?.activeChannel?.name === channel.name })} onClick={() => handleChannelChange(channel)}>
+															<li {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} onContextMenu={(event) => handleChannelContextMenu(event, channel)} className={classNames('flex min-w-max cursor-pointer items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600', { 'bg-gray-600 text-gray-200 brightness-125': classroom?.activeChannel?.id === channel.id })} onClick={() => handleChannelChange(channel)}>
 																<FaVolumeUp className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
 																<span className='select-none'>{channel.name}</span>
 															</li>

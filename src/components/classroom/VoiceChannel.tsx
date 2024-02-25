@@ -1,59 +1,33 @@
-import { JitsiMeeting } from '@jitsi/react-sdk';
-import { useAuth } from '../hooks/UseAuth';
+import { useParams } from 'react-router-dom';
+import Header from './channel/Header';
+import { ReactElement, useEffect, useRef } from 'react';
+import JitsiFrame from './channel/JitsiFrame';
+import { useClassroomContext } from '../hooks/UseClassroomContext';
+import { isJitsiChannel } from '../../utils/Utils';
+import { JitsiChannel } from '../../types/Types';
 
-type VoiceChannelProps = {
-	room_name: string;
-};
+const VoiceChannel = () => {
+	const ref = useRef<ReactElement | null>(null);
+	const { classroom } = useClassroomContext();
 
-const VoiceChannel = ({ room_name }: VoiceChannelProps) => {
-	const { user } = useAuth();
+	useEffect(() => {
+		if (isJitsiChannel(classroom?.activeChannel) && classroom?.activeChannel !== null && classroom?.activeChannel !== undefined) {
 
-	const renderSpinner = () => (
-		<div
-			style={{
-				fontFamily: 'sans-serif',
-				textAlign: 'center',
-			}}
-		>
-			Loading..
-		</div>
-	);
+			const room_name = (classroom?.activeChannel as JitsiChannel).room_name || '';
+			ref.current = <JitsiFrame room_name={room_name || ''} />;
+		}
+		return () => {
+			// console.log('unmount');
+			ref.current = null;
+		};
+	}, []);
+
+	if (!ref.current) return null;
 
 	return (
-		<div className='h-full'>
-			<JitsiMeeting
-				roomName={room_name}
-				spinner={renderSpinner}
-				configOverwrite={{
-					startWithAudioMuted: true,
-					disableModeratorIndicator: true,
-					enableEmailInStats: false,
-					prejoinPageEnabled: false,
-					disableDeepLinking: true,
-				}}
-				interfaceConfigOverwrite={{
-					DISABLE_JOIN_LEAVE_NOTIFICATIONS: true,
-					SHOW_INVITE_MORE_HEADER: false,
-					SHOW_POWERED_BY: false,
-					SHOW_WATERMARK_FOR_GUESTS: false,
-					PROVIDER_NAME: 'Manthano',
-					REMOVE_LOBBY_CHAT_WITH_MODERATOR: false,
-					MOBILE_APP_PROMO: false,
-				}}
-				userInfo={{
-					displayName: user?.username || '',
-					email: 'teste@gmail.com',
-				}}
-				onApiReady={(externalApi) => {
-					console.log(externalApi);
-				}}
-				getIFrameRef={(iframeRef) => {
-					iframeRef.style.height = '100%';
-					iframeRef.style.minWidth = '400px';
-					// iframeRef.style.maxWidth = '';
-					iframeRef.style.width = '100%';
-				}}
-			/>
+		<div className='flex h-full flex-col bg-gray-800'>
+			<Header />
+			{ref.current}
 		</div>
 	);
 };

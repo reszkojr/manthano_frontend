@@ -15,6 +15,7 @@ import ErrorPage from './pages/ErrorPage';
 import '../index.css';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-loading-skeleton/dist/skeleton.css';
+import VoiceChannel from './components/classroom/VoiceChannel';
 
 const Manthano = () => {
 	const router = createBrowserRouter(
@@ -29,7 +30,12 @@ const Manthano = () => {
 					<Route path='join' Component={ClassroomJoinPage} />
 					<Route path='classroom' Component={ClassroomProvider}>
 						<Route path=':classroom_code' Component={ClassroomPage}>
-							<Route path=':channel_code' Component={Channel} />
+							<Route path='vc'>
+								<Route path=':channel_code' Component={VoiceChannel} />
+							</Route>
+							<Route path='c'>
+								<Route path=':channel_code' Component={Channel} />
+							</Route>
 						</Route>
 					</Route>
 				</Route>
