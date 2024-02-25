@@ -35,6 +35,7 @@ export interface ResponseData {
 
 export interface User {
 	username: string;
+	email: string;
 	token: string;
 	refreshToken: string;
 	user: number;
