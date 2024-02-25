@@ -1,33 +1,23 @@
-import { useParams } from 'react-router-dom';
 import Header from './channel/Header';
-import { ReactElement, useEffect, useRef } from 'react';
 import JitsiFrame from './channel/JitsiFrame';
 import { useClassroomContext } from '../hooks/UseClassroomContext';
-import { isJitsiChannel } from '../../utils/Utils';
 import { JitsiChannel } from '../../types/Types';
+import { useEffect, useState } from 'react';
 
 const VoiceChannel = () => {
-	const ref = useRef<ReactElement | null>(null);
 	const { classroom } = useClassroomContext();
+	const [key, setKey] = useState(Date.now());
 
 	useEffect(() => {
-		if (isJitsiChannel(classroom?.activeChannel) && classroom?.activeChannel !== null && classroom?.activeChannel !== undefined) {
-
-			const room_name = (classroom?.activeChannel as JitsiChannel).room_name || '';
-			ref.current = <JitsiFrame room_name={room_name || ''} />;
-		}
-		return () => {
-			// console.log('unmount');
-			ref.current = null;
-		};
+		setKey(Date.now());
 	}, []);
 
-	if (!ref.current) return null;
+	if (classroom?.activeChannel === undefined) return;
 
 	return (
 		<div className='flex h-full flex-col bg-gray-800'>
 			<Header />
-			{ref.current}
+			<JitsiFrame key={key} room_name={(classroom?.activeChannel as JitsiChannel).room_name || ''} />
 		</div>
 	);
 };
