@@ -8,6 +8,7 @@ import { Message } from '../../../types/Types';
 import useApi from '../../../hooks/useApi';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { isJitsiChannel } from '../../../utils/Utils';
 
 const Chat = () => {
 	const messagesRef = useRef<Array<HTMLDivElement | null>>([]);
@@ -33,12 +34,20 @@ const Chat = () => {
 
 	// Fetch Channel messages
 	useEffect(() => {
-		if (classroom?.activeChannel === undefined) return;
+		if (classroom?.activeChannel === undefined || isJitsiChannel(classroom?.activeChannel)) return;
 		setMessages(undefined);
 
-		api.get('classroom/messages', { params: { channel_name: classroom?.activeChannel?.name } }).then((response) => {
-			setMessages(response.data);
+		const controller = new AbortController();
+
+		api.get('classroom/messages', { params: { channel_name: classroom?.activeChannel?.name }, signal: controller.signal }).then((response) => {
+			if (response) {
+				setMessages(response.data);
+			}
 		});
+
+		return () => {
+			controller.abort();
+		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [classroom?.activeChannel]);
 
@@ -179,7 +188,7 @@ const Chat = () => {
 			) : (
 				<ul>
 					<div className='h-5/6'>{/* TODO */}</div>
-					<li className='mt-4 flex'>
+					{/* <li className='mt-4 flex'>
 						<div className='mb-2 mr-4 h-12 w-12'>
 							<SkeletonTheme circle baseColor='#2f363b' height='100%' highlightColor='#1a2329' />
 						</div>
@@ -220,7 +229,7 @@ const Chat = () => {
 							<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'24%'} highlightColor='#1a2329' count={1} />
 							<SkeletonTheme baseColor='#2f363b' height={'20px'} width={'22%'} highlightColor='#1a2329' count={1} />
 						</div>
-					</li>
+					</li> */}
 				</ul>
 			)}
 			<div ref={messagesEndRef}></div>
