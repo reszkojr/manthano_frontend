@@ -23,6 +23,7 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export const AuthProvider = ({ children }: Props) => {
 	const [user, setUser] = useState<User | null>(null);
+	const [email, setEmail] = useState<string | null>(null);
 	const [loading, setLoading] = useState<boolean>(true);
 
 	const api = useApi();
@@ -47,31 +48,37 @@ export const AuthProvider = ({ children }: Props) => {
 		const username = usernameFromToken(storageToken);
 		const user = userIdFromToken(storageToken);
 
-		setUser({
+		setUser((prev) => ({
+			...prev!,
 			username,
+			email: email || '',
 			token: storageToken,
 			refreshToken: refreshToken,
 			user,
 			avatar: '', // TODO
-		});
+		}));
 		setLoading(false);
 	}, []);
 
 	const login = async (userData: LoginUserData): Promise<ResponseData> => {
 		return await AuthService.handleLogin(userData, api)
 			.then((response) => {
+				setEmail(userData.email);
+
 				const token = response?.data.access;
 				const refreshToken = response?.data.refresh;
 
 				const username = usernameFromToken(token);
 				const user = userIdFromToken(token);
-				setUser({
+				setUser((prev) => ({
+					...prev!,
 					username,
+					email: userData.email,
 					token,
 					refreshToken,
 					user,
 					avatar: '', // TODO
-				});
+				}));
 				storeTokens(token, refreshToken);
 				return {
 					message: 'Successfully logged in.',
