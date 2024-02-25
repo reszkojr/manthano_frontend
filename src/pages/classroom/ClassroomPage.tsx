@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 
-import NavigationPanel from '../../components/classroom/NavigationPanel';
 import Sidebar from '../../components/classroom/Sidebar';
+import ActionsPanel from '../../components/classroom/ActionsPanel';
 import { useClassroomContext } from '../../components/hooks/UseClassroomContext';
 
 const ClassroomPage = () => {
@@ -17,8 +17,8 @@ const ClassroomPage = () => {
 	return (
 		<div className='flex h-[100dvh] w-screen overflow-hidden'>
 			<div className='flex w-min'>
+				<ActionsPanel />
 				<Sidebar />
-				<NavigationPanel />
 			</div>
 			<div className='w-full'>
 				<Outlet />
