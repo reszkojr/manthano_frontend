@@ -34,7 +34,7 @@ const Chat = () => {
 
 	// Fetch Channel messages
 	useEffect(() => {
-		if (classroom?.activeChannel === undefined || isJitsiChannel(classroom?.activeChannel)) return;
+		if (classroom?.activeChannel === undefined) return;
 		setMessages(undefined);
 
 		const controller = new AbortController();
