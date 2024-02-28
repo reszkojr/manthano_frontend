@@ -64,6 +64,7 @@ const Sidebar = () => {
 	}, []);
 
 	const handleChannelChange = (channel: Channel | JitsiChannel) => {
+		if (classroom?.activeChannel === channel) return;
 		if (isMobile) {
 			setPanelCollapsed(true);
 		}
@@ -237,7 +238,7 @@ const Sidebar = () => {
 											{classroom?.channels.map((channel, index) => (
 												<Draggable key={channel.id} draggableId={channel.id.toString()} index={index}>
 													{(provided) => (
-														<li {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} onContextMenu={(event) => handleChannelContextMenu(event, channel)} className={classNames('flex min-w-max cursor-pointer items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600', { 'bg-gray-600 text-gray-200 brightness-125': classroom?.activeChannel?.name === channel.name })} onClick={() => handleChannelChange(channel)}>
+														<li {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} onContextMenu={(event) => handleChannelContextMenu(event, channel)} className={classNames('flex min-w-max cursor-pointer items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600', { 'bg-gray-600 text-gray-200 brightness-125': classroom?.activeChannel === channel })} onClick={() => handleChannelChange(channel)}>
 															<FaHashtag className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
 															<span className='select-none'>{channel.name}</span>
 														</li>
@@ -265,7 +266,7 @@ const Sidebar = () => {
 												classroom?.jitsi_channels.map((channel, index) => (
 													<Draggable key={channel.id} draggableId={channel.id.toString()} index={index}>
 														{(provided) => (
-															<li {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} onContextMenu={(event) => handleChannelContextMenu(event, channel)} className={classNames('flex min-w-max cursor-pointer items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600', { 'bg-gray-600 text-gray-200 brightness-125': classroom?.activeChannel?.id === channel.id })} onClick={() => handleChannelChange(channel)}>
+															<li {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} onContextMenu={(event) => handleChannelContextMenu(event, channel)} className={classNames('flex min-w-max cursor-pointer items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600', { 'bg-gray-600 text-gray-200 brightness-125': classroom?.activeChannel === channel })} onClick={() => handleChannelChange(channel)}>
 																<FaVolumeUp className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
 																<span className='select-none'>{channel.name}</span>
 															</li>
