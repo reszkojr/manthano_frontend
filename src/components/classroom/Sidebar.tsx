@@ -47,6 +47,8 @@ const Sidebar = () => {
 	const api = useApi();
 
 	useEffect(() => {
+		if (classroom?.activeChannel === undefined) setPanelCollapsed(false);
+
 		const mobileMediaQuery = window.matchMedia('(max-width: 767px)');
 		if (mobileMediaQuery.matches) {
 			setIsMobile(true);
@@ -57,10 +59,6 @@ const Sidebar = () => {
 			mobileMediaQuery.removeEventListener('change', (event) => setIsMobile(event.matches));
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-
-	useEffect(() => {
-		if (classroom?.activeChannel === undefined) setPanelCollapsed(false);
 	}, []);
 
 	const handleChannelChange = (channel: Channel | JitsiChannel) => {
