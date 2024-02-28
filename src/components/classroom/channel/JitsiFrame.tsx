@@ -1,16 +1,17 @@
-import { JitsiMeeting } from '@jitsi/react-sdk';
+import { JaaSMeeting } from '@jitsi/react-sdk';
 import { useAuth } from '../../hooks/UseAuth';
+
 import { useEffect, useState } from 'react';
 import { IJitsiMeetExternalApi } from '@jitsi/react-sdk/lib/types';
 
-const JitsiFrame = ({ room_name }: { room_name: string }) => {
+const JitsiFrame = ({ room_name, token }: { room_name: string; token: string }) => {
 	const { user } = useAuth();
 	const [externalApi, setExternalApi] = useState<IJitsiMeetExternalApi>();
 
 	useEffect(() => {
 		return () => {
 			if (externalApi) {
-				externalApi.dispose();
+				// externalApi.dispose();
 			}
 		};
 	}, []);
@@ -27,11 +28,14 @@ const JitsiFrame = ({ room_name }: { room_name: string }) => {
 	);
 
 	return (
-		<JitsiMeeting
+		<JaaSMeeting
+			appId={'vpaas-magic-cookie-703a24e42f9945bb92d05923ce73c114'}
+			jwt={token}
 			roomName={room_name}
 			spinner={render_spinner}
 			configOverwrite={{
 				startWithAudioMuted: true,
+				startWithVideoMuted: true,
 				disableModeratorIndicator: true,
 				enableEmailInStats: false,
 				prejoinPageEnabled: false,
@@ -57,7 +61,6 @@ const JitsiFrame = ({ room_name }: { room_name: string }) => {
 			}}
 			onApiReady={(api) => {
 				console.log('api ready');
-
 				setExternalApi(api);
 			}}
 			getIFrameRef={(iframeRef) => {

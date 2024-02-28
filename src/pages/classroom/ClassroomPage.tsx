@@ -1,11 +1,14 @@
-import { useEffect } from 'react';
-import { Outlet, useLocation, useParams } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
 import Sidebar from '../../components/classroom/Sidebar';
 import ActionsPanel from '../../components/classroom/ActionsPanel';
-import { useClassroomContext } from '../../components/hooks/UseClassroomContext';
+import { useEffect, useState } from 'react';
 
 const ClassroomPage = () => {
+	const [key, setKey] = useState(Date.now());
+
+	useEffect(() => setKey(Date.now()), []);
+
 	return (
 		<div className='flex h-[100dvh] w-screen overflow-hidden'>
 			<div className='flex w-min'>
@@ -13,7 +16,7 @@ const ClassroomPage = () => {
 				<Sidebar />
 			</div>
 			<div className='w-full'>
-				<Outlet />
+				<Outlet key={key} />
 			</div>
 		</div>
 	);

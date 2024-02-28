@@ -3,13 +3,21 @@ import JitsiFrame from './channel/JitsiFrame';
 import { useClassroomContext } from '../hooks/UseClassroomContext';
 import { JitsiChannel } from '../../types/Types';
 import { useEffect, useState } from 'react';
+import useApi from '../../hooks/useApi';
 
 const VoiceChannel = () => {
+	const [token, setToken] = useState('');
+
 	const { classroom } = useClassroomContext();
-	const [key, setKey] = useState(Date.now());
+	const api = useApi();
 
 	useEffect(() => {
-		setKey(Date.now());
+		const getToken = async () => {
+			await api.get('auth/token/jaas').then((response) => {
+				if (response) setToken(response.data);
+			});
+		};
+		getToken();
 	}, []);
 
 	if (classroom?.activeChannel === undefined) return;
@@ -17,7 +25,7 @@ const VoiceChannel = () => {
 	return (
 		<div className='flex h-full flex-col bg-gray-800'>
 			<Header />
-			<JitsiFrame key={key} room_name={(classroom?.activeChannel as JitsiChannel).room_name || ''} />
+			<JitsiFrame token={token} room_name={(classroom?.activeChannel as JitsiChannel).room_name || ''} />
 		</div>
 	);
 };
