@@ -1,6 +1,6 @@
 import { createContext, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useAuth } from '../components/hooks/UseAuth';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import { Channel, Classroom, JitsiChannel, Message } from '../types/Types';
 import useApi from '../hooks/useApi';
 import { isJitsiChannel } from '../utils/Utils';
@@ -29,6 +29,7 @@ export const ClassroomProvider = () => {
 	const [messages, setMessages] = useState<Message[] | undefined>([] as Message[]);
 	const [isPanelCollapsed, setPanelCollapsed] = useState(true);
 	const [websocket, setWebsocket] = useState<WebSocket | null>(null);
+	const { channel_code, classroom_code } = useParams();
 
 	const navigate = useNavigate();
 	const { user, tokenCheck, getClassroom } = useAuth();
@@ -36,42 +37,32 @@ export const ClassroomProvider = () => {
 
 	// Get Classroom information
 	useEffect(() => {
-		const retrieveAndSetClassroom = async () => {
+		setClassroom((prev) => ({ ...prev!, code: classroom_code! }));
+
+		const setClassroomInformation = async () => {
 			return await getClassroom(api).then((data) => {
 				if (data) setClassroom(data);
 			});
 		};
 
-		retrieveAndSetClassroom();
-
-		const getChannels = async () => {
-			await api.get('classroom/channels/').then((response) => {
-				const channels: Channel[] = [];
-				for (const key in response.data) {
-					const id = Number(key);
-					channels.push({ id: id, name: response.data[id] });
-				}
-			});
-			await api.get('classroom/jitsi_channels/').then((response) => {
-				const jitsi_channels: JitsiChannel[] = [];
-				response.data.forEach((ch: JitsiChannel) => {
-					jitsi_channels.push({ id: ch['id'], name: ch['name'], room_name: ch['room_name'] });
-					setClassroom((prev) => ({
-						...prev!,
-						jitsi_channels: jitsi_channels || [],
-					}));
-				});
-			});
-		};
-
-		getChannels();
+		setClassroomInformation();
 
 		if (classroom?.activeChannel !== undefined && classroom?.activeChannel !== null) {
 			const channelType = isJitsiChannel(classroom?.activeChannel) ? 'vc' : 'c';
 
-			return navigate(`/classroom/${classroom?.code}/${channelType}}/${classroom.activeChannel.name}`);
+			return navigate(`/classroom/${classroom?.code}/${channelType}/${classroom.activeChannel.name}`);
 		}
 	}, []);
+
+	useEffect(() => {
+		let channel = null;
+		if (location.pathname.includes('/vc/')) {
+			channel = classroom?.jitsi_channels.find((ch) => ch.name === channel_code);
+		} else if (location.pathname.includes('/c/')) {
+			channel = classroom?.channels.find((ch) => ch.name === channel_code);
+		}
+		setClassroom((prev) => ({ ...prev!, activeChannel: channel }));
+	}, [classroom?.jitsi_channels, classroom?.channels, channel_code]);
 
 	// Instantiate WebSocket instance
 	useEffect(() => {
