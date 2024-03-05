@@ -53,7 +53,7 @@ const Input = () => {
 	};
 
 	return (
-		<div className='relative m-4 mt-auto rounded-md border border-gray-600 px-2 pt-2 shadow-2xl'>
+		<div className='blur-backdrop absolute bottom-0 m-4 w-[95%] rounded-md border border-gray-600 px-2 pt-2'>
 			<div className='mb-2 flex gap-4'>
 				<textarea ref={textAreaRef} value={inputContent} onKeyDown={handleTextAreaEnter} onChange={(event) => setInputContent(event.target.value)} spellCheck={false} id='message_input' className='min-h-8 max-h-28 w-full resize-none border-none bg-transparent p-0 text-gray-50 outline-none' />
 				<BiSolidSend onTouchEnd={handleTouchEnd} onClick={handleMessageSend} className='mb-auto h-auto w-6 hover:cursor-pointer hover:brightness-150 hover:filter' />

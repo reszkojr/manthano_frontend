@@ -176,7 +176,7 @@ const Sidebar = () => {
 	};
 
 	return (
-		<div className={classNames('z-[1] max-h-screen flex-grow overflow-hidden border-r border-r-gray-600 bg-gray-800 transition-[width] duration-200', { collapsed: isPanelCollapsed, 'w-[80vw] md:w-56': !isPanelCollapsed })}>
+		<div className={classNames('z-[1] max-h-screen flex-grow overflow-hidden bg-gray-800 transition-[width] duration-200', { collapsed: isPanelCollapsed, 'w-[80vw] md:w-56': !isPanelCollapsed })}>
 			{clicked && (
 				<ContextMenu
 					top={coords.y}
@@ -215,7 +215,7 @@ const Sidebar = () => {
 			)}
 			<aside className='h-screen'>
 				<div className={classNames('flex h-full flex-col gap-3 transition-opacity duration-200', { 'invisible opacity-0': isPanelCollapsed })}>
-					<nav className='custom-shadow flex h-12 w-full items-center justify-between border-b border-b-gray-600 px-4'>
+					<nav className='custom-shadow flex h-12 w-full items-center justify-between border-b border-b-gray-700 px-4'>
 						<span className='my-auto min-w-max text-xl font-bold text-gray-50'>{classroom?.name}</span>
 					</nav>
 					<div className='space-y-4 px-3'>

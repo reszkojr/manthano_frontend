@@ -9,7 +9,7 @@ const LargeHeader = () => {
 
 	const redirect = () => navigate('/');
 	return (
-		<nav className='border-b border-b-gray-600'>
+		<nav className='border-b border-b-gray-700'>
 			<div className='text-gray flex items-center justify-between p-4 px-12'>
 				<div className='flex items-center space-x-12'>
 					<img src='/m_manthano.png' onClick={() => redirect()} className='w-8 cursor-pointer' />
@@ -39,7 +39,7 @@ const LargeHeader = () => {
 						<div className='flex items-center space-x-8 text-gray-50'>
 							<Link to='/auth/login'>Login</Link>
 							<Link to='/auth/signup'>
-								<div className='rounded-[4px] bg-gradient-to-bl from-teal-500 to-lapis-500 px-4 py-2 hover:bg-white'>Sign up</div>
+								<div className='to-lapis-500 rounded-[4px] bg-gradient-to-bl from-teal-500 px-4 py-2 hover:bg-white'>Sign up</div>
 							</Link>
 						</div>
 					)}
