@@ -115,6 +115,35 @@ const Chat = () => {
 		});
 	};
 
+	const formatDate = (date: Date | undefined) => {
+		if (date === undefined) return;
+		date = new Date(date);
+		const now = new Date();
+
+		const diffInMs = now.getTime() - date.getTime();
+
+		const seconds = Math.floor(diffInMs / 1000);
+		const minutes = Math.floor(seconds / 60);
+		const hours = Math.floor(minutes / 60);
+		const days = Math.floor(hours / 24);
+
+		if (seconds < 60) {
+			return `now`;
+		} else if (minutes < 60) {
+			return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+		} else if (hours < 12) {
+			return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+		} else if (days === 1) {
+			return `yesterday`;
+		} else if (days > 1 && days <= 3) {
+			return `${days} ago`;
+		} else {
+			// Format date using desired format (dd/mm/yyyy in this case)
+			const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+			return formattedDate;
+		}
+	};
+
 	return (
 		<div className='mb-4 min-w-max flex-1 gap-0 overflow-y-auto overflow-x-hidden p-4'>
 			{/* Context menu logic */}
@@ -164,7 +193,7 @@ const Chat = () => {
 										<div className='w-11/12'>
 											<div className='flex items-center gap-2'>
 												<div className='font-semibold'>{message.username}</div>
-												<span className='text-sm text-gray-400'>{`${message.date}`}</span>
+												<span className='text-sm text-gray-400'>{`${formatDate(message.date as Date)}`}</span>
 											</div>
 											<div className='flex items-center gap-2'>
 												<div message-id={message.id} ref={(el) => (messagesRef.current[index] = el)} className='whitespace-pre-line'>
