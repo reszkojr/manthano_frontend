@@ -193,7 +193,7 @@ const Chat = () => {
 										<div className='w-11/12'>
 											<div className='flex items-center gap-2'>
 												<div className='font-semibold'>{message.username}</div>
-												<span className='text-sm text-gray-400'>{`${formatDate(message.date as Date)}`}</span>
+												<span className='text-xs text-gray-400'>{`${formatDate(message.date as Date)}`}</span>
 											</div>
 											<div className='flex items-center gap-2'>
 												<div message-id={message.id} ref={(el) => (messagesRef.current[index] = el)} className='whitespace-pre-line'>
