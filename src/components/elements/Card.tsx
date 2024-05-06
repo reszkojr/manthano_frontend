@@ -13,7 +13,7 @@ const Card = (props: CardProps) => {
 		<div className={styles.card}>
 			<a href={props.href} className='flex'>
 				{props.icon && <div className='my-auto ml-2 mr-6'>{props.icon}</div>}
-				<div className='pr-2'>
+				<div className='content-center pr-2'>
 					<h2 className='text-md font-semibold'>{props.title}</h2>
 					{props.subtitle && <p className='text-md text-gray-300'>{props.subtitle}</p>}
 				</div>
