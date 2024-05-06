@@ -39,7 +39,7 @@ const LoginPage = () => {
 					<h1 className='mb-3 text-2xl font-bold'>Welcome back!</h1>
 					<h2 className='text-gray-300'>Let's start your classroom in just a few clicks.</h2>
 					<h2 className='text-gray-300'>
-						Still don't have an account?{' '}
+						Don't have an account?{' '}
 						<Link to='/auth/signup' className='text-lapis-500'>
 							Sign up
 						</Link>

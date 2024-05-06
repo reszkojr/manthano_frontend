@@ -43,11 +43,11 @@ const SignUpPage = () => {
 			<div className='space-y-4 p-6'>
 				<div className=''>
 					<h1 className='mb-3 text-2xl font-bold'>Let's get you started!</h1>
-					<h2 className='text-gray-300'>Creating your classroom is gonna be as easy as Plato finding a cave.</h2>
+					<h2 className='text-gray-300'>Let's get you out of the cave.</h2>
 					<h2 className='text-gray-300'>
 						Already have an account?{' '}
 						<Link to='/auth/login' className='text-lapis-500'>
-							Then Login here
+							Then login here
 						</Link>
 					</h2>
 				</div>
