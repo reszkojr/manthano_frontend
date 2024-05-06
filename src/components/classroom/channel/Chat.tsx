@@ -171,9 +171,8 @@ const Chat = () => {
 					<ul className='bottom-0 justify-end'>
 						<div className='h-5/6' />
 						{messages.map((message, index, msgs) => {
-							let content = null;
 							if (msgs[index - 1] !== undefined && msgs[index - 1].user === message.user) {
-								content = (
+								return (
 									<li key={index} onContextMenu={(event) => handleMessageContextMenu(event, message)} className='flex gap-4'>
 										<div className='w-10'></div>
 										<div className='flex w-11/12 items-center gap-2'>
@@ -185,7 +184,7 @@ const Chat = () => {
 									</li>
 								);
 							} else {
-								content = (
+								return (
 									<li key={index} onContextMenu={(event) => handleMessageContextMenu(event, message)} className='mt-4 flex gap-4'>
 										<div className='mt-2 h-10 w-10 overflow-hidden rounded-full'>
 											<img src={message.avatar} alt='pp' className='h-10 w-10 object-cover' />
@@ -205,7 +204,6 @@ const Chat = () => {
 									</li>
 								);
 							}
-							return content;
 						})}
 					</ul>
 				) : (
