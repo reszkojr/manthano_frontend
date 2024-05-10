@@ -1,15 +1,15 @@
 import { FormEvent } from 'react';
-import { useAuth } from '../../components/hooks/UseAuth';
+import { useAuth } from '../../../components/hooks/UseAuth';
 import { Link, useNavigate } from 'react-router-dom';
 
-import TextInput from '../../components/elements/TextInput';
-import Submit from '../../components/elements/Submit';
-import Checkbox from '../../components/elements/Checkbox';
+import TextInput from '../../../components/elements/TextInput';
+import Submit from '../../../components/elements/Submit';
+import Checkbox from '../../../components/elements/Checkbox';
 
 import { toast } from 'react-toastify';
-import { ResponseData } from '../../types/Types';
+import { ResponseData } from '../../../types/Types';
 
-const LoginPage = () => {
+const Login = () => {
 	const { login } = useAuth();
 	const navigate = useNavigate();
 
@@ -63,4 +63,4 @@ const LoginPage = () => {
 	);
 };
 
-export default LoginPage;
+export default Login;

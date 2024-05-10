@@ -1,10 +1,10 @@
 import { Outlet } from 'react-router-dom';
 
-import Sidebar from '../../components/classroom/Sidebar';
-import ActionsPanel from '../../components/classroom/ActionsPanel';
+import Sidebar from '../../../components/classroom/Sidebar';
+import ActionsPanel from '../../../components/classroom/ActionsPanel';
 import { useEffect, useState } from 'react';
 
-const ClassroomPage = () => {
+const Classroom = () => {
 	const [key, setKey] = useState(Date.now());
 
 	useEffect(() => setKey(Date.now()), []);
@@ -22,4 +22,4 @@ const ClassroomPage = () => {
 	);
 };
 
-export default ClassroomPage;
+export default Classroom;

@@ -1,17 +1,17 @@
 import { FormEvent } from 'react';
 
-import { useAuth } from '../../components/hooks/UseAuth';
+import { useAuth } from '../../../components/hooks/UseAuth';
 
-import TextInput from '../../components/elements/TextInput';
-import Submit from '../../components/elements/Submit';
-import Checkbox from '../../components/elements/Checkbox';
+import TextInput from '../../../components/elements/TextInput';
+import Submit from '../../../components/elements/Submit';
+import Checkbox from '../../../components/elements/Checkbox';
 
 import { useNavigate } from 'react-router';
-import { ResponseData } from '../../types/Types';
+import { ResponseData } from '../../../types/Types';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 
-const SignUpPage = () => {
+const SignUp = () => {
 	const { register } = useAuth();
 	const navigate = useNavigate();
 
@@ -79,4 +79,4 @@ const SignUpPage = () => {
 	);
 };
 
-export default SignUpPage;
+export default SignUp;

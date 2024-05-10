@@ -1,15 +1,15 @@
 import { PiChalkboardTeacher, PiStudentFill } from 'react-icons/pi';
 import { FaArrowLeft } from 'react-icons/fa';
-import Button from '../../components/elements/Button';
+import Button from '../../../components/elements/Button';
 import { useState } from 'react';
 
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import Question from '../../components/auth/Question';
-import { Question as QuestionType } from '../../components/auth/Types';
+import Question from '../../../components/auth/Question';
+import { Question as QuestionType } from '../../../components/auth/Types';
 
-import './transitions.css';
+import './Setup.css';
 
-const AccountSetupPage = () => {
+const Setup = () => {
 	const questionsList = [
 		{
 			description: "What's gonna be your role in the Classroom?",
@@ -76,4 +76,4 @@ const AccountSetupPage = () => {
 	);
 };
 
-export default AccountSetupPage;
+export default Setup;

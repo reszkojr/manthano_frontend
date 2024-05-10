@@ -3,14 +3,14 @@ import { FaUsersSlash, FaUsers } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 import axios from 'axios';
-import { useAuth } from '../../components/hooks/UseAuth';
+import { useAuth } from '../../../components/hooks/UseAuth';
 import { useNavigate } from 'react-router-dom';
 
-import TextInputWithButton from '../../components/elements/TextInputWithButton';
-import Card from '../../components/elements/Card';
-import useApi from '../../hooks/useApi';
+import TextInputWithButton from '../../../components/elements/TextInputWithButton';
+import Card from '../../../components/elements/Card';
+import useApi from '../../../hooks/useApi';
 
-const ClassroomJoinPage = () => {
+const Join = () => {
 	const [classroomCode, setClassroomCode] = useState('');
 	const [loading, setLoading] = useState(true);
 
@@ -81,4 +81,4 @@ const ClassroomJoinPage = () => {
 	);
 };
 
-export default ClassroomJoinPage;
+export default Join;
