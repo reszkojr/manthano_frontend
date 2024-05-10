@@ -1,8 +1,8 @@
 import { Outlet } from 'react-router-dom';
 
 import Sidebar from '../../../components/classroom/Sidebar';
-import ActionsPanel from '../../../components/classroom/ActionsPanel';
 import { useEffect, useState } from 'react';
+import ActionsPanel from '../../../components/classroom/ActionsPanel';
 
 const Classroom = () => {
 	const [key, setKey] = useState(Date.now());
@@ -10,8 +10,8 @@ const Classroom = () => {
 	useEffect(() => setKey(Date.now()), []);
 
 	return (
-		<div className='flex h-[100dvh] w-screen overflow-hidden'>
-			<div className='flex w-min'>
+		<div className={`bg-classroom-950 flex h-screen w-screen p-4`}>
+			<div className='flex md:mr-4'>
 				<ActionsPanel />
 				<Sidebar />
 			</div>

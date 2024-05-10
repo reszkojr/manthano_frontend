@@ -4,7 +4,7 @@ import Chat from './Chat';
 
 const Channel = () => {
 	return (
-		<div className='bg-gray-750 relative flex h-full flex-col'>
+		<div className='bg-classroom-900 relative flex h-full flex-col rounded-2xl'>
 			<Header />
 			<Chat />
 			<Input />

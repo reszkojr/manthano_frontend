@@ -145,7 +145,7 @@ const Chat = () => {
 	};
 
 	return (
-		<div className='mb-4 min-w-max flex-1 gap-0 overflow-y-auto overflow-x-hidden p-4'>
+		<div className='min-w-max flex-1 gap-0 overflow-y-auto overflow-x-hidden p-4'>
 			{/* Context menu logic */}
 			{clicked && (
 				<ContextMenu
@@ -258,7 +258,7 @@ const Chat = () => {
 					</li>
 				</ul>
 			)}
-			<div ref={messagesEndRef} className='h-24'></div>
+			<div ref={messagesEndRef}></div>
 		</div>
 	);
 };

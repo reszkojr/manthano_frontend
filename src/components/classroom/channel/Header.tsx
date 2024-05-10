@@ -6,8 +6,8 @@ const Header = () => {
 	const { setPanelCollapsed, classroom } = useClassroomContext();
 
 	return (
-		<div className='bg-gray-750 custom-shadow-lighter flex h-12 items-center gap-2 border-b border-b-gray-700 px-4 text-gray-200'>
-			<button onClick={() => setPanelCollapsed((prev) => !prev)}>
+		<div className='text-white-100 flex h-12 items-center gap-4 px-4'>
+			<button className='mt-1 h-auto w-4' onClick={() => setPanelCollapsed((prev) => !prev)}>
 				<AiOutlineMenu />
 			</button>
 			<div className='flex gap-2'>

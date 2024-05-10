@@ -14,7 +14,7 @@ const Input = () => {
 	const [inputContent, setInputContent] = useState('');
 	const [emojiPickerVisible, setEmojiPickerVisible] = useState(false);
 
-	const { sendMessage } = useClassroomContext();
+	const { sendMessage, classroom } = useClassroomContext();
 
 	const textAreaRef = useRef<HTMLTextAreaElement>(null);
 	const emojiPickerRef = useRef<HTMLDivElement>(null);
@@ -53,9 +53,9 @@ const Input = () => {
 	};
 
 	return (
-		<div className='blur-backdrop absolute bottom-0 m-4 w-[95%] rounded-md border border-gray-600 px-2 pt-2'>
+		<div className='blur-backdrop m-4 w-[95%] rounded-md px-2 pt-2'>
 			<div className='mb-2 flex gap-4'>
-				<textarea ref={textAreaRef} value={inputContent} onKeyDown={handleTextAreaEnter} onChange={(event) => setInputContent(event.target.value)} spellCheck={false} id='message_input' className='min-h-8 max-h-28 w-full resize-none border-none bg-transparent p-0 text-gray-50 outline-none' />
+				<textarea ref={textAreaRef} value={inputContent} placeholder={`Message #${classroom?.activeChannel?.name}`} onKeyDown={handleTextAreaEnter} onChange={(event) => setInputContent(event.target.value)} spellCheck={false} id='message_input' className='min-h-8 bg-classroom-700 placeholder:text-classroom-400 max-h-28 w-full resize-none rounded-xl border-none bg-transparent bg-opacity-20 p-2 text-gray-100 outline-none' />
 				<BiSolidSend onTouchEnd={handleTouchEnd} onClick={handleMessageSend} className='mb-auto h-auto w-6 hover:cursor-pointer hover:brightness-150 hover:filter' />
 			</div>
 			<div className='h-8'>

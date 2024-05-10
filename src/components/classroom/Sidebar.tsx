@@ -176,7 +176,7 @@ const Sidebar = () => {
 	};
 
 	return (
-		<div className={classNames('z-[1] max-h-screen flex-grow overflow-hidden bg-gray-800 transition-[width] duration-200', { collapsed: isPanelCollapsed, 'w-[80vw] md:w-56': !isPanelCollapsed })}>
+		<div className={classNames('z-[1] overflow-hidden transition-[border-radius,width] duration-200', { 'collapsed rounded-2xl': isPanelCollapsed, 'w-[80vw] md:w-64': !isPanelCollapsed })}>
 			{clicked && (
 				<ContextMenu
 					top={coords.y}
@@ -213,20 +213,20 @@ const Sidebar = () => {
 					]}
 				/>
 			)}
-			<aside className='h-screen'>
-				<div className={classNames('flex h-full flex-col gap-3 transition-opacity duration-200', { 'invisible opacity-0': isPanelCollapsed })}>
-					<nav className='custom-shadow flex h-12 w-full items-center justify-between border-b border-b-gray-700 px-4'>
+			<aside className='bg-classroom-900 h-full rounded-2xl rounded-l-none p-2'>
+				<div className={classNames('flex flex-col gap-3 transition-opacity duration-200', { 'invisible opacity-0': isPanelCollapsed })}>
+					<nav className='flex h-12 w-full items-center justify-between px-4'>
 						<span className='my-auto min-w-max text-xl font-bold text-gray-50'>{classroom?.name}</span>
 					</nav>
 					<div className='space-y-4 px-3'>
 						<ul className='flex flex-col gap-2'>
 							<li className='flex min-w-max items-center justify-between'>
-								<div className='min-w-max items-center text-sm text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter'>
+								<div className='min-w-max items-center text-sm text-gray-300 text-opacity-70 hover:cursor-pointer hover:brightness-150 hover:filter'>
 									<span className='flex select-none gap-2'>
 										CHANNELS <MdExpandMore />
 									</span>
 								</div>
-								<AiOutlinePlus onClick={() => setModalAddChannelOpen(true)} className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
+								<AiOutlinePlus onClick={() => setModalAddChannelOpen(true)} className='text-gray-300 text-opacity-70 hover:cursor-pointer hover:brightness-150 hover:filter' />
 							</li>
 
 							<DragDropContext onDragEnd={handleOnDragEnd}>
@@ -237,7 +237,7 @@ const Sidebar = () => {
 												<Draggable key={channel.id} draggableId={channel.id.toString()} index={index}>
 													{(provided) => (
 														<li {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} onContextMenu={(event) => handleChannelContextMenu(event, channel)} className={classNames('flex min-w-max cursor-pointer items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600', { 'bg-gray-600 text-gray-200 brightness-125': classroom?.activeChannel === channel })} onClick={() => handleChannelChange(channel)}>
-															<FaHashtag className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
+															<FaHashtag className='text-gray-300 text-opacity-70 hover:cursor-pointer hover:brightness-150 hover:filter' />
 															<span className='select-none'>{channel.name}</span>
 														</li>
 													)}
@@ -251,10 +251,10 @@ const Sidebar = () => {
 						</ul>
 						<ul className='flex flex-col gap-2'>
 							<li className='flex min-w-max items-center justify-between'>
-								<div className='flex min-w-max items-center gap-2 text-sm text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter'>
+								<div className='flex min-w-max items-center gap-2 text-sm text-gray-300 text-opacity-70 hover:cursor-pointer hover:brightness-150 hover:filter'>
 									<span className='flex select-none gap-2'>VOICE CHANNELS</span> <MdExpandMore />
 								</div>
-								<AiOutlinePlus onClick={() => setModalJitsiAddChannelOpen(true)} className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
+								<AiOutlinePlus onClick={() => setModalJitsiAddChannelOpen(true)} className='text-gray-300 text-opacity-70 hover:cursor-pointer hover:brightness-150 hover:filter' />
 							</li>
 							<DragDropContext onDragEnd={handleOnDragEnd}>
 								<StrictModeDroppable droppableId='channels'>
@@ -265,7 +265,7 @@ const Sidebar = () => {
 													<Draggable key={channel.id} draggableId={channel.id.toString()} index={index}>
 														{(provided) => (
 															<li {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} onContextMenu={(event) => handleChannelContextMenu(event, channel)} className={classNames('flex min-w-max cursor-pointer items-center gap-2 rounded-md px-4 py-[4px] text-gray-200 hover:bg-gray-600', { 'bg-gray-600 text-gray-200 brightness-125': classroom?.activeChannel === channel })} onClick={() => handleChannelChange(channel)}>
-																<FaVolumeUp className='text-gray-300 hover:cursor-pointer hover:brightness-150 hover:filter' />
+																<FaVolumeUp className='text-gray-300 text-opacity-70 hover:cursor-pointer hover:brightness-150 hover:filter' />
 																<span className='select-none'>{channel.name}</span>
 															</li>
 														)}
