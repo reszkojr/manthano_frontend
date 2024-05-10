@@ -16,6 +16,7 @@ import '../index.css';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-loading-skeleton/dist/skeleton.css';
 import VoiceChannel from './components/classroom/VoiceChannel';
+import AccountSetupPage from './pages/authentication/AccountSetupPage';
 
 const Manthano = () => {
 	const router = createBrowserRouter(
@@ -23,6 +24,7 @@ const Manthano = () => {
 			<Route path='/' Component={Root}>
 				<Route index Component={LandingPage} />
 				<Route path='auth'>
+					<Route path='setup' Component={AccountSetupPage} />
 					<Route path='login' Component={LoginPage} />
 					<Route path='signup' Component={SignUpPage} />
 				</Route>

@@ -35,7 +35,7 @@ const SignUpPage = () => {
 		}
 
 		toast.success(response.message);
-		return navigate('/auth/login');
+		return navigate('/auth/setup');
 	};
 
 	return (

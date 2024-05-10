@@ -1,0 +1,18 @@
+.question-enter {
+    opacity: 0;
+}
+
+.question-enter-active {
+    opacity: 1;
+    transition: opacity 500ms ease-in-out;
+}
+
+.question-exit {
+    opacity: 1;
+    display: none;
+}
+
+.question-exit {
+    opacity: 0;
+    transition: opacity 500ms ease-in-out;
+}
