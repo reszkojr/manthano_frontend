@@ -213,7 +213,7 @@ const Sidebar = () => {
 					]}
 				/>
 			)}
-			<aside className='bg-classroom-900 h-full rounded-2xl rounded-l-none p-2'>
+			<aside className='h-full rounded-2xl rounded-l-none bg-gray-800 p-2'>
 				<div className={classNames('flex flex-col gap-3 transition-opacity duration-200', { 'invisible opacity-0': isPanelCollapsed })}>
 					<nav className='flex h-12 w-full items-center justify-between px-4'>
 						<span className='my-auto min-w-max text-xl font-bold text-gray-50'>{classroom?.name}</span>

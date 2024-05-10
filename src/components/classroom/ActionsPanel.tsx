@@ -7,7 +7,7 @@ const ActionsPanel = () => {
 	const { isPanelCollapsed } = useClassroomContext();
 
 	return (
-		<div className={`transition-[border-radius, background-color] hidden h-full w-16 flex-col items-center gap-3 rounded-2xl p-3 duration-200 md:flex ${isPanelCollapsed && 'bg-classroom-950'} ${!isPanelCollapsed && 'bg-classroom-900 rounded-r-none'}`}>
+		<div className={`transition-[border-radius, background-color] hidden h-full w-16 flex-col items-center gap-3 rounded-2xl p-3 duration-200 md:flex ${isPanelCollapsed && 'bg-gray-850'} ${!isPanelCollapsed && 'rounded-r-none bg-gray-800'}`}>
 			<div className='mb-4 h-12 w-full'>
 				<img src='/m_manthano.png' className='mx-auto h-auto w-8' alt='m_manthano' />
 			</div>

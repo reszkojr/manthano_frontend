@@ -55,7 +55,7 @@ const Input = () => {
 	return (
 		<div className='blur-backdrop m-4 w-[95%] rounded-md px-2 pt-2'>
 			<div className='mb-2 flex gap-4'>
-				<textarea ref={textAreaRef} value={inputContent} placeholder={`Message #${classroom?.activeChannel?.name}`} onKeyDown={handleTextAreaEnter} onChange={(event) => setInputContent(event.target.value)} spellCheck={false} id='message_input' className='min-h-8 bg-classroom-700 placeholder:text-classroom-400 max-h-28 w-full resize-none rounded-xl border-none bg-transparent bg-opacity-20 p-2 text-gray-100 outline-none' />
+				<textarea ref={textAreaRef} value={inputContent} placeholder={`Message #${classroom?.activeChannel?.name}`} onKeyDown={handleTextAreaEnter} onChange={(event) => setInputContent(event.target.value)} spellCheck={false} id='message_input' className='min-h-8 bg-gray-850 max-h-28 w-full resize-none rounded-xl border-none bg-opacity-50 p-2 text-gray-100 outline-none placeholder:text-gray-400' />
 				<BiSolidSend onTouchEnd={handleTouchEnd} onClick={handleMessageSend} className='mb-auto h-auto w-6 hover:cursor-pointer hover:brightness-150 hover:filter' />
 			</div>
 			<div className='h-8'>

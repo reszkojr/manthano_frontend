@@ -10,7 +10,7 @@ const Classroom = () => {
 	useEffect(() => setKey(Date.now()), []);
 
 	return (
-		<div className={`bg-classroom-950 flex h-screen w-screen p-4`}>
+		<div className={`bg-gray-850 flex h-screen w-screen p-4`}>
 			<div className='flex md:mr-4'>
 				<ActionsPanel />
 				<Sidebar />
