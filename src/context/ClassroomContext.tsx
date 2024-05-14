@@ -1,9 +1,10 @@
 import { createContext, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useAuth } from '../components/hooks/UseAuth';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
-import { Channel, Classroom, JitsiChannel, Message } from '../types/Types';
+import {Channel, Classroom, JitsiChannel, Message} from '../types/Types';
 import useApi from '../hooks/useApi';
-import { isJitsiChannel } from '../utils/Utils';
+import {isJitsiChannel} from '../utils/Utils';
+
 
 interface ClassroomContextType {
 	classroom: Classroom | undefined;
@@ -29,19 +30,20 @@ export const ClassroomProvider = () => {
 	const [messages, setMessages] = useState<Message[] | undefined>([] as Message[]);
 	const [isPanelCollapsed, setPanelCollapsed] = useState(true);
 	const [websocket, setWebsocket] = useState<WebSocket | null>(null);
-	const { channel_code, classroom_code } = useParams();
+	const {channel_code, classroom_code} = useParams();
 
 	const navigate = useNavigate();
-	const { user, tokenCheck, getClassroom } = useAuth();
+	const {user, tokenCheck, getClassroom} = useAuth();
 	const api = useApi();
 
 	// Get Classroom information
 	useEffect(() => {
-		setClassroom((prev) => ({ ...prev!, code: classroom_code! }));
+		setClassroom((prev) => ({...prev!, code: classroom_code!}));
 
 		const setClassroomInformation = async () => {
 			return await getClassroom(api).then((data) => {
 				if (data) setClassroom(data);
+				console.log(data?.users)
 			});
 		};
 
@@ -55,7 +57,7 @@ export const ClassroomProvider = () => {
 	}, []);
 
 	useEffect(() => {
-		let channel = null;
+		let channel: JitsiChannel | Channel | undefined;
 		if (location.pathname.includes('/vc/')) {
 			channel = classroom?.jitsi_channels.find((ch) => ch.name === channel_code);
 		} else if (location.pathname.includes('/c/')) {

@@ -21,8 +21,6 @@ module.exports = {
     useTabs: true,
     embeddedLanguageFormatting: "auto",
     vueIndentScriptAndStyle: false,
-    filepath:
-        "/home/fabiojr2/Langs/JavaScript/manthano_frontend/src/components/classroom/ActionsPanel.tsx",
     parser: "typescript",
     plugins: ["prettier-plugin-tailwindcss"],
 };

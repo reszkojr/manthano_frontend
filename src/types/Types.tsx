@@ -1,4 +1,4 @@
-import IconType from 'react-icon';
+import React from "react";
 
 export interface RefreshAuthResponse {
 	token: string;
@@ -51,8 +51,18 @@ export interface Classroom {
 	created_at: Date;
 	updated_at: Date;
 	channels: Channel[];
+	users: UserClassroom[];
 	jitsi_channels: JitsiChannel[];
 	activeChannel: Channel | JitsiChannel | undefined | null;
+}
+
+export interface UserClassroom {
+	id: number;
+	first_name: string;
+	last_name: string;
+	username: string;
+	profile_picture: string | undefined;
+	profile_background: string | undefined;
 }
 
 export interface Schedule {}
@@ -79,7 +89,7 @@ export interface Message {
 }
 
 export interface ContextMenuOption {
-	icon?: IconType;
+	icon?: React.ReactElement;
 	label: string;
 	onClick: (context: unknown) => void;
 }
