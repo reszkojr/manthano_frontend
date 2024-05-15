@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+/*eslint-env node*/
+module.exports = {
   content: [
     "./index.html",
     "./src/**/*.{js,jsx,ts,tsx}",
@@ -71,6 +72,7 @@ export default {
           400: "#5e6a72",
           500: "#36454f",
           600: "#2b373f",
+          650: "#263037",
           700: "#20292f",
           750: '#1d252a',
           800: "#161c20",
@@ -87,6 +89,6 @@ export default {
       }
     },
   },
-  plugins: [require("@tailwindcss/forms")],
+  plugins: [("@tailwindcss/forms")],
 }
 
