@@ -18,7 +18,8 @@ const VoiceChannel = () => {
 			});
 		};
 		getToken();
-	}, []);
+	}, [api, token]);
+
 
 	if (classroom?.activeChannel === undefined) return;
 
