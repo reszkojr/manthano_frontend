@@ -16,7 +16,7 @@ import Settings from './routes/settings/Settings/Settings'
 import '../index.css';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-loading-skeleton/dist/skeleton.css';
-import VoiceChannel from './components/classroom/VoiceChannel';
+import VoiceChannel from './components/classroom/voicechannel/VoiceChannel.tsx';
 import Setup from './routes/auth/Setup/Setup';
 
 const Manthano = () => {

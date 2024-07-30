@@ -1,5 +1,5 @@
 import { JaaSMeeting } from '@jitsi/react-sdk';
-import { useAuth } from '../../hooks/UseAuth';
+import { useAuth } from '../../hooks/UseAuth.tsx';
 
 import { useEffect, useState } from 'react';
 import { IJitsiMeetExternalApi } from '@jitsi/react-sdk/lib/types';

@@ -1,9 +1,9 @@
-import Header from './channel/Header';
-import JitsiFrame from './channel/JitsiFrame';
-import { useClassroomContext } from '../hooks/UseClassroomContext';
-import { JitsiChannel } from '../../types/Types';
+import Header from '../channel/Header.tsx';
+import JitsiFrame from './JitsiFrame.tsx';
+import { useClassroomContext } from '../../hooks/UseClassroomContext.tsx';
+import { JitsiChannel } from '../../../types/Types.tsx';
 import { useEffect, useState } from 'react';
-import useApi from '../../hooks/useApi';
+import useApi from '../../../hooks/useApi.tsx';
 
 const VoiceChannel = () => {
 	const [token, setToken] = useState('');
