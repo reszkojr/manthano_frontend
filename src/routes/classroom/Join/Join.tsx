@@ -57,8 +57,8 @@ const Join = () => {
 						<h2 className='text-gray-300'>Using Manthano gives you the ability to be more productive with Classrooms.</h2>
 						<h2 className='mt-4 text-gray-300'>Choose a Classroom template to start.</h2>
 						<div className='mb-4 mt-4 space-y-4'>
-							<Card icon={<FaUsers className='h-auto w-10' />} title='With Teachers' subtitle='Teachers will control and manage the Classroom.' href='/classroom' />
-							<Card icon={<FaUsersSlash className='h-auto w-10' />} title='Without Teachers' subtitle='A Classroom with no Teachers to rule them all.' href='/classroom' />
+							<Card icon={<FaUsers className='h-auto w-10' />} title='With Teachers' subtitle='Teachers will control and manage the Classroom.' />
+							<Card icon={<FaUsersSlash className='h-auto w-10' />} title='Without Teachers' subtitle='A Classroom with no Teachers to rule them all.' />
 						</div>
 						<div className='my-2 flex items-center'>
 							<hr className='mx-auto h-[3px] w-1/2 rounded border-0 bg-gray-600' />
