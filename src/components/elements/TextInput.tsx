@@ -5,6 +5,7 @@ type TextInputProps = {
 	name: string;
 	label?: string;
 	value?: string | number | readonly string[] | undefined;
+	defaultValue?: string | number | readonly string[] | undefined;
 	onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined;
 	placeholder?: string;
 	className?: string;
@@ -22,7 +23,7 @@ const TextInput = (props: TextInputProps) => {
 			<label htmlFor={props.name} className={classNames('text-gray-200', { 'font-bold': props.boldLabel })}>
 				{props.label}
 			</label>
-			<input onChange={props.onChange} value={props.value} className={`${styles.input}`} type={props.type} name={props.name} placeholder={props.placeholder} />
+			<input onChange={props.onChange} defaultValue={props.defaultValue} value={props.value} className={`${styles.input}`} type={props.type} name={props.name} placeholder={props.placeholder} />
 		</div>
 	);
 };
