@@ -17,7 +17,16 @@ import '../index.css';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-loading-skeleton/dist/skeleton.css';
 import VoiceChannel from './components/classroom/voicechannel/VoiceChannel.tsx';
-import Setup from './routes/auth/Setup/Setup';
+import {
+    GeneralQuestion,
+    ProfessorQuestion1,
+    ProfessorQuestion2,
+    ProfessorQuestion3,
+    StudentQuestion1,
+    StudentQuestion2,
+} from "./components/auth/Question.tsx";
+import {SetupProvider} from "./context/SetupContext.tsx";
+import Setup from "./routes/auth/Setup/Setup.tsx";
 
 const Manthano = () => {
     const router = createBrowserRouter(
@@ -25,7 +34,20 @@ const Manthano = () => {
             <Route path='/' Component={Root}>
                 <Route index Component={Home}/>
                 <Route path='auth'>
-                    <Route path='setup' Component={Setup}/>
+                    <Route path='setup' Component={SetupProvider}>
+                        <Route path='form' Component={Setup}>
+                            <Route path='role' Component={GeneralQuestion}/>
+                            <Route path='student'>
+                                <Route path='question1' Component={StudentQuestion1}/>
+                                <Route path='question2' Component={StudentQuestion2}/>
+                            </Route>
+                            <Route path='professor'>
+                                <Route path='question1' Component={ProfessorQuestion1}/>
+                                <Route path='question2' Component={ProfessorQuestion2}/>
+                                <Route path='question3' Component={ProfessorQuestion3}/>
+                            </Route>
+                        </Route>
+                    </Route>
                     <Route path='login' Component={Login}/>
                     <Route path='signup' Component={SignUp}/>
                 </Route>
