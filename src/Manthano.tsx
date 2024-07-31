@@ -29,64 +29,60 @@ import {SetupProvider} from "./context/SetupContext.tsx";
 import Setup from "./routes/auth/Setup/Setup.tsx";
 
 const Manthano = () => {
-    const router = createBrowserRouter(
-        createRoutesFromElements(
-            <Route path='/' Component={Root}>
-                <Route index Component={Home}/>
-                <Route path='auth'>
-                    <Route path='setup' Component={SetupProvider}>
-                        <Route path='form' Component={Setup}>
-                            <Route path='role' Component={GeneralQuestion}/>
-                            <Route path='student'>
-                                <Route path='question1' Component={StudentQuestion1}/>
-                                <Route path='question2' Component={StudentQuestion2}/>
-                            </Route>
-                            <Route path='professor'>
-                                <Route path='question1' Component={ProfessorQuestion1}/>
-                                <Route path='question2' Component={ProfessorQuestion2}/>
-                                <Route path='question3' Component={ProfessorQuestion3}/>
-                            </Route>
+    const router = createBrowserRouter(createRoutesFromElements(<Route path='/' Component={Root}>
+        <Route index Component={Home}/>
+        <Route path='auth'>
+            <Route Component={RequireAuth}>
+                <Route path='setup' Component={SetupProvider}>
+                    <Route path='form' Component={Setup}>
+                        <Route index path='role' Component={GeneralQuestion}/>
+                        <Route path='student'>
+                            <Route path='question1' Component={StudentQuestion1}/>
+                            <Route path='question2' Component={StudentQuestion2}/>
+                        </Route>
+                        <Route path='professor'>
+                            <Route path='question1' Component={ProfessorQuestion1}/>
+                            <Route path='question2' Component={ProfessorQuestion2}/>
+                            <Route path='question3' Component={ProfessorQuestion3}/>
                         </Route>
                     </Route>
-                    <Route path='login' Component={Login}/>
-                    <Route path='signup' Component={SignUp}/>
                 </Route>
-                <Route Component={RequireAuth}>
-                    <Route path='join' Component={Join}/>
-                    <Route path='classroom' Component={ClassroomProvider}>
-                        <Route path=':classroom_code' Component={Classroom}>
-                            <Route path='vc'>
-                                <Route path=':channel_code' Component={VoiceChannel}/>
-                            </Route>
-                            <Route path='c'>
-                                <Route path=':channel_code' Component={Channel}/>
-                            </Route>
-                        </Route>
-                    </Route>
-                    <Route path='settings' Component={Settings}>
-                        <Route path='profile' Component={undefined}/>
-                        <Route path='account' Component={undefined}/>
-                        <Route path='settings' Component={undefined}/>
-                        <Route path='settings' Component={undefined}/>
-                        <Route path='settings' Component={undefined}/>
-                        <Route path='settings' Component={undefined}/>
-                    </Route>
-                </Route>
-                <Route path='*' Component={ErrorPage}/>
             </Route>
-        )
-    );
+            <Route path='login' Component={Login}/>
+            <Route path='signup' Component={SignUp}/>
+        </Route>
+        <Route Component={RequireAuth}>
+            <Route path='join' Component={Join}/>
+            <Route path='classroom' Component={ClassroomProvider}>
+                <Route path=':classroom_code' Component={Classroom}>
+                    <Route path='vc'>
+                        <Route path=':channel_code' Component={VoiceChannel}/>
+                    </Route>
+                    <Route path='c'>
+                        <Route path=':channel_code' Component={Channel}/>
+                    </Route>
+                </Route>
+            </Route>
+            <Route path='settings' Component={Settings}>
+                <Route path='profile' Component={undefined}/>
+                <Route path='account' Component={undefined}/>
+                <Route path='settings' Component={undefined}/>
+                <Route path='settings' Component={undefined}/>
+                <Route path='settings' Component={undefined}/>
+                <Route path='settings' Component={undefined}/>
+            </Route>
+        </Route>
+        <Route path='*' Component={ErrorPage}/>
+    </Route>));
 
-    return (
-        <>
-            <AuthProvider>
-                <RouterProvider router={router}/>
-            </AuthProvider>
-            <ToastContainer position='top-center' transition={Slide} autoClose={3000} hideProgressBar={false}
-                            newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover
-                            theme='dark'/>
-        </>
-    );
+    return (<>
+        <AuthProvider>
+            <RouterProvider router={router}/>
+        </AuthProvider>
+        <ToastContainer position='top-center' transition={Slide} autoClose={3000} hideProgressBar={false}
+                        newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover
+                        theme='dark'/>
+    </>);
 };
 
 export default Manthano;

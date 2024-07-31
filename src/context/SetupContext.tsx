@@ -1,13 +1,13 @@
 import {createContext, useCallback, useEffect, useState} from 'react';
 import {Outlet, useNavigate} from "react-router-dom";
+import useApi from "../hooks/useApi.tsx";
 
 interface SetupContextType {
     answers: {
         role: string;
-        username: string;
-        academicEmail: string;
+        academic_email: string;
         enrollment: string;
-        academicRank: string;
+        academic_rank: string;
         subjects: string;
     };
     updateAnswer: (key: string, value: string) => void;
@@ -21,13 +21,13 @@ export const SetupContext = createContext<SetupContextType | undefined>(undefine
 
 export const SetupProvider = () => {
     const navigate = useNavigate();
+    const api = useApi();
 
     const [answers, setAnswers] = useState({
         role: '',
-        username: '',
-        academicEmail: '',
         enrollment: '',
-        academicRank: '',
+        academic_email: '',
+        academic_rank: '',
         subjects: ''
     });
     const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -53,6 +53,9 @@ export const SetupProvider = () => {
 
     const nextQuestion = useCallback(() => {
         const nextIndex = Math.min(currentQuestion + 1, questionUrls.length - 1);
+        if (nextIndex === currentQuestion) {
+            sendData().then(() => navigate('/join'));
+        }
         setCurrentQuestion(nextIndex);
         navigate(questionUrls[nextIndex]);
     }, [currentQuestion, answers, questionUrls]);
@@ -63,8 +66,30 @@ export const SetupProvider = () => {
         navigate(questionUrls[prevIndex]);
     }, [currentQuestion, answers, questionUrls]);
 
+    const sendData = async () => {
+        let data = {};
+
+        if (answers['role'] === 'professor') {
+            data = {
+                role: answers['role'],
+                academic_rank: answers['academic_rank'],
+                academic_email: answers['academic_email'],
+                subjects: answers['subjects']
+            };
+        } else if (answers['role'] === 'student') {
+            data = {
+                role: answers['role'],
+                academic_email: answers['academic_email'],
+                enrollment: answers['enrollment']
+            };
+        }
+
+        return await api.post('/auth/setup/', data);
+    }
+
     return (
-        <SetupContext.Provider value={{ answers, updateAnswer, currentQuestion, nextQuestion, previousQuestion, setCurrentQuestion }}>
+        <SetupContext.Provider
+            value={{answers, updateAnswer, currentQuestion, nextQuestion, previousQuestion, setCurrentQuestion}}>
             <Outlet/>
         </SetupContext.Provider>
     );

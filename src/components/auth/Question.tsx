@@ -26,52 +26,69 @@ const GeneralQuestion = () => {
     )
 }
 
-const StudentQuestion1 = () => (
-    <SlideTransition>
+const StudentQuestion1 = () => {
+    const {answers, updateAnswer} = useSetupContext();
+
+    return <SlideTransition>
         <div className='flex flex-col items-center gap-2 w-full justify-center'>
             <h1 className='text-xl text-gray-100'>What's your academic email?</h1>
-            <TextInput name={'academic_email'} placeholder={'Provide your academic email address'} className={'w-full'}
+            <TextInput defaultValue={answers['academic_email']} name={'academic_email'}
+                       onChange={(text) => updateAnswer('academic_email', text.currentTarget.value)}
+                       placeholder={'Provide your academic email address'} className={'w-full'}
                        type={'text'}/>
         </div>
     </SlideTransition>
-);
+};
 
-const StudentQuestion2 = () => (
-    <SlideTransition>
+const StudentQuestion2 = () => {
+    const {answers, updateAnswer} = useSetupContext();
+
+    return <SlideTransition>
         <div className='flex flex-col items-center gap-2 w-full justify-center'>
             <h1 className='text-xl text-gray-100'>What is your enrollment number?</h1>
-            <TextInput name='enrollment' placeholder='Provide your enrollment number' type='text' className={'w-full'}/>
+            <TextInput defaultValue={answers['enrollment']} name='enrollment' onChange={(text) => updateAnswer('enrollment', text.currentTarget.value)}
+                       placeholder='Provide your enrollment number' type='text' className={'w-full'}/>
         </div>
     </SlideTransition>
-);
+};
 
-const ProfessorQuestion1 = () => (
-    <SlideTransition>
+const ProfessorQuestion1 = () => {
+    const {answers, updateAnswer} = useSetupContext();
+
+    return <SlideTransition>
         <div className='flex flex-col items-center gap-2 w-full justify-center'>
             <h1 className='text-xl text-gray-100'>What is your academic email address?</h1>
-            <TextInput name='academic_email' placeholder='Provide your academic email address' type='text'
+            <TextInput defaultValue={answers['academic_email']} name='academic_email'
+                       onChange={(text) => updateAnswer('academic_email', text.currentTarget.value)}
+                       placeholder='Provide your academic email address' type='email'
                        className={'w-full'}/>
         </div>
     </SlideTransition>
-);
+};
 
-const ProfessorQuestion2 = () => (
-    <SlideTransition>
+const ProfessorQuestion2 = () => {
+    const {answers, updateAnswer} = useSetupContext();
+
+    return <SlideTransition>
         <div className='flex flex-col items-center gap-2 w-full justify-center'>
             <h1 className='text-xl text-gray-100'>What is your academic rank?</h1>
-            <TextInput name='academic_rank' placeholder="Provide your academic rank" type='text' className={'w-full'}/>
+            <TextInput defaultValue={answers['academic_rank']} name='academic_rank' onChange={(text) => updateAnswer('academic_rank', text.currentTarget.value)}
+                       placeholder="Provide your academic rank" type='text' className={'w-full'}/>
         </div>
     </SlideTransition>
-);
+};
 
-const ProfessorQuestion3 = () => (
-    <SlideTransition>
+const ProfessorQuestion3 = () => {
+    const {answers, updateAnswer} = useSetupContext();
+
+    return <SlideTransition>
         <div className='flex flex-col items-center gap-2 w-full justify-center'>
             <h1 className='text-xl text-gray-100'>What subjects do you teach?</h1>
-            <TextInput name='subjects' placeholder='List the subjects you teach' type='text' className={'w-full'}/>
+            <TextInput defaultValue={answers['subjects']} name='subjects' onChange={(text) => updateAnswer('subjects', text.currentTarget.value)}
+                       placeholder='List the subjects you teach' type='text' className={'w-full'}/>
         </div>
     </SlideTransition>
-);
+};
 
 export {
     GeneralQuestion,
