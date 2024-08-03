@@ -33,20 +33,21 @@ const useApi = () => {
 			if (error.response.status === 401 && !originalRequest._retry) {
 				originalRequest._retry = true;
 
-				try {
-					const response = await instance.post('/auth/token/refresh', { refresh: user.refreshToken });
-					const newToken = response.data.access;
+				return await instance.post('/auth/token/refresh', { refresh: user.refreshToken })
+					.then(response => {
+						const newToken = response.data.access;
 
-					setUser({ ...user, token: newToken });
-					storeTokens(newToken, user?.refreshToken);
+						setUser({ ...user, token: newToken });
+						storeTokens(newToken, user?.refreshToken);
 
-					originalRequest.headers.Authorization = `Bearer ${newToken}`;
-					return axios(originalRequest);
-				} catch (refreshError) {
-					removeTokens();
-					setUser(null);
-					return axios(originalRequest);
-				}
+						originalRequest.headers.Authorization = `Bearer ${newToken}`;
+						return axios(originalRequest);
+					})
+					.catch(() => {
+						removeTokens();
+						setUser(null);
+						return axios(originalRequest);
+					})
 			}
 			return Promise.reject(error);
 		}
