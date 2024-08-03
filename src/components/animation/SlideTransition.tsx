@@ -9,7 +9,7 @@ const animations = {
 
 const SlideTransition = ({children}: Props) => {
     return (
-        <motion.div className={'w-full'} variants={animations} initial={"initial"} animate={"animate"} exit={"exit"}>
+        <motion.div variants={animations} initial={"initial"} animate={"animate"} exit={"exit"}>
             {children}
         </motion.div>
     )

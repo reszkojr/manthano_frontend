@@ -6,7 +6,6 @@ import Home from './routes/home/Home/Home';
 import Login from './routes/auth/Login/Login';
 import SignUp from './routes/auth/SignUp/SignUp';
 import RequireAuth from './utils/RequireAuth';
-import Join from './routes/classroom/Join/Join';
 import {ClassroomProvider} from './context/ClassroomContext';
 import Classroom from './routes/classroom/Classroom/Classroom';
 import Channel from './components/classroom/channel/Channel';
@@ -27,6 +26,8 @@ import {
 } from "./components/auth/Question.tsx";
 import {SetupProvider} from "./context/SetupContext.tsx";
 import Setup from "./routes/auth/Setup/Setup.tsx";
+import Join from "./routes/classroom/creation/Join/Join.tsx";
+import Create from "./routes/classroom/creation/Create/Create.tsx";
 
 const Manthano = () => {
     const router = createBrowserRouter(createRoutesFromElements(<Route path='/' Component={Root}>
@@ -53,6 +54,7 @@ const Manthano = () => {
         </Route>
         <Route Component={RequireAuth}>
             <Route path='join' Component={Join}/>
+            <Route path='create' Component={Create}/>
             <Route path='classroom' Component={ClassroomProvider}>
                 <Route path=':classroom_code' Component={Classroom}>
                     <Route path='vc'>

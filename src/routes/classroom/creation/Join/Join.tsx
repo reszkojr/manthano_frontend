@@ -1,14 +1,14 @@
-import {FormEvent, useEffect, useState} from 'react';
+import React, {FormEvent, useEffect, useState} from 'react';
 import {FaUsers, FaUsersSlash} from 'react-icons/fa';
 import {toast} from 'react-toastify';
 
 import axios from 'axios';
-import {useAuth} from '../../../components/hooks/UseAuth';
+import {useAuth} from '../../../../components/hooks/UseAuth.tsx';
 import {useNavigate} from 'react-router-dom';
 
-import TextInputWithButton from '../../../components/elements/TextInputWithButton';
-import Card from '../../../components/elements/Card';
-import useApi from '../../../hooks/useApi';
+import TextInputWithButton from '../../../../components/elements/TextInputWithButton.tsx';
+import Card from '../../../../components/elements/Card.tsx';
+import useApi from '../../../../hooks/useApi.tsx';
 
 const Join = () => {
     const [classroomCode, setClassroomCode] = useState('');
@@ -27,7 +27,7 @@ const Join = () => {
                 setLoading(false);
             })
             .finally(() => setLoading(false))
-    }, []);
+    }, [api, navigate, getClassroom]);
 
     const handleJoinClassroomSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -60,9 +60,12 @@ const Join = () => {
                             Classrooms.</h2>
                         <h2 className='mt-4 text-gray-300'>Choose a Classroom template to start.</h2>
                         <div className='mb-4 mt-4 space-y-4'>
-                            <Card icon={<FaUsers className='h-auto w-10'/>} title='With Teachers'
+                            <Card icon={<FaUsers className='h-auto w-10'/>}
+                                  onClick={() => navigate('/create', {state: {professor_managed: true}})} title='With Teachers'
                                   subtitle='Teachers will control and manage the Classroom.'/>
-                            <Card icon={<FaUsersSlash className='h-auto w-10'/>} title='Without Teachers'
+                            <Card icon={<FaUsersSlash className='h-auto w-10'/>}
+                                  onClick={() => navigate('/create', {state: {professor_managed: false}})}
+                                  title='Without Teachers'
                                   subtitle='A Classroom with no Teachers to rule them all.'/>
                         </div>
                         <div className='my-2 flex items-center'>
