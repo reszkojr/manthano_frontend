@@ -80,6 +80,7 @@ const Create = (props: CreateProps) => {
             return value.slice(0, 255);
         }
         if (name === 'classroom_code') {
+
             return value.trim().replace(/\s+/g, '');
         }
         return value;

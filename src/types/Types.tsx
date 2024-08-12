@@ -58,11 +58,21 @@ export interface Classroom {
 
 export interface UserClassroom {
 	id: number;
+	role: 'student' | 'professor';
 	first_name: string;
 	last_name: string;
 	username: string;
 	profile_picture: string | undefined;
 	profile_background: string | undefined;
+}
+
+export interface Student {
+	enrollment: string;
+}
+
+export interface Professor {
+	academic_rank: string;
+	subjects: string[];
 }
 
 export interface Schedule {}
