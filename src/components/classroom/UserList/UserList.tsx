@@ -30,7 +30,7 @@ const UserList = () => {
                     ))}
                 </ul>
                 <ul className='flex flex-col gap-2'>
-                        {classroom?.users.filter(user => user.role === 'student').map((user) => (
+                        {classroom?.users.filter(user => user.role === 'professor').map((user) => (
                         <li key={user.id}>
                             <div className='w-10 h-10 relative'>
                                 {
