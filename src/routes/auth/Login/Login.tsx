@@ -1,14 +1,14 @@
+import {isAxiosError} from "axios";
 import {FormEvent, useCallback} from 'react';
-import {useAuth} from '../../../components/hooks/UseAuth';
 import {Link, useNavigate} from 'react-router-dom';
 
-import TextInput from '../../../components/elements/TextInput';
-import Submit from '../../../components/elements/Submit';
-import Checkbox from '../../../components/elements/Checkbox';
-
 import {toast} from 'react-toastify';
+import Checkbox from '../../../components/elements/Checkbox';
+import Submit from '../../../components/elements/Submit';
+
+import TextInput from '../../../components/elements/TextInput';
+import {useAuth} from '../../../components/hooks/UseAuth';
 import useApi from "../../../hooks/useApi.tsx";
-import {isAxiosError} from "axios";
 
 const Login = () => {
     const {login} = useAuth();
@@ -38,7 +38,7 @@ const Login = () => {
             .then(response => {
                 if (response.status === 200) {
                     toast.success("Fill your account informations in the formulary!");
-                    return navigate('/auth/setup/form/role');
+                    return navigate('/auth/setup');
                 }
             })
             .catch(error => {
@@ -69,7 +69,7 @@ const Login = () => {
                         <TextInput type='text' name='email' placeholder='fabio@reszko.dev' label='Email'/>
                         <TextInput type='password' name='password' placeholder='●●●●●●●●●●●●●' label='Password'/>
                         <div className='my-2 flex justify-between text-gray-300'>
-                            <Checkbox text='Remember me' id='remember'/>
+                            <Checkbox contentEditable={false} text='Remember me' id='remember'/>
                             <a href='/auth/password md:w-[400px]' className='text-lapis-500'>
                                 Forgot your password?
                             </a>

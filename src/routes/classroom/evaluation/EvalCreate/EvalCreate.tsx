@@ -72,12 +72,12 @@ function EvalCreate() {
     }
 
     return (
-        <div className={'flex w-full p-4 h-full gap-2'}>
+        <div className={'flex w-full h-full'}>
             <DragDropContext onDragEnd={onDragEnd}>
-                <div className={'w-2/3'}>
-                    <h1 className={'text-2xl font-bold text-gray-200 p-4 mb-2'}>Formulary</h1>
+                <div className={'w-2/3 m-4 mt-0 overflow-auto'}>
+                    <h1 className={'text-md p-2 font-bold text-gray-200'}>Formulary</h1>
                     <div
-                        className={'rounded-lg overflow-hidden bg-gray-800 relative min-h-2/3 h-full border rounded-b-none border-gray-700 text-teal-900'}>
+                        className={'rounded-lg bg-gray-800 relative min-h-2/3 h-full border rounded-b-none border-gray-700 text-teal-900'}>
                         <Droppable droppableId={"formColumn"}>
                             {(provided) => (
                                 <div
@@ -113,12 +113,12 @@ function EvalCreate() {
                 </div>
                 <Droppable droppableId={"componentsColumn"}>
                     {(provided) => (
-                        <div className={"rounded-lg w-1/3 ml-4"}
+                        <div className={"rounded-lg overflow-none h-screen w-1/3 bg-blue-700 p-2"}
                              ref={provided.innerRef}
                              {...provided.droppableProps}
                         >
 
-                            <h1 className={'text-2xl font-bold text-gray-200 mb-2 p-4'}>Components</h1>
+                            <h1 className={'text-md font-bold text-gray-200 p-2'}>Components</h1>
                             {columns['componentsColumn'].map((component, index) => (
                                 <Draggable key={component.id} draggableId={component.id} index={index}>
                                     {(provided, snapshot) => (
