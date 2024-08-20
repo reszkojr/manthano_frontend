@@ -37,6 +37,16 @@ export function Text({title, provided, className, innerRef, onChange}: Component
     );
 }
 
+export function Section({title, description, provided, className, innerRef}: ComponentProps) {
+    return (
+        <div className={`${className} items-center justify-center place-content-center`}
+             ref={innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+            <h1 className={'text-lg font-bold'}>{title}</h1>
+            <h2 className={''}>{description || 'Description'}</h2>
+        </div>
+    );
+}
+
 export function MultipleSelection({
     id,
     title,
@@ -65,7 +75,8 @@ export function MultipleSelection({
             <form name={id}>
                 {checkboxes.map(checkbox => (
                     <div key={checkbox.id} className="flex items-center mb-2">
-                        <Checkbox text={checkbox.label} id={checkbox.id} contentEditable/>
+                        <Checkbox checked={false} onChange={() => {
+                        }} text={checkbox.label} id={checkbox.id} contentEditable/>
                         <MdDelete
                             onClick={() => removeCheckbox(checkbox.id)}
                             className="w-4 h-auto text-red-500 ml-2 cursor-pointer"
