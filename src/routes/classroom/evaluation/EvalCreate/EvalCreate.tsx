@@ -1,12 +1,11 @@
 import {DragDropContext, Draggable, Droppable, DropResult} from "@hello-pangea/dnd";
-import {useState} from "react";
+import {ChangeEvent, useState} from "react";
 import {v4 as uuid} from "uuid";
+import Button from "../../../../components/elements/Button.tsx";
+import Submit from "../../../../components/elements/Submit.tsx";
+import FormComponent from "./FormComponent.tsx";
+import {Component} from "./Props.tsx";
 
-interface Component {
-    id: string;
-    type: string;
-    content: string;
-}
 
 const getComponentStyle = (isDragging: boolean) => {
     return 'p-4 text-gray-100 mb-2 ' + (isDragging ? 'bg-gray-800' : 'bg-gray-800') + ' border-dashed border-gray-600 border-2 duration-150 rounded-md';
@@ -14,11 +13,21 @@ const getComponentStyle = (isDragging: boolean) => {
 
 function EvalCreate() {
     const components: Component[] = [
-        {id: uuid(), type: 'Title', content: 'Title'},
-        {id: uuid(), type: 'Description', content: 'Description'},
-        {id: uuid(), type: 'TextBox', content: 'Text Box'},
-        {id: uuid(), type: 'MultiSelect', content: 'Multiple Choice'},
-        {id: uuid(), type: 'Checkbox', content: 'Checkboxes'},
+        {id: uuid(), description: null, type: 'title', title: 'Title'},
+        {id: uuid(), description: null, type: 'subtitle', title: 'Subtitle'},
+        {id: uuid(), description: null, type: 'text', title: 'Text'},
+        {
+            id: uuid(),
+            description: 'Add, edit or remove the current checkboxes.',
+            type: 'multiSelect',
+            title: 'Multiple selection'
+        },
+        {
+            id: uuid(),
+            description: 'Add, edit or remove the current radio buttons.',
+            type: 'singleSelect',
+            title: 'Single selection'
+        },
     ]
 
     const [columns, setColumns] = useState<{ [index: string]: Component[] }>({
@@ -35,7 +44,7 @@ function EvalCreate() {
 
     const onDragEnd = (result: DropResult) => {
         const {source, destination} = result;
-        if (!destination) return;
+        if (!destination || destination.droppableId === "componentsColumn") return;
 
         const sourceComponentsList = columns[source.droppableId];
         const destinationComponentsList = columns[destination.droppableId];
@@ -56,41 +65,60 @@ function EvalCreate() {
         }));
     }
 
-    return (
-        <div className={'flex w-full p-4 gap-2'}>
-            <DragDropContext onDragEnd={onDragEnd}>
-                <Droppable droppableId={"formColumn"}>
-                    {(provided) => (
-                        <div
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                            className={'rounded-lg border border-gray-700 text-teal-900 bg-gray-800 w-2/3 p-4'}
-                        >
-                            {columns['formColumn'].map((component, index) => (
-                                <Draggable key={component.id} draggableId={component.id} index={index}>
-                                    {(provided, snapshot) => (
-                                        <div
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-                                            className={getComponentStyle(snapshot.isDragging)}
-                                        >
-                                            {component.content}
-                                        </div>
-                                    )}
-                                </Draggable>
-                            ))}
-                            {provided.placeholder}
-                        </div>
-                    )}
-                </Droppable>
+    const onChange = (id: string, changeEvent: ChangeEvent) => {
+        if (id && changeEvent) {
+            console.log('s')
+        }
+    }
 
+    return (
+        <div className={'flex w-full p-4 h-full gap-2'}>
+            <DragDropContext onDragEnd={onDragEnd}>
+                <div className={'w-2/3'}>
+                    <h1 className={'text-2xl font-bold text-gray-200 p-4 mb-2'}>Formulary</h1>
+                    <div
+                        className={'rounded-lg overflow-hidden bg-gray-800 relative min-h-2/3 h-full border rounded-b-none border-gray-700 text-teal-900'}>
+                        <Droppable droppableId={"formColumn"}>
+                            {(provided) => (
+                                <div
+                                    ref={provided.innerRef}
+                                    {...provided.droppableProps}
+                                    className={'p-4 h-full relative'}
+                                >
+                                    {columns['formColumn'].map((component, index) => (
+                                        <Draggable key={component.id} draggableId={component.id} index={index}>
+                                            {(provided, snapshot) => (
+                                                <FormComponent id={component.id}
+                                                               columns={columns}
+                                                               setColumns={setColumns}
+                                                               type={component.type}
+                                                               title={component.title}
+                                                               provided={provided}
+                                                               innerRef={provided.innerRef}
+                                                               className={getComponentStyle(snapshot.isDragging)}
+                                                               onChange={event => onChange(component.id, event)}
+                                                               description={component.description}/>
+                                            )}
+                                        </Draggable>
+                                    ))}
+                                    {provided.placeholder}
+                                </div>
+                            )}
+                        </Droppable>
+                    </div>
+                    <div className='mt-auto flex w-full justify-between gap-2 bg-gray-700 px-2 py-3 rounded-b'>
+                        <Button label='Cancel' onClick={() => alert()}/>
+                        <Submit label={'Save'}/>
+                    </div>
+                </div>
                 <Droppable droppableId={"componentsColumn"}>
                     {(provided) => (
-                        <div className={"rounded-lg w-1/3 p-4"}
+                        <div className={"rounded-lg w-1/3 ml-4"}
                              ref={provided.innerRef}
                              {...provided.droppableProps}
                         >
+
+                            <h1 className={'text-2xl font-bold text-gray-200 mb-2 p-4'}>Components</h1>
                             {columns['componentsColumn'].map((component, index) => (
                                 <Draggable key={component.id} draggableId={component.id} index={index}>
                                     {(provided, snapshot) => (
@@ -100,7 +128,7 @@ function EvalCreate() {
                                             {...provided.dragHandleProps}
                                             className={getComponentStyle(snapshot.isDragging)}
                                         >
-                                            {component.content}
+                                            {component.title}
                                         </div>
                                     )}
                                 </Draggable>

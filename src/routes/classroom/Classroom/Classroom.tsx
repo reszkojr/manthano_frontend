@@ -1,18 +1,18 @@
-import {Outlet} from 'react-router-dom';
+import {useEffect, useState} from 'react';
+import {PiNotePencilBold} from "react-icons/pi";
+import {Outlet, useNavigate} from 'react-router-dom';
 
 import Sidebar from '../../../components/classroom/Sidebar';
-import {useEffect, useState} from 'react';
 import UserList from '../../../components/classroom/UserList/UserList.tsx';
-import {useClassroomContext} from "../../../components/hooks/UseClassroomContext.tsx";
 import Button from "../../../components/elements/Button.tsx";
-import {PiNotePencilBold} from "react-icons/pi";
-import {useAuth} from "../../../components/hooks/UseAuth.tsx";
+import {useClassroomContext} from "../../../components/hooks/UseClassroomContext.tsx";
 
 const Classroom = () => {
     const [key, setKey] = useState(Date.now());
 
     const {classroom} = useClassroomContext();
-    const {user} = useAuth();
+
+    const navigate = useNavigate();
 
     useEffect(() => setKey(Date.now()), []);
 
@@ -27,7 +27,8 @@ const Classroom = () => {
 
             </div>
             <div className="absolute top-7 right-7 group">
-                <div title={'EvalCreate an evaluation'}
+                <div title={'Create an evaluation'}
+                     onClick={() => navigate('/classroom/eval/create')}
                      className={'rounded-2xl bg-persian-600 cursor-pointer group-hover:brightness-125 transition-all duration-150 flex items-center justify-center w-12 h-12'}>
                     <PiNotePencilBold
                         className={'w-3/5 h-auto text-teal-800 transition-all group-hover:text-teal-900 duration-150 group-hover:scale-105'}/>
