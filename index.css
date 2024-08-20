@@ -3,156 +3,165 @@
 @tailwind utilities;
 
 @layer base {
-	:root {
-		color: white;
-		background-color: #0b0e10;
+    :root {
+        color: white;
+        background-color: #0b0e10;
 
-		--color-lapis-100: #cde0e8;
-		--color-lapis-200: #9bc2d1;
-		--color-lapis-300: #69a3bb;
-		--color-lapis-400: #3785a4;
-		--color-lapis-500: #05668d;
-		--color-lapis-600: #045271;
-		--color-lapis-700: #033d55;
-		--color-lapis-800: #022938;
-		--color-lapis-900: #01141c;
+        --color-lapis-100: #cde0e8;
+        --color-lapis-200: #9bc2d1;
+        --color-lapis-300: #69a3bb;
+        --color-lapis-400: #3785a4;
+        --color-lapis-500: #05668d;
+        --color-lapis-600: #045271;
+        --color-lapis-700: #033d55;
+        --color-lapis-800: #022938;
+        --color-lapis-900: #01141c;
 
-		--color-teal-100: #cce6e9;
-		--color-teal-200: #9acdd3;
-		--color-teal-300: #67b4bc;
-		--color-teal-400: #359ba6;
-		--color-teal-500: #028290;
-		--color-teal-600: #026873;
-		--color-teal-700: #014e56;
-		--color-teal-800: #01343a;
-		--color-teal-900: #001a1d;
+        --color-teal-100: #cce6e9;
+        --color-teal-200: #9acdd3;
+        --color-teal-300: #67b4bc;
+        --color-teal-400: #359ba6;
+        --color-teal-500: #028290;
+        --color-teal-600: #026873;
+        --color-teal-700: #014e56;
+        --color-teal-800: #01343a;
+        --color-teal-900: #001a1d;
 
-		--color-persian-100: #cceee1;
-		--color-persian-200: #99dcc3;
-		--color-persian-300: #66cba5;
-		--color-persian-400: #33b987;
-		--color-persian-500: #00a869;
-		--color-persian-600: #008654;
-		--color-persian-700: #00653f;
-		--color-persian-800: #00432a;
-		--color-persian-900: #002215;
+        --color-persian-100: #cceee1;
+        --color-persian-200: #99dcc3;
+        --color-persian-300: #66cba5;
+        --color-persian-400: #33b987;
+        --color-persian-500: #00a869;
+        --color-persian-600: #008654;
+        --color-persian-700: #00653f;
+        --color-persian-800: #00432a;
+        --color-persian-900: #002215;
 
-		--color-thistle-100: #f6f5fa;
-		--color-thistle-200: #eeeaf5;
-		--color-thistle-300: #e5e0ef;
-		--color-thistle-400: #ddd5ea;
-		--color-thistle-500: #d4cbe5;
-		--color-thistle-600: #aaa2b7;
-		--color-thistle-700: #7f7a89;
-		--color-thistle-800: #55515c;
-		--color-thistle-900: #2a292e;
+        --color-thistle-100: #f6f5fa;
+        --color-thistle-200: #eeeaf5;
+        --color-thistle-300: #e5e0ef;
+        --color-thistle-400: #ddd5ea;
+        --color-thistle-500: #d4cbe5;
+        --color-thistle-600: #aaa2b7;
+        --color-thistle-700: #7f7a89;
+        --color-thistle-800: #55515c;
+        --color-thistle-900: #2a292e;
 
-		--color-gray-100: #d7dadc;
-		--color-gray-200: #afb5b9;
-		--color-gray-300: #868f95;
-		--color-gray-400: #5e6a72;
-		--color-gray-500: #36454f;
-		--color-gray-600: #2b373f;
-		--color-gray-700: #20292f;
-		--color-gray-800: #161c20;
-		--color-gray-900: #0b0e10;
+        --color-gray-100: #d7dadc;
+        --color-gray-200: #afb5b9;
+        --color-gray-300: #868f95;
+        --color-gray-400: #5e6a72;
+        --color-gray-500: #36454f;
+        --color-gray-600: #2b373f;
+        --color-gray-700: #20292f;
+        --color-gray-800: #161c20;
+        --color-gray-900: #0b0e10;
 
-		--color-black: #040403;
+        --color-black: #040403;
 
-		--toastify-color-dark: var(--color-gray-700) !important;
-		--toastify-color-info: #359ba6 !important;
-		--toastify-color-success: #33b987 !important;
+        --toastify-color-dark: var(--color-gray-700) !important;
+        --toastify-color-info: #359ba6 !important;
+        --toastify-color-success: #33b987 !important;
 
-		--epr-bg-color: #FFFFFF !important;
-		--epr-category-label-bg-color: #FFFFFF !important;
-	}
+        --epr-bg-color: #FFFFFF !important;
+        --epr-category-label-bg-color: #FFFFFF !important;
+    }
 
-	html {
-		font-family: 'Lato', sans-serif;
-		overflow-x: hidden;
-	}
+    html {
+        font-family: 'Lato', sans-serif;
+        overflow-x: hidden;
+    }
 
-	body {
-		max-width: 100vw;
-	}
+    body {
+        max-width: 100vw;
+    }
 
-	/* Password mask size fix */
-	input[type='password'] {
-		font-family: Verdana;
-	}
+    /* Password mask size fix */
+    input[type='password'] {
+        font-family: Verdana sans-serif;
+    }
 
-	/* Autofill color fix */
-	@keyframes autofill {
+    /* Autofill color fix */
+    @keyframes autofill {
 
-		0%,
-		100% {
-			background: transparent;
-		}
-	}
+        0%,
+        100% {
+            background: transparent;
+        }
+    }
 
-	input[type='number']::-webkit-outer-spin-button,
-	input[type='number']::-webkit-inner-spin-button,
-	input[type='number'] {
-		-webkit-appearance: none;
-		margin: 0;
-		-moz-appearance: textfield !important;
-	}
+    input[type='number']::-webkit-outer-spin-button,
+    input[type='number']::-webkit-inner-spin-button,
+    input[type='number'] {
+        -webkit-appearance: none;
+        margin: 0;
+        -moz-appearance: textfield !important;
+    }
 
-	input:-webkit-autofill {
-		-webkit-animation-delay: 1s;
-		/* Safari support - any positive time runs instantly */
-		-webkit-animation-name: autofill;
-		-webkit-animation-fill-mode: both;
-	}
+    input:-webkit-autofill {
+        -webkit-animation-delay: 1s;
+        /* Safari support - any positive time runs instantly */
+        -webkit-animation-name: autofill;
+        -webkit-animation-fill-mode: both;
+    }
 
-	::-webkit-scrollbar {
-		width: 12px;
-	}
+    html {
+        --scrollbar-color-thumb: #343A3E;
+        --scrollbar-color-track: #13181B;
+        --scrollbar-width: thin;
+        --scrollbar-width-legacy: 10;
+    }
 
-	::-webkit-scrollbar-track {
-		background: rgba(0, 0, 0, 0.2);
-	}
+    /* Modern browsers with `scrollbar-*` support */
+    @supports (scrollbar-width: auto) {
+        html {
+            scrollbar-color: var(--scrollbar-color-thumb) var(--scrollbar-color-track);
+            scrollbar-width: var(--scrollbar-width);
+        }
+    }
 
-	::-webkit-scrollbar-thumb {
-		background: rgba(0, 0, 0, 0.5);
-		border-radius: 6px;
-	}
+    /* Legacy browsers with `::-webkit-scrollbar-*` support */
+    @supports selector(::-webkit-scrollbar) {
+        html::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-color-thumb);
+        }
 
-	::-webkit-scrollbar-thumb:hover {
-		background: #555;
-	}
+        html::-webkit-scrollbar-track {
+            background: var(--scrollbar-color-track);
+        }
 
-	* {
-		scrollbar-width: thin;
-		scrollbar-color: #f1f1f1 #888;
-	}
+        html::-webkit-scrollbar {
+            max-width: var(--scrollbar-width-legacy);
+            max-height: var(--scrollbar-width-legacy);
+        }
+    }
 
-	*::-webkit-scrollbar-thumb {
-		background-color: rgba(220, 220, 255, 0.1);
-		border-radius: 6px;
-	}
+    *::-webkit-scrollbar-thumb {
+        background-color: rgba(220, 220, 255, 0.1);
+        border-radius: 6px;
+    }
 
-	*::-webkit-scrollbar-thumb:hover {
-		background-color: #555;
-	}
+    *::-webkit-scrollbar-thumb:hover {
+        background-color: #555;
+    }
 
-	.custom-shadow {
-		box-shadow: 0px 7px 0px -1px rgba(0, 0, 0, 0.20);
-		-webkit-box-shadow: 0px 7px 0px -1px rgba(0, 0, 0, 0.20);
-		-moz-box-shadow: 0px 7px 0px -1px rgba(0, 0, 0, 0.20);
-	}
+    .custom-shadow {
+        box-shadow: 0 7px 0 -1px rgba(0, 0, 0, 0.20);
+        -webkit-box-shadow: 0 7px 0 -1px rgba(0, 0, 0, 0.20);
+        -moz-box-shadow: 0 7px 0 -1px rgba(0, 0, 0, 0.20);
+    }
 
-	.custom-shadow-lighter {
-		box-shadow: 0px 7px 5px -1px rgba(0, 0, 0, 0.08);
-		-webkit-box-shadow: 0px 7px 5px -1px rgba(0, 0, 0, 0.08);
-		-moz-box-shadow: 0px 7px 5px -1px rgba(0, 0, 0, 0.08);
-	}
+    .custom-shadow-lighter {
+        box-shadow: 0 7px 5px -1px rgba(0, 0, 0, 0.08);
+        -webkit-box-shadow: 0 7px 5px -1px rgba(0, 0, 0, 0.08);
+        -moz-box-shadow: 0 7px 5px -1px rgba(0, 0, 0, 0.08);
+    }
 
-	.shadow-3d {
-		box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.15);
-	}
+    .shadow-3d {
+        box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.15);
+    }
 
-	.blur-backdrop {
-		backdrop-filter: blur(15px);
-	}
+    .blur-backdrop {
+        backdrop-filter: blur(15px);
+    }
 }
