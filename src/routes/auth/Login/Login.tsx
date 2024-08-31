@@ -1,4 +1,3 @@
-import {isAxiosError} from "axios";
 import {FormEvent, useCallback} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 
@@ -30,25 +29,22 @@ const Login = () => {
             return;
         }
 
-        await redirectAfterLogin();
+        const firstTime = await isUserFirstTime();
+
+        if (firstTime) {
+            return navigate('/auth/setup')
+        }
+        return navigate('/join')
     };
 
-    const redirectAfterLogin = useCallback(() => {
-        return api.get('/auth/first_time/')
-            .then(response => {
-                if (response.status === 200) {
-                    toast.success("Fill your account informations in the formulary!");
-                    return navigate('/auth/setup');
-                }
-            })
-            .catch(error => {
-                if (isAxiosError(error) && error.response?.status === 404) {
-                    return navigate('/join');
-                }
-                toast.error("Something's wrong. Try again later.")
-            });
-
-    }, [api])
+    const isUserFirstTime = useCallback(async () => {
+        try {
+            await api.get('/auth/first_time');
+            return true;
+        } catch (_) {
+            return false;
+        }
+    }, [api]);
 
     return (
         <div
@@ -69,7 +65,8 @@ const Login = () => {
                         <TextInput type='text' name='email' placeholder='fabio@reszko.dev' label='Email'/>
                         <TextInput type='password' name='password' placeholder='●●●●●●●●●●●●●' label='Password'/>
                         <div className='my-2 flex justify-between text-gray-300'>
-                            <Checkbox contentEditable={false} text='Remember me' id='remember'/>
+                            <Checkbox checked={false} onChange={() => {
+                            }} contentEditable={false} text='Remember me' id='remember'/>
                             <a href='/auth/password md:w-[400px]' className='text-lapis-500'>
                                 Forgot your password?
                             </a>
